@@ -2,10 +2,11 @@ import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
-    <div className="App font-primary">
+    <div className="App font-primary overflow-hidden">
       <Navbar />
 
       <Routes>
@@ -14,6 +15,8 @@ function App() {
         <Route path="/products" />
         <Route path="/cart" />
       </Routes>
+
+      <Footer />
     </div>
   );
 }

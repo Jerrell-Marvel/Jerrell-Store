@@ -10,15 +10,15 @@ function Navbar() {
   const [showProductCategories, setShowProductCategories] = useState(false);
   return (
     <>
-      <header className="fixed w-full px-4 shadow-lg z-20 bg-white h-20 flex items-center">
+      <header className="fixed w-full px-6 shadow-lg z-20 bg-white h-20 flex items-center">
         <div className="flex w-full items-center">
-          <NavLink to="/" className="py-6 uppercase font-bold px-4">
-            Jerrell Store
+          <NavLink to="/" className="py-6 uppercase font-bold pr-4">
+            jStore
           </NavLink>
 
           <input type="text" placeholder="Search" className="h-8 md:w-1/4 px-2 border-2 rounded-lg mr-12 md:mr-0 z-20 w-1/3" />
 
-          <button id="hamburger" className={`absolute right-4 block md:hidden z-20 top-1/2 -translate-y-1/2 ${navActive ? "hamburger-active" : ""}`} onClick={() => setNavActive((prev) => !prev)}>
+          <button id="hamburger" className={`absolute right-6 block md:hidden z-20 top-1/2 -translate-y-1/2 ${navActive ? "hamburger-active" : ""}`} onClick={() => setNavActive((prev) => !prev)}>
             <span className="hamburger-line origin-top-left transition duration-300"></span>
             <span className="hamburger-line transition duration-300"></span>
             <span className="hamburger-line origin-bottom-left transition duration-300"></span>

@@ -24,39 +24,9 @@
   @apply after:absolute w-fit after:-bottom-1/4 relative after:left-0 after:block after:h-[3px] after:w-full after:bg-slate-800  after:content-[''];
 }
 
-.swiper {
-  width: 100%;
-  height: 100%;
+.swiper-button-next::after {
+  @apply md:!text-4xl !text-lg;
 }
-
-.swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: #fff;
-
-  /* Center slide text vertically */
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-}
-
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.swiper {
-  margin-left: auto;
-  margin-right: auto;
+.swiper-button-prev::after {
+  @apply md:!text-4xl !text-lg;
 }

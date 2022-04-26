@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Autoplay, Pagination, Navigation, EffectFade } from "swiper";
@@ -9,8 +9,13 @@ import "./HeroCarousel.css";
 import { heroImages } from "../../../assets/assetsVariable";
 
 function HeroCarousel() {
+  const heroCarouselRef = useRef<HTMLDivElement>(null!);
+  useEffect(() => {
+    heroCarouselRef.current.style.opacity = "1";
+  }, []);
+
   return (
-    <div className="hero-carousel container mx-auto">
+    <div className="hero-carousel opacity-0 transition-opacity duration-[1500ms]" ref={heroCarouselRef}>
       <Swiper
         modules={[Autoplay, Pagination, Navigation, EffectFade]}
         navigation
@@ -29,7 +34,7 @@ function HeroCarousel() {
         {heroImages.map((img, index) => {
           return (
             <SwiperSlide className="hero-carousel__slide" key={index}>
-              <img src={img} alt="" />
+              <img src={img} alt="" className="hero-carousel__img" />
             </SwiperSlide>
           );
         })}
