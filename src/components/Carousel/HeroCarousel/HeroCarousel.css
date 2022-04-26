@@ -1,0 +1,17 @@
+.hero-carousel__slides {
+  @apply w-full;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  @apply text-white;
+}
+
+.swiper-pagination-bullet-active {
+  @apply bg-white;
+}
+
+.hero-carousel__slides {
+  -webkit-transform: translateZ(0);
+}
+
