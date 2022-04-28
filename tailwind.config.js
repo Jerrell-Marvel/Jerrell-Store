@@ -21,6 +21,9 @@ module.exports = {
           "50%": { transform: "rotate(3deg)" },
         },
       },
+      gridTemplateColumns: {
+        "card-grid": "repeat(auto-fit, minmax(300px, 1fr))",
+      },
     },
   },
   plugins: [],

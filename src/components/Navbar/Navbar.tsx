@@ -10,7 +10,7 @@ function Navbar() {
   const [showProductCategories, setShowProductCategories] = useState(false);
   return (
     <>
-      <header className="fixed w-full px-6 shadow-lg z-20 bg-white h-20 flex items-center">
+      <header className="fixed w-full px-6 border-b-2 z-20 bg-white h-20 flex items-center">
         <div className="flex w-full items-center">
           <NavLink to="/" className="py-6 uppercase font-bold pr-4">
             jStore
@@ -58,8 +58,8 @@ function Navbar() {
 
               <NavCart />
               <li>
-                <NavLink to={`/Login`} className="block pl-6 md:pl-0 py-3 md:py-0 z-10">
-                  <Button />
+                <NavLink to={`/login`} className="block pl-6 md:pl-0 py-3 md:py-0 z-10">
+                  <Button>Login</Button>
                 </NavLink>
               </li>
             </ul>

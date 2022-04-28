@@ -1,5 +1,17 @@
 import { useState, useEffect } from "react";
 
+export type useFetchParameters = {
+  url: string;
+  category?: string;
+  id?: string;
+  title?: string;
+};
+
+export type ApiResponse = {
+  data: ApiResponseData[] | ApiResponseData;
+  loading: boolean;
+};
+
 type ApiResponseData = {
   id: number;
   title: string;
@@ -13,31 +25,15 @@ type ApiResponseData = {
   launches: [];
   events: [];
 };
-export type useFetchParameters = {
-  url: string;
-  category?: string;
-  id?: string;
-  title?: string;
-};
-export type ApiResponse<T> = {
-  data: T;
-  loading: boolean;
-};
-
-type cobaCoba = {
-  name: string;
-  age: number;
-};
-
-export function useFetch<T>({ url, category = "", id = "", title }: useFetchParameters): ApiResponse<T> | undefined {
-  const [ApiResponse, setApiResponse] = useState<ApiResponse<T> | undefined>(undefined);
+export function useFetch({ url, category = "", id = "", title }: useFetchParameters) {
+  const [ApiResponse, setApiResponse] = useState<ApiResponse | undefined>(undefined);
 
   useEffect(() => {
     const getData = async () => {
       try {
         const response = await fetch(`${url}${category}${id}`);
-
-        const data: T = await response.json();
+        console.log(response);
+        const data: ApiResponseData[] | ApiResponseData = await response.json();
         setApiResponse({
           data: data,
           loading: false,

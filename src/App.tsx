@@ -3,16 +3,24 @@ import Navbar from "./components/Navbar/Navbar";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import Footer from "./components/Footer/Footer";
+import Products from "./pages/Products/Products";
+import ProductsCategories from "./pages/ProductsCategories/ProductsCategories";
+import ProductDetails from "./pages/ProductsDetails/ProductsDetails";
+import ProductsNav from "./components/ProductsNav/ProductsNav";
 
 function App() {
   return (
-    <div className="App font-primary overflow-hidden">
+    <div className="App font-primary">
       <Navbar />
 
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" />
-        <Route path="/products" />
+
+        <Route path="/products" element={<Products />}></Route>
+        <Route path="/products/:category" element={<ProductsCategories />}></Route>
+        <Route path="/products/:category/:itemId" element={<ProductDetails />}></Route>
+
         <Route path="/cart" />
       </Routes>
 
