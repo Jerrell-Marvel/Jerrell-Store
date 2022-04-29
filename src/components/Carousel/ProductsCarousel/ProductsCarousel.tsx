@@ -12,7 +12,7 @@ import "swiper/css/free-mode";
 import "swiper/css/pagination";
 
 // import required modules
-import { FreeMode, Pagination } from "swiper";
+import { FreeMode } from "swiper";
 import { Link } from "react-router-dom";
 
 type ProductsType = {

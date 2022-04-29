@@ -1,18 +1,5 @@
 import { useState, useEffect } from "react";
 
-type ApiResponseData = {
-  id: number;
-  title: string;
-  url: string;
-  imageUrl: string;
-  newsSite: string;
-  summary: string;
-  publishedAt: string;
-  updatedAt: string;
-  featured: boolean;
-  launches: [];
-  events: [];
-};
 export type useFetchParameters = {
   url: string;
   category?: string;
