@@ -8,9 +8,13 @@ function Products() {
   return (
     <div>
       <ProductsNav />
-      <div className="px-6 bg-slate-100 py-10">
+      <div className="bg-slate-100 px-6 py-10">
         <h2 className="text-4xl font-medium">Popular Products</h2>
-        <ShowProducts amount={10} url="https://api.spaceflightnewsapi.net/v3/articles" title="Category 3" />
+        <ShowProducts
+          amount={10}
+          url="https://api.spaceflightnewsapi.net/v3/articles"
+          title="Category 3"
+        />
         <NavLink to={`/products/all`} className="mx-auto block w-fit">
           <Button>See All Products</Button>
         </NavLink>

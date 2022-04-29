@@ -24,8 +24,15 @@ export type ApiResponse<T> = {
   loading: boolean;
 };
 
-export function useFetch<T>({ url, category = "", id = "", title }: useFetchParameters): [ApiResponse<T> | undefined, boolean] {
-  const [ApiResponse, setApiResponse] = useState<ApiResponse<T> | undefined>(undefined);
+export function useFetch<T>({
+  url,
+  category = "",
+  id = "",
+  title,
+}: useFetchParameters): [ApiResponse<T> | undefined, boolean] {
+  const [ApiResponse, setApiResponse] = useState<ApiResponse<T> | undefined>(
+    undefined
+  );
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

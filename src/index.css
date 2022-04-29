@@ -21,14 +21,14 @@
 }
 
 .active > p {
-  @apply after:absolute w-fit after:-bottom-1/4 relative after:left-0 after:block after:h-[3px] after:w-full after:bg-slate-800  after:content-[''];
+  @apply relative w-fit after:absolute after:-bottom-1/4 after:left-0 after:block after:h-[3px] after:w-full after:bg-slate-800  after:content-[''];
 }
 
 .swiper-button-next::after {
-  @apply md:!text-4xl !text-lg;
+  @apply !text-lg md:!text-4xl;
 }
 .swiper-button-prev::after {
-  @apply md:!text-4xl !text-lg;
+  @apply !text-lg md:!text-4xl;
 }
 
 input::-webkit-outer-spin-button,

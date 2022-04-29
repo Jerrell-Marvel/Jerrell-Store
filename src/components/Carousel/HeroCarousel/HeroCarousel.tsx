@@ -15,7 +15,10 @@ function HeroCarousel() {
   }, []);
 
   return (
-    <div className="hero-carousel opacity-0 transition-opacity duration-[1500ms]" ref={heroCarouselRef}>
+    <div
+      className="hero-carousel opacity-0 transition-opacity duration-[1500ms]"
+      ref={heroCarouselRef}
+    >
       <Swiper
         modules={[Autoplay, Pagination, Navigation, EffectFade]}
         navigation

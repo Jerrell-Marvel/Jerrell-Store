@@ -25,8 +25,15 @@ type ApiResponseData = {
   launches: [];
   events: [];
 };
-export function useFetch({ url, category = "", id = "", title }: useFetchParameters) {
-  const [ApiResponse, setApiResponse] = useState<ApiResponse | undefined>(undefined);
+export function useFetch({
+  url,
+  category = "",
+  id = "",
+  title,
+}: useFetchParameters) {
+  const [ApiResponse, setApiResponse] = useState<ApiResponse | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     const getData = async () => {
