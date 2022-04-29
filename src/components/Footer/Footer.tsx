@@ -2,7 +2,7 @@ function Footer() {
   return (
     <footer className="bg-primary pt-16">
       <div className="px-6 text-white sm:px-16">
-        <div className="flex flex-wrap gap-8 justify-center sm:justify-between">
+        <div className="flex flex-wrap gap-8 sm:justify-between">
           <div className="mb-12 w-fit">
             <h2 className="mb-5 text-3xl font-bold">Jerrell</h2>
             <h3 className="mb-2 text-2xl font-semibold">Lorem ipsum dolor sit.</h3>

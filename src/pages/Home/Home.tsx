@@ -1,7 +1,7 @@
 import HomeBanner from "../../components/HomeBanner/HomeBanner";
 import HeroCarousel from "../../components/Carousel/HeroCarousel/HeroCarousel";
 import Service from "../../components/Service/Service";
-import ProductsCarousel from "../../components/ProductsCarousel/ProductsCarousel";
+import ProductsCarousel from "../../components/Carousel/ProductsCarousel/ProductsCarousel";
 
 function Home() {
   return (

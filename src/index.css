@@ -30,3 +30,14 @@
 .swiper-button-prev::after {
   @apply md:!text-4xl !text-lg;
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

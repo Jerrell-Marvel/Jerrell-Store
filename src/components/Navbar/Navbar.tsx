@@ -29,7 +29,7 @@ function Navbar() {
               {navLinks.map((navLink, index) => {
                 return (
                   <li key={index}>
-                    <NavLink to={`/${navLink}`} className=" block w-full py-3 pl-6 md:py-6 group md:px-4">
+                    <NavLink to={`/${navLink}`} className=" block w-full py-3 pl-6 md:py-6 group md:px-4" onClick={() => setNavActive((prev) => !prev)}>
                       <p className="after:absolute w-fit after:-bottom-1/4 relative after:left-1/2 after:block after:h-[3px] after:w-0 after:bg-slate-800  after:content-[''] group-hover:after:left-0 group-hover:after:right-0 group-hover:after:w-full after:transition-all after:duration-300 uppercase font-medium">
                         {navLink}
                       </p>
@@ -47,7 +47,7 @@ function Navbar() {
                   <div className={`md:absolute bg-white md:shadow-lg rounded-lg md:w-full divide-y-[1px] flex-col md:left-0  md:top-full md:hidden md:group-hover:flex md:py-2 w-full pt-2 ${showProductCategories ? "flex" : "hidden"}`}>
                     {productCategories.map((category, index) => {
                       return (
-                        <Link to={`/products/${category}`} className="py-2 hover:underline md:flex md:justify-center md:w-full md:px-4 capitalize" key={index}>
+                        <Link to={`/products/${category}`} className="py-2 hover:underline md:flex md:justify-center md:w-full md:px-4 capitalize" key={index} onClick={() => setNavActive((prev) => !prev)}>
                           {category}
                         </Link>
                       );

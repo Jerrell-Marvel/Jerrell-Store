@@ -24,13 +24,9 @@ export type ApiResponse<T> = {
   loading: boolean;
 };
 
-type cobaCoba = {
-  name: string;
-  age: number;
-};
-
-export function useFetch<T>({ url, category = "", id = "", title }: useFetchParameters): ApiResponse<T> | undefined {
+export function useFetch<T>({ url, category = "", id = "", title }: useFetchParameters): [ApiResponse<T> | undefined, boolean] {
   const [ApiResponse, setApiResponse] = useState<ApiResponse<T> | undefined>(undefined);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
@@ -42,6 +38,7 @@ export function useFetch<T>({ url, category = "", id = "", title }: useFetchPara
           data: data,
           loading: false,
         });
+        setLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -49,5 +46,5 @@ export function useFetch<T>({ url, category = "", id = "", title }: useFetchPara
 
     getData();
   }, [url, category, id]);
-  return ApiResponse;
+  return [ApiResponse, loading];
 }

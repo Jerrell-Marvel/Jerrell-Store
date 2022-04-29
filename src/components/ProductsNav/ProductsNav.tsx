@@ -1,15 +1,13 @@
-import { useEffect } from "react";
-import { useNavigate, NavLink, Outlet } from "react-router-dom";
-import ProductsCategories from "../../pages/ProductsCategories/ProductsCategories";
+import { NavLink } from "react-router-dom";
 const productCategories = ["all", "hoodie", "snacks", "jeans", "shorts", "shirts"];
 
 function ProductsNav() {
   return (
     <>
-      <div className="w-full h-[40vh] flex lg:h-[50vh] items-center justify-center text-center px-6 pt-20 border-b-2">
-        <h2 className="text-5xl sm:leading-[6rem] font-medium">Explore Products</h2>
+      <div className="w-full h-[40vh] flex lg:h-[50vh] items-center relative justify-center text-center px-6 pt-20 border-b-2 bg-[url('https://source.unsplash.com/random/800x300')] bg-cover after:content-[''] after:absolute after:top-0 after:left-0 after:right-0 after:bottom-0 after:bg-slate-800 after:opacity-40">
+        <h2 className="text-5xl sm:leading-[6rem] font-medium text-white z-[2]">Explore Products</h2>
       </div>
-      <div className="sticky top-20">
+      <div className="sticky top-20 bg-white z-[50]">
         <ul className="flex justify-between border-b-2 bg-white items-center gap-8 overflow-auto px-6 h-16 lg:justify-evenly">
           {productCategories.map((category, index) => {
             return (
