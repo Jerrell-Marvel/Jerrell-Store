@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  useFetch,
-  ApiResponse,
-  useFetchParameters,
-} from "../../../customHooks/useFetch";
+import { useFetch, ApiResponse, useFetchParameters } from "../../../customHooks/useFetch";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
@@ -35,16 +31,8 @@ type ProductsCarouselType = {
   events: [];
 }[];
 
-function ProductsCarousel({
-  amount,
-  url,
-  category = "",
-  id,
-  title,
-}: ProductsProps) {
-  const [data, setData] = useState<
-    ApiResponse<ProductsCarouselType> | undefined
-  >(undefined);
+function ProductsCarousel({ amount, url, category = "", id, title }: ProductsProps) {
+  const [data, setData] = useState<ApiResponse<ProductsCarouselType> | undefined>(undefined);
 
   const [response, loading] = useFetch<ProductsCarouselType>({
     url: url,
@@ -66,42 +54,26 @@ function ProductsCarousel({
         <div className="w-full overflow-hidden">
           <div className="flex h-72 w-fit">
             {[...Array(10)].map((element, index) => (
-              <div
-                className="mr-4 h-full w-64 animate-loading rounded-sm bg-slate-200"
-                key={index}
-              ></div>
+              <div className="mr-4 h-full w-64 animate-loading rounded-sm bg-slate-200" key={index}></div>
             ))}
           </div>
         </div>
       ) : (
         <div>
           <div className="mb-4 flex items-end justify-between">
-            <h3 className="mr-4 text-4xl font-medium">{title}</h3>
-            <Link
-              to={`/products/${category}`}
-              className="text-2xl md:mr-4 lg:mr-8"
-            >
+            <h3 className="mr-4 text-2xl font-medium sm:text-3xl md:text-4xl lg:text-5xl">{title}</h3>
+            <Link to={`/products/${category}`} className="text-lg sm:text-xl md:mr-4 md:text-2xl lg:mr-8 lg:text-3xl">
               See More ➡
             </Link>
           </div>
 
-          <Swiper
-            slidesPerView={"auto"}
-            spaceBetween={30}
-            freeMode={true}
-            modules={[FreeMode]}
-            grabCursor={true}
-          >
+          <Swiper slidesPerView={"auto"} spaceBetween={30} freeMode={true} modules={[FreeMode]} grabCursor={true}>
             {data?.data?.map((d, index) => {
               return (
                 <SwiperSlide className="!w-64" key={index}>
                   <Link to={`/products/itemCategory/${d.id}`}>
                     <div className="flex w-full flex-col">
-                      <img
-                        src={d.imageUrl}
-                        alt={d.title}
-                        className="mb-3 !h-72"
-                      />
+                      <img src={d.imageUrl} alt={d.title} className="mb-3 !h-72" />
                       <h3>{d.title}</h3>
                     </div>
                   </Link>

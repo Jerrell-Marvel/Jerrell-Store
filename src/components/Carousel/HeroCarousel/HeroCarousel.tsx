@@ -15,10 +15,7 @@ function HeroCarousel() {
   }, []);
 
   return (
-    <div
-      className="hero-carousel opacity-0 transition-opacity duration-[1500ms]"
-      ref={heroCarouselRef}
-    >
+    <div className="hero-carousel opacity-0 transition-opacity duration-[1500ms]" ref={heroCarouselRef}>
       <Swiper
         modules={[Autoplay, Pagination, Navigation, EffectFade]}
         navigation
@@ -36,8 +33,8 @@ function HeroCarousel() {
       >
         {heroImages.map((img, index) => {
           return (
-            <SwiperSlide className="hero-carousel__slide" key={index}>
-              <img src={img} alt="" className="hero-carousel__img" />
+            <SwiperSlide className="hero-carousel__slide w-full" key={index}>
+              <img src={img} alt="" className="hero-carousel__img w-full" />
             </SwiperSlide>
           );
         })}
