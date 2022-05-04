@@ -4,8 +4,9 @@ import { useParams } from "react-router-dom";
 // import { useFetch2, ApiResponse } from "../../customHooks/useFetch2";
 import { useFetch, ApiResponse } from "../../customHooks/useFetch";
 import ProductsCarousel from "../../components/Carousel/ProductsCarousel/ProductsCarousel";
+import { useWishlistContext } from "../../context/WishlistContext";
 
-type ProductDetailsType = {
+export type ProductDetailsType = {
   id: number;
   title: string;
   url: string;
@@ -21,6 +22,7 @@ type ProductDetailsType = {
 function ProductDetails() {
   const { itemId } = useParams();
   //   console.log(itemId);
+  const { wishlist, setWishlist } = useWishlistContext();
 
   const [itemDetails, setItemDetails] = useState<ApiResponse<ProductDetailsType> | undefined>(undefined);
   const [productAmount, setProductAmount] = useState(1);
@@ -46,6 +48,36 @@ function ProductDetails() {
     }
   }, [response]);
 
+  const addToWishlistHandler = (itemDetails: ProductDetailsType | undefined) => {
+    if (typeof itemDetails !== "undefined") {
+      const itemWithAmount = {
+        ...itemDetails,
+        amount: productAmount,
+      };
+
+      const itemIndex = wishlist.findIndex((list) => {
+        return list.id === itemDetails.id;
+      });
+
+      if (itemIndex !== -1) {
+        const newItem = { ...itemDetails, amount: wishlist[itemIndex].amount + itemWithAmount.amount };
+
+        const newWishlist = [...wishlist];
+        newWishlist[itemIndex] = newItem;
+
+        setWishlist(newWishlist);
+      } else {
+        console.log("this");
+        setWishlist([...wishlist, itemWithAmount]);
+      }
+
+      // console.log(itemIndex);
+      // console.log(itemWithAmount);
+    } else {
+      return undefined;
+    }
+  };
+
   return (
     <>
       <section className="bg-slate-50 px-6 pt-20 pb-6">
@@ -70,7 +102,14 @@ function ProductDetails() {
             </div>
 
             <button className="mt-4 w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">add to cart</button>
-            <button className="mt-4 w-full border-2 border-black bg-white py-4 uppercase text-black transition-colors duration-300 hover:bg-slate-100">add to wishlist</button>
+            <button
+              onClick={(e) => {
+                addToWishlistHandler(itemDetails?.data);
+              }}
+              className="mt-4 w-full border-2 border-black bg-white py-4 uppercase text-black transition-colors duration-300 hover:bg-slate-100"
+            >
+              add to wishlist
+            </button>
           </div>
         </div>
       </section>

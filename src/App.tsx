@@ -10,27 +10,31 @@ import About from "./pages/About/About";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound/NotFound";
 import Wishlist from "./pages/Wishlist/Wishlist";
+import { WishlistProvider } from "./context/WishlistContext";
 
 function App() {
   return (
     <div className="App font-primary">
-      <Navbar />
+      <WishlistProvider>
+        <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
 
-        <Route path="/products" element={<Products />}></Route>
-        <Route path="/products/:category" element={<ProductsCategories />}></Route>
-        <Route path="/products/:category/:itemId" element={<ProductDetails />}></Route>
+          <Route path="/products" element={<Products />}></Route>
+          <Route path="/products/:category" element={<ProductsCategories />}></Route>
+          <Route path="/products/:category/:itemId" element={<ProductDetails />}></Route>
 
-        <Route path="/cart" />
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          <Route path="/cart" />
 
-      <Footer />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+
+        <Footer />
+      </WishlistProvider>
     </div>
   );
 }
