@@ -2,10 +2,10 @@ import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import NavCart from "./NavCart";
 import Button from "../Button/Button";
-import { productCategories } from "../../assets/assetsVariable";
 
+const navLinks = ["about", "wishlist"];
+const productCategories = ["all", "hoodie", "snacks", "jeans", "shorts", "shirts"];
 function Navbar() {
-  const [navLinks] = useState(["about"]);
   const [navActive, setNavActive] = useState(false);
   const [showProductCategories, setShowProductCategories] = useState(false);
   return (
@@ -16,7 +16,7 @@ function Navbar() {
             jStore
           </NavLink>
 
-          <input type="text" placeholder="Search" className="z-20 mr-12 h-8 w-1/3 rounded-lg border-2 px-2 md:mr-0 md:w-1/4" />
+          <input type="text" placeholder="Search" className="z-20 mr-12 h-8 w-1/3 rounded-lg border-2 px-2 md:mr-0 md:w-[18%]" />
 
           <button id="hamburger" className={`absolute right-6 top-1/2 z-[100] block -translate-y-1/2 md:hidden ${navActive ? "hamburger-active" : ""}`} onClick={() => setNavActive((prev) => !prev)}>
             <span className="hamburger-line origin-top-left transition duration-300"></span>
