@@ -29,7 +29,7 @@ function ShowProducts({ amount, url, category = "", id, title }: ProductsProps) 
   useEffect(() => {
     if (response?.data instanceof Array && typeof response !== "undefined") {
       const slicedResponse = response?.data.slice(0, amount);
-      setData({ data: slicedResponse, loading: false });
+      setData({ data: slicedResponse });
     }
   }, [response, amount]);
 

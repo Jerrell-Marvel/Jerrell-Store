@@ -8,18 +8,10 @@ export type useFetchParameters = {
 };
 export type ApiResponse<T> = {
   data: T;
-  loading: boolean;
 };
 
-export function useFetch<T>({
-  url,
-  category = "",
-  id = "",
-  title,
-}: useFetchParameters): [ApiResponse<T> | undefined, boolean] {
-  const [ApiResponse, setApiResponse] = useState<ApiResponse<T> | undefined>(
-    undefined
-  );
+export function useFetch<T>({ url, category = "", id = "", title }: useFetchParameters): [ApiResponse<T> | undefined, boolean] {
+  const [ApiResponse, setApiResponse] = useState<ApiResponse<T> | undefined>(undefined);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,7 +22,6 @@ export function useFetch<T>({
         const data: T = await response.json();
         setApiResponse({
           data: data,
-          loading: false,
         });
         setLoading(false);
       } catch (error) {

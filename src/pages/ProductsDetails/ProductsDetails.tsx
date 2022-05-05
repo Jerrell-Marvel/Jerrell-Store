@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 // import { useFetch2, ApiResponse } from "../../customHooks/useFetch2";
 import { useFetch, ApiResponse } from "../../customHooks/useFetch";
@@ -26,6 +26,8 @@ function ProductDetails() {
 
   const [itemDetails, setItemDetails] = useState<ApiResponse<ProductDetailsType> | undefined>(undefined);
   const [productAmount, setProductAmount] = useState(1);
+  const [isModalActive, setIsModalActive] = useState(false);
+
   const incrementAmount = () => {
     setProductAmount(productAmount + 1);
   };
@@ -63,19 +65,18 @@ function ProductDetails() {
         const newItem = { ...itemDetails, amount: wishlist[itemIndex].amount + itemWithAmount.amount };
 
         const newWishlist = [...wishlist];
-        newWishlist[itemIndex] = newItem;
+        newWishlist.splice(itemIndex, 1);
+        newWishlist.unshift(newItem);
 
         setWishlist(newWishlist);
       } else {
-        console.log("this");
-        setWishlist([...wishlist, itemWithAmount]);
+        setWishlist([itemWithAmount, ...wishlist]);
       }
 
       // console.log(itemIndex);
       // console.log(itemWithAmount);
-    } else {
-      return undefined;
-    }
+      setProductAmount(1);
+    } else return;
   };
 
   return (
@@ -105,6 +106,7 @@ function ProductDetails() {
             <button
               onClick={(e) => {
                 addToWishlistHandler(itemDetails?.data);
+                setIsModalActive((prev) => !prev);
               }}
               className="mt-4 w-full border-2 border-black bg-white py-4 uppercase text-black transition-colors duration-300 hover:bg-slate-100"
             >
@@ -116,6 +118,31 @@ function ProductDetails() {
 
       <div className="w-full">
         <ProductsCarousel amount={10} url="https://api.spaceflightnewsapi.net/v3/articles" title="Related Products" />
+      </div>
+
+      {/* Modal */}
+      <div className={`${isModalActive ? "visible" : "invisible"}`}>
+        <div className="fixed left-0 right-0 bottom-0 top-0 z-10 bg-black opacity-40"></div>
+        <div className="fixed left-0 right-0 bottom-0 top-0 z-20 pt-20">
+          <div className="absolute top-1/2 left-1/2 w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-6 lg:w-1/2">
+            <h4 className="mb-2 text-3xl font-medium">Added successfully</h4>
+            <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam, rem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, dolor.</span>
+
+            <div className="mt-4 flex gap-4">
+              <button
+                onClick={() => {
+                  setIsModalActive((prev) => !prev);
+                }}
+                className="w-fit border-2 border-black bg-white py-2 px-4 uppercase text-black transition-colors duration-300 hover:bg-slate-100"
+              >
+                ADD MORE
+              </button>
+              <Link to="/wishlist" className="w-fit border-2 border-black bg-primary px-4 py-2 uppercase text-white transition-colors duration-300">
+                WISHLIST PAGE
+              </Link>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

@@ -1,13 +1,13 @@
 import { createContext, ReactNode, useContext, useState } from "react";
 import { ProductDetailsType } from "../pages/ProductsDetails/ProductsDetails";
 
-type ProductWishlistType = ProductDetailsType & { amount: number };
+export type ProductWishlistType = ProductDetailsType & { amount: number };
 
-type TodoContextValue = {
+type WishlistContextValue = {
   wishlist: ProductWishlistType[];
   setWishlist: React.Dispatch<React.SetStateAction<[] | ProductWishlistType[]>>;
 };
-export const WishlistContext = createContext({} as TodoContextValue);
+export const WishlistContext = createContext({} as WishlistContextValue);
 
 export const useWishlistContext = () => {
   return useContext(WishlistContext);

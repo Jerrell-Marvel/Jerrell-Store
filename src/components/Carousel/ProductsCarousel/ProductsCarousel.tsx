@@ -44,7 +44,7 @@ function ProductsCarousel({ amount, url, category = "", id, title }: ProductsPro
   useEffect(() => {
     if (typeof response !== "undefined") {
       const slicedResponse = response?.data.slice(0, amount);
-      setData({ data: slicedResponse, loading: false });
+      setData({ data: slicedResponse });
     }
   }, [response, amount]);
 
