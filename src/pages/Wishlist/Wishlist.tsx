@@ -23,36 +23,38 @@ function Wishlist() {
           {wishlist.length > 0 ? "" : <p>Your wishlist is empty</p>}
         </div>
 
-        <ul>
-          {wishlist.map((list) => {
-            return (
-              <li className="flex w-full flex-col items-center">
-                <div className="grid h-full w-full max-w-lg grid-cols-[35%_65%] justify-between border-2 p-4 sm:max-w-xl md:max-w-2xl lg:max-w-4xl">
-                  <div className="w-full">
-                    <img src={list.imageUrl} alt={list.title} className="w-full"></img>
-                  </div>
-                  <div className="flex h-full flex-col items-end gap-2 pl-4 text-right">
-                    <h4 className="font-medium md:text-lg lg:text-xl">{list.title}</h4>
-                    <span>Amount : {list.amount}</span>
+        <div className="py-6 px-6">
+          <ul className="mx-auto w-fit">
+            {wishlist.map((list) => {
+              return (
+                <li className="mb-4 flex w-full flex-col items-center rounded-xl border-2 border-x-2">
+                  <div className="grid h-full w-full max-w-lg grid-cols-[35%_65%] justify-between p-4 sm:max-w-xl md:max-w-2xl lg:max-w-4xl">
+                    <div className="w-full">
+                      <img src={list.imageUrl} alt={list.title} className="w-full"></img>
+                    </div>
+                    <div className="flex h-full flex-col items-end gap-2 pl-4 text-right">
+                      <h4 className="font-medium md:text-lg lg:text-xl">{list.title}</h4>
+                      <span>Amount : {list.amount}</span>
 
-                    <Link to={`/products/itemCategory/${list.id}`} className="w-fit border-2 border-black bg-primary px-2 py-1 text-sm uppercase text-white transition-colors duration-300">
-                      view item
-                    </Link>
+                      <Link to={`/products/itemCategory/${list.id}`} className="mb-1 w-fit border-2 border-black bg-primary px-2 py-1 text-sm uppercase text-white transition-colors duration-300">
+                        view item
+                      </Link>
 
-                    <button
-                      onClick={() => {
-                        removeWishlistHandler(list);
-                      }}
-                      className="w-fit border-2 border-black bg-white px-2 py-1 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"
-                    >
-                      Remove
-                    </button>
+                      <button
+                        onClick={() => {
+                          removeWishlistHandler(list);
+                        }}
+                        className="w-fit border-2 border-black bg-white px-2 py-1 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"
+                      >
+                        Remove
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </WishlistProvider>
   );

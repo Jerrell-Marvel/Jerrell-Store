@@ -125,7 +125,7 @@ function ProductDetails() {
         <div className="fixed left-0 right-0 bottom-0 top-0 z-10 bg-black opacity-40"></div>
         <div className="fixed left-0 right-0 bottom-0 top-0 z-20 pt-20">
           <div className="absolute top-1/2 left-1/2 w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-6 lg:w-1/2">
-            <h4 className="mb-2 text-3xl font-medium">Added successfully</h4>
+            <h4 className="mb-2 text-3xl font-medium uppercase">successfully added</h4>
             <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam, rem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, dolor.</span>
 
             <div className="mt-4 flex gap-4">
@@ -133,11 +133,11 @@ function ProductDetails() {
                 onClick={() => {
                   setIsModalActive((prev) => !prev);
                 }}
-                className="w-fit border-2 border-black bg-white py-2 px-4 uppercase text-black transition-colors duration-300 hover:bg-slate-100"
+                className="w-fit border-2 border-black bg-white py-2 px-4 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"
               >
                 ADD MORE
               </button>
-              <Link to="/wishlist" className="w-fit border-2 border-black bg-primary px-4 py-2 uppercase text-white transition-colors duration-300">
+              <Link to="/wishlist" className="w-fit border-2 border-black bg-primary px-4 py-2 text-sm uppercase text-white transition-colors duration-300">
                 WISHLIST PAGE
               </Link>
             </div>
