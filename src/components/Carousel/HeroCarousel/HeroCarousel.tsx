@@ -5,8 +5,8 @@ import { Autoplay, Pagination, Navigation, EffectFade } from "swiper";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import "swiper/css/effect-fade";
-import "./HeroCarousel.css";
-import { heroImages } from "../../../assets/assetsVariable";
+
+const heroImages = ["https://source.unsplash.com/random/1600x800", "https://source.unsplash.com/random/1600x801", "https://source.unsplash.com/random/1600x799"];
 
 function HeroCarousel() {
   const heroCarouselRef = useRef<HTMLDivElement>(null!);

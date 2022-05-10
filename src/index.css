@@ -41,3 +41,22 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+/* Hero Carousel */
+.hero-carousel__slides {
+  @apply w-full;
+}
+
+.swiper-button-prev,
+.swiper-button-next {
+  @apply !text-white;
+}
+
+.swiper-pagination-bullet-active {
+  @apply !bg-white;
+}
+
+.swiper-slide-cover {
+  transition: 10s ease-out;
+  transform: scale(1.2);
+}

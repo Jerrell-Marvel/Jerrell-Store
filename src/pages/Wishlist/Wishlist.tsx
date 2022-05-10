@@ -54,6 +54,13 @@ function Wishlist() {
               );
             })}
           </ul>
+          {wishlist.length < 1 ? (
+            <Link to="/wishlist" className="w-fit border-2 border-black bg-primary px-4 py-2 text-sm uppercase text-white transition-colors duration-300">
+              WISHLIST PAGE
+            </Link>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </WishlistProvider>
