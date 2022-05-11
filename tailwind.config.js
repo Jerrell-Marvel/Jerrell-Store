@@ -9,9 +9,6 @@ module.exports = {
       colors: {
         primary: "#0f172a",
       },
-      screens: {
-        "2xl": "1320px",
-      },
       animation: {
         wiggle: "wiggle 1s ease-in-out infinite",
         loading: "loading 1s linear infinite",
