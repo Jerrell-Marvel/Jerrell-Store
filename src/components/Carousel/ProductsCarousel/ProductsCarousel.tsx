@@ -11,42 +11,40 @@ import "swiper/css/pagination";
 import { FreeMode } from "swiper";
 import { Link } from "react-router-dom";
 
-type ProductsType = {
-  amount: number;
-};
-
 export type ProductsProps = ProductsType & useFetchParameters;
 
-type ProductsCarouselType = {
-  id: number;
-  title: string;
+type ProductsType = {
+  success: boolean;
+  products: {
+    _id: string;
+    name: string;
+    weight: string;
+    category: string;
+    stock: string;
+    description: string;
+    price: string;
+    createdAt: string;
+    updatedAt: string;
+  }[];
+};
+
+type ProductsCarouselProps = {
   url: string;
-  imageUrl: string;
-  newsSite: string;
-  summary: string;
-  publishedAt: string;
-  updatedAt: string;
-  featured: boolean;
-  launches: [];
-  events: [];
-}[];
+};
 
-function ProductsCarousel({ amount, url, category = "", id, title }: ProductsProps) {
-  const [data, setData] = useState<ApiResponse<ProductsCarouselType> | undefined>(undefined);
+function ProductsCarousel({ url }: ProductsCarouselProps) {
+  const [datas, setDatas] = useState<ProductsType | undefined>(undefined);
 
-  const [response, loading] = useFetch<ProductsCarouselType>({
+  const [response, loading] = useFetch<ProductsType>({
     url: url,
-    category: category,
-    id: id,
-    title: title,
   });
 
   useEffect(() => {
     if (typeof response !== "undefined") {
-      const slicedResponse = response?.data.slice(0, amount);
-      setData({ data: slicedResponse });
+      // const slicedResponse = response?.data.slice(0, amount);
+      setDatas(response);
     }
-  }, [response, amount]);
+  }, [response]);
 
   return (
     <section className="px-6 py-12 md:py-16">
@@ -61,20 +59,20 @@ function ProductsCarousel({ amount, url, category = "", id, title }: ProductsPro
       ) : (
         <div>
           <div className="mb-4 flex items-end justify-between">
-            <h3 className="mr-4 text-2xl font-medium sm:text-3xl md:text-4xl lg:text-5xl">{title}</h3>
-            <Link to={`/products/${category}`} className="text-lg sm:text-xl md:mr-4 md:text-2xl lg:mr-8 lg:text-3xl">
+            <h3 className="mr-4 text-2xl font-medium sm:text-3xl md:text-4xl lg:text-5xl">COBA</h3>
+            {/* <Link to={`/products/${category}`} className="text-lg sm:text-xl md:mr-4 md:text-2xl lg:mr-8 lg:text-3xl">
               See More ➡
-            </Link>
+            </Link> */}
           </div>
 
           <Swiper slidesPerView={"auto"} spaceBetween={30} freeMode={true} modules={[FreeMode]} grabCursor={true}>
-            {data?.data?.map((d, index) => {
+            {datas?.products.map((product, index) => {
               return (
                 <SwiperSlide className="!w-64" key={index}>
-                  <Link to={`/products/itemCategory/${d.id}`}>
+                  <Link to={`/products/itemCategory/${product._id}`}>
                     <div className="flex w-full flex-col">
-                      <img src={d.imageUrl} alt={d.title} className="mb-3 !h-72" />
-                      <h3>{d.title}</h3>
+                      {/* <img src={d.imageUrl} alt={d.title} className="mb-3 !h-72" /> */}
+                      <h3>{product.name}</h3>
                     </div>
                   </Link>
                 </SwiperSlide>

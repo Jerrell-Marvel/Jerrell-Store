@@ -12,11 +12,7 @@ function ProductsCategories() {
 
       <div className="bg-slate-100 px-6 py-10">
         <h2 className="text-4xl font-medium capitalize">{category}</h2>
-        <ShowProducts
-          amount={10}
-          url="https://api.spaceflightnewsapi.net/v3/articles"
-          title="Category 3"
-        />
+        <ShowProducts url="http://localhost:5000/api/v1/products" />
         <NavLink to={`/products/all`} className="mx-auto block w-fit">
           <Button>See All Products</Button>
         </NavLink>

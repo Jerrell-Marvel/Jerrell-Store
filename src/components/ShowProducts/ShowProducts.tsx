@@ -1,37 +1,43 @@
 import { useEffect, useState } from "react";
 import { useFetch, ApiResponse } from "../../customHooks/useFetch";
 import { Link } from "react-router-dom";
-import { ProductsProps } from "../Carousel/ProductsCarousel/ProductsCarousel";
+// import { ProductsProps } from "../Carousel/ProductsCarousel/ProductsCarousel";
 
-type ShowProductsType = {
-  id: number;
-  title: string;
+type ProductsType = {
+  success: boolean;
+  products: {
+    _id: string;
+    name: string;
+    weight: string;
+    category: string;
+    stock: string;
+    description: string;
+    price: string;
+    createdAt: string;
+    updatedAt: string;
+  }[];
+};
+
+type ShowProductsProps = {
   url: string;
-  imageUrl: string;
-  newsSite: string;
-  summary: string;
-  publishedAt: string;
-  updatedAt: string;
-  featured: boolean;
-  launches: [];
-  events: [];
-}[];
-function ShowProducts({ amount, url, category = "", id, title }: ProductsProps) {
-  const [data, setData] = useState<ApiResponse<ShowProductsType> | undefined>(undefined);
+};
 
-  const [response, loading] = useFetch({
+function ShowProducts({ url }: ShowProductsProps) {
+  const [datas, setDatas] = useState<ProductsType | undefined>(undefined);
+
+  const [response, loading] = useFetch<ProductsType>({
     url: url,
-    category: category,
-    id: id,
-    title: title,
   });
 
   useEffect(() => {
-    if (response?.data instanceof Array && typeof response !== "undefined") {
-      const slicedResponse = response?.data.slice(0, amount);
-      setData({ data: slicedResponse });
+    // if (response?.data instanceof Array && typeof response !== "undefined") {
+    //   // const slicedResponse = response?.data.slice(0, amount);
+    //   setDatas({ data: response.data });
+    // }
+    if (typeof response !== "undefined") {
+      setDatas(response);
     }
-  }, [response, amount]);
+  }, [response]);
 
   return (
     <>
@@ -50,16 +56,14 @@ function ShowProducts({ amount, url, category = "", id, title }: ProductsProps) 
           </ul>
         ) : (
           <ul className="grid w-full grid-cols-card-grid gap-6 py-10">
-            {data?.data?.map((d) => {
+            {datas?.products.map((product) => {
               return (
-                <Link to={`/products/itemCategory/${d.id}`} key={d.id}>
+                <Link to={`/products/${product._id}`} key={product._id}>
                   <li className="flex h-full flex-col gap-4 rounded-xl bg-white p-4 transition-transform duration-300 hover:scale-105">
-                    <h3 className="d">{d.title}</h3>
-                    <div>
-                      <img src={d.imageUrl} className="w-full" alt={d.title}></img>
-                    </div>
+                    <h3 className="d">{product.name}</h3>
+                    <div>{/* <img src={d.imageUrl} className="w-full" alt={d.title}></img> */}</div>
 
-                    <p className="">{d.updatedAt}</p>
+                    <p className="">{product.description}</p>
                   </li>
                 </Link>
               );

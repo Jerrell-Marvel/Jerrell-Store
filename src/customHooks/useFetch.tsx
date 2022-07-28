@@ -2,34 +2,35 @@ import { useState, useEffect } from "react";
 
 export type useFetchParameters = {
   url: string;
-  category?: string;
-  id?: string;
-  title?: string;
 };
 export type ApiResponse<T> = {
   data: T;
 };
 
-export function useFetch<T>({ url, category = "", id = "", title }: useFetchParameters): [ApiResponse<T> | undefined, boolean] {
-  const [ApiResponse, setApiResponse] = useState<ApiResponse<T> | undefined>(undefined);
+export function useFetch<T>({ url }: useFetchParameters): [T | undefined, boolean, any] {
+  const [ApiResponse, setApiResponse] = useState<T | undefined>(undefined);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState({ success: true });
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`${url}${category}${id}`);
+        const response = await fetch(`${url}`);
+
+        if (!response.ok) {
+          throw response;
+        }
 
         const data: T = await response.json();
-        setApiResponse({
-          data: data,
-        });
+
+        setApiResponse(data);
         setLoading(false);
-      } catch (error) {
-        console.error(error);
+      } catch (error: any) {
+        setError(await error.json());
       }
     };
 
     getData();
-  }, [url, category, id]);
-  return [ApiResponse, loading];
+  }, [url]);
+  return [ApiResponse, loading, error];
 }

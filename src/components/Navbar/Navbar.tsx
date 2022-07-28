@@ -8,6 +8,7 @@ const productCategories = ["all", "hoodie", "snacks", "jeans", "shorts", "shirts
 function Navbar() {
   const [navActive, setNavActive] = useState(false);
   const [showProductCategories, setShowProductCategories] = useState(false);
+
   return (
     <>
       <header className="fixed z-[99] flex h-20 w-full items-center border-b-2 bg-white px-6">
