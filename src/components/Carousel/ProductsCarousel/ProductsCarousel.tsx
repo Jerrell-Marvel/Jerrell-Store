@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useFetch, ApiResponse, useFetchParameters } from "../../../customHooks/useFetch";
+import { useFetch, useFetchParameters } from "../../../customHooks/useFetch";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles

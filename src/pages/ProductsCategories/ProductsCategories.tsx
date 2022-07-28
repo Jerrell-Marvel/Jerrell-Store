@@ -4,7 +4,7 @@ import ShowProducts from "../../components/ShowProducts/ShowProducts";
 import Button from "../../components/Button/Button";
 import { NavLink } from "react-router-dom";
 import SortProductsDropdown from "../../components/Dropdown/SortProductsDropdown";
-import { useState, useRef } from "react";
+import { useState } from "react";
 
 function ProductsCategories() {
   const { category = "all" } = useParams();
