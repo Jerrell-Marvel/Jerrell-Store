@@ -59,7 +59,7 @@ function ProductsCarousel({ url }: ProductsCarouselProps) {
       ) : (
         <div>
           <div className="mb-4 flex items-end justify-between">
-            <h3 className="mr-4 text-2xl font-medium sm:text-3xl md:text-4xl lg:text-5xl">COBA</h3>
+            <h3 className="mr-4 text-2xl font-medium sm:text-3xl md:text-4xl lg:text-5xl">Related products</h3>
             {/* <Link to={`/products/${category}`} className="text-lg sm:text-xl md:mr-4 md:text-2xl lg:mr-8 lg:text-3xl">
               See More ➡
             </Link> */}

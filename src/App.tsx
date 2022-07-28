@@ -9,7 +9,6 @@ import ProductDetails from "./pages/ProductsDetails/ProductsDetails";
 import About from "./pages/About/About";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound/NotFound";
-import ShowProducts from "./components/ShowProducts/ShowProducts";
 // import Wishlist from "./pages/Wishlist/Wishlist";
 // import { WishlistProvider } from "./context/WishlistContext";
 
@@ -23,9 +22,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
 
-        <Route path="/products" element={<Products />}></Route>
-        {/* <Route path="/products/:category" element={<ProductsCategories />}></Route> */}
-        <Route path="/products/:itemId" element={<ProductDetails />}></Route>
+        {/* <Route path="/products" element={<Products />}></Route> */}
+        <Route path="/product-category/:category" element={<ProductsCategories />}></Route>
+        <Route path="/product/:itemId" element={<ProductDetails />}></Route>
 
         <Route path="/cart" />
 

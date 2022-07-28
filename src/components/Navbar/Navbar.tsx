@@ -48,7 +48,7 @@ function Navbar() {
                   <div className={`w-full flex-col divide-y-[1px] rounded-lg bg-white pt-2 md:absolute md:left-0  md:top-full md:hidden md:w-full md:py-2 md:shadow-lg md:group-hover:flex ${showProductCategories ? "flex" : "hidden"}`}>
                     {productCategories.map((category, index) => {
                       return (
-                        <Link to={`/products/${category}`} className="py-2 capitalize hover:underline md:flex md:w-full md:justify-center md:px-4" key={index} onClick={() => setNavActive((prev) => !prev)}>
+                        <Link to={`/product-category/${category}`} className="py-2 capitalize hover:underline md:flex md:w-full md:justify-center md:px-4" key={index} onClick={() => setNavActive((prev) => !prev)}>
                           {category}
                         </Link>
                       );

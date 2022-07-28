@@ -12,7 +12,7 @@ function ProductsNav() {
           {productCategories.map((category, index) => {
             return (
               <li className="h-full" key={index}>
-                <NavLink to={`/products/${category}`} className="group flex h-full items-center">
+                <NavLink to={`/product-category/${category}`} className="group flex h-full items-center">
                   <p className="relative w-fit font-medium uppercase after:absolute after:-bottom-1/4 after:left-1/2 after:block after:h-[3px]  after:w-0 after:bg-slate-800 after:transition-all after:duration-300 after:content-[''] group-hover:after:left-0 group-hover:after:right-0 group-hover:after:w-full">
                     {category}
                   </p>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 // import { useFetch2, ApiResponse } from "../../customHooks/useFetch2";
 import { useFetch } from "../../customHooks/useFetch";
@@ -23,7 +23,6 @@ type ProductType = {
 };
 
 function ProductDetails() {
-  const navigate = useNavigate();
   const { itemId } = useParams();
   // const { wishlist, setWishlist } = useWishlistContext();
 

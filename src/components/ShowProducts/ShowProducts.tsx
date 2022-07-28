@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import { useFetch, ApiResponse } from "../../customHooks/useFetch";
+import { useFetch } from "../../customHooks/useFetch";
 import { Link } from "react-router-dom";
-// import { ProductsProps } from "../Carousel/ProductsCarousel/ProductsCarousel";
 
 type ProductsType = {
   success: boolean;
@@ -24,6 +23,7 @@ type ShowProductsProps = {
 
 function ShowProducts({ url }: ShowProductsProps) {
   const [datas, setDatas] = useState<ProductsType | undefined>(undefined);
+
 
   const [response, loading] = useFetch<ProductsType>({
     url: url,
@@ -58,7 +58,7 @@ function ShowProducts({ url }: ShowProductsProps) {
           <ul className="grid w-full grid-cols-card-grid gap-6 py-10">
             {datas?.products.map((product) => {
               return (
-                <Link to={`/products/${product._id}`} key={product._id}>
+                <Link to={`/product/${product._id}`} key={product._id}>
                   <li className="flex h-full flex-col gap-4 rounded-xl bg-white p-4 transition-transform duration-300 hover:scale-105">
                     <h3 className="d">{product.name}</h3>
                     <div>{/* <img src={d.imageUrl} className="w-full" alt={d.title}></img> */}</div>
