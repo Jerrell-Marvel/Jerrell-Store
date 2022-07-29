@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 export type useFetchParameters = {
   url: string;
@@ -15,13 +16,10 @@ export function useFetch<T>({ url }: useFetchParameters): [T | undefined, boolea
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await fetch(`${url}`);
+        const response = await axios.get(`${url}`);
+        console.log(response);
 
-        if (!response.ok) {
-          throw await response.json();
-        }
-
-        const data: T = await response.json();
+        const data: T = response.data;
 
         setApiResponse(data);
         setLoading(false);

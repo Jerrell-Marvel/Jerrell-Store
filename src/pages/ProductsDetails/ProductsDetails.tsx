@@ -149,7 +149,7 @@ function ProductDetails() {
           </div>
         </div>
       ) : (
-        <NotFound statusCode={error.statusCode} message={error.message} />
+        <NotFound statusCode={error.response.request.status} message={error.response.data.message} statusText={error.response.request.statusText} />
       )}
     </>
   );

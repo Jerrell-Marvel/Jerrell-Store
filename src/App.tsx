@@ -29,7 +29,7 @@ function App() {
 
         {/* <Route path="/wishlist" element={<Wishlist />} /> */}
         <Route path="/login" element={<Login />} />
-        <Route path="*" element={<NotFound statusCode={404} message="Page not found or no longer exist" />} />
+        <Route path="*" element={<NotFound statusCode={404} message="Page not found or no longer exist" statusText="Page not found" />} />
       </Routes>
 
       <Footer />
