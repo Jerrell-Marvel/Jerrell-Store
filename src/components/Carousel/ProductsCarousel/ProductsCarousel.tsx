@@ -5,7 +5,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/free-mode";
-import "swiper/css/pagination";
 
 // import required modules
 import { FreeMode } from "swiper";
@@ -30,9 +29,10 @@ type ProductsType = {
 
 type ProductsCarouselProps = {
   url: string;
+  category: string;
 };
 
-function ProductsCarousel({ url }: ProductsCarouselProps) {
+function ProductsCarousel({ url, category }: ProductsCarouselProps) {
   const [datas, setDatas] = useState<ProductsType | undefined>(undefined);
 
   const [response, loading] = useFetch<ProductsType>({
@@ -60,19 +60,23 @@ function ProductsCarousel({ url }: ProductsCarouselProps) {
         <div>
           <div className="mb-4 flex items-end justify-between">
             <h3 className="mr-4 text-2xl font-medium sm:text-3xl md:text-4xl lg:text-5xl">Related products</h3>
-            {/* <Link to={`/products/${category}`} className="text-lg sm:text-xl md:mr-4 md:text-2xl lg:mr-8 lg:text-3xl">
+            <Link to={`/product-category/${category}`} className="text-lg sm:text-xl md:mr-4 md:text-2xl lg:mr-8 lg:text-3xl">
               See More ➡
-            </Link> */}
+            </Link>
           </div>
 
           <Swiper slidesPerView={"auto"} spaceBetween={30} freeMode={true} modules={[FreeMode]} grabCursor={true}>
             {datas?.products.map((product, index) => {
               return (
-                <SwiperSlide className="!w-64" key={index}>
-                  <Link to={`/products/itemCategory/${product._id}`}>
-                    <div className="flex w-full flex-col">
+                <SwiperSlide className="block !w-64" key={index}>
+                  <Link to={`/product/${product._id}`}>
+                    <div className="z-10 flex w-full flex-col bg-pink-500">
                       {/* <img src={d.imageUrl} alt={d.title} className="mb-3 !h-72" /> */}
                       <h3>{product.name}</h3>
+                      <p>
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis voluptate ratione consectetur necessitatibus, odio neque eligendi eius. Recusandae voluptatum, nam blanditiis perferendis sint sunt ad, ut, illo saepe
+                        ullam quasi.
+                      </p>
                     </div>
                   </Link>
                 </SwiperSlide>

@@ -120,7 +120,7 @@ function ProductDetails() {
           </section>
 
           <div className="w-full">
-            <ProductsCarousel url="http://localhost:5000/api/v1/products" />
+            <ProductsCarousel url="http://localhost:5000/api/v1/products" category={`${itemDetails?.product.category}`} />
           </div>
 
           {/* Modal */}

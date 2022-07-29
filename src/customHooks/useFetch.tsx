@@ -18,7 +18,7 @@ export function useFetch<T>({ url }: useFetchParameters): [T | undefined, boolea
         const response = await fetch(`${url}`);
 
         if (!response.ok) {
-          throw response;
+          throw await response.json();
         }
 
         const data: T = await response.json();
@@ -26,7 +26,7 @@ export function useFetch<T>({ url }: useFetchParameters): [T | undefined, boolea
         setApiResponse(data);
         setLoading(false);
       } catch (error: any) {
-        setError(await error.json());
+        setError(error);
       }
     };
 
