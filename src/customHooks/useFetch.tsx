@@ -16,8 +16,7 @@ export function useFetch<T>({ url }: useFetchParameters): [T | undefined, boolea
   useEffect(() => {
     const getData = async () => {
       try {
-        const response = await axios.get(`${url}`);
-        console.log(response);
+        const response = await axios.get(url);
 
         const data: T = response.data;
 
@@ -25,9 +24,9 @@ export function useFetch<T>({ url }: useFetchParameters): [T | undefined, boolea
         setLoading(false);
       } catch (error: any) {
         setError(error);
+        console.log(error);
       }
     };
-
     getData();
   }, [url]);
   return [ApiResponse, loading, error];

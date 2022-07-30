@@ -35,7 +35,7 @@ type ProductsCarouselProps = {
 function ProductsCarousel({ url, category }: ProductsCarouselProps) {
   const [datas, setDatas] = useState<ProductsType | undefined>(undefined);
 
-  const [response, loading] = useFetch<ProductsType>({
+  const [response, loading, error] = useFetch<ProductsType>({
     url: url,
   });
 

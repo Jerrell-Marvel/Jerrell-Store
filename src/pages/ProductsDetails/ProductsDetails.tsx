@@ -49,7 +49,7 @@ function ProductDetails() {
     if (typeof response !== "undefined") {
       setItemDetails(response);
     }
-  }, [response, loading, error]);
+  }, [response]);
 
   // const addToWishlistHandler = (itemDetails: ProductType | undefined) => {
   //   if (typeof itemDetails !== "undefined") {

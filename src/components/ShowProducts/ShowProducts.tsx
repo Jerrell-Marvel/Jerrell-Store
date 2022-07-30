@@ -24,7 +24,6 @@ type ShowProductsProps = {
 function ShowProducts({ url }: ShowProductsProps) {
   const [datas, setDatas] = useState<ProductsType | undefined>(undefined);
 
-
   const [response, loading] = useFetch<ProductsType>({
     url: url,
   });
