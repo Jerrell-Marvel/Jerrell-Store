@@ -17,9 +17,11 @@ export default function usePost<T>({ url, body, headers }: usePostProps): [T | u
     if (sendRequest) {
       const getData = async () => {
         try {
-          const response: T = await axios.post(url, body, { headers });
-          console.log(response);
-          setApiResponse(response);
+          const response = await axios.post(url, body, { headers });
+
+          const data: T = response.data;
+          console.log(data);
+          setApiResponse(data);
           setLoading(false);
           setSendRequest(false);
         } catch (err: any) {

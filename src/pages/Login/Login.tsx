@@ -2,17 +2,16 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import usePost from "../../customHooks/usePost";
 
-type UserType = {
+type LoginApiResponse = {
   username: string;
-  email: string;
-  password: string;
+  token: string;
 };
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [response, loading, error, sendRequest, setSendRequest] = usePost<UserType>({
+  const [response, loading, error, sendRequest, setSendRequest] = usePost<LoginApiResponse>({
     url: "http://localhost:5000/api/v1/auth/login",
     body: {
       email,

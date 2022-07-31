@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import usePost from "../../customHooks/usePost";
+import matchRegex from "../../utils/matchRegex";
 
 type userType = {
   username: string;
@@ -14,6 +15,8 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
@@ -29,14 +32,16 @@ export default function Register() {
   useEffect(() => {
     if (typeof error !== "undefined" && error.code !== "ERR_NETWORK") {
       if (error.response.data.name === "ValidationError") {
-        setErrorMessage("Invalid email format");
+        console.log(error.response);
+        setErrorMessage("Please provide information");
       }
       if (error.response.data.name === "MongoServerError") {
-        setErrorMessage("Email is already registered");
+        setEmailErrorMessage("Email is already registered");
       }
     }
 
     if (typeof error !== "undefined" && error.code === "ERR_NETWORK") {
+      setEmailErrorMessage("");
       setErrorMessage("Something went wrong please try again later");
     }
 
@@ -50,58 +55,72 @@ export default function Register() {
   }, [response, loading, error, sendRequest, setSendRequest]);
 
   const handleSubmit = () => {
-    setSendRequest(true);
+    const isMatch = matchRegex(email, /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+    if (isMatch) {
+      setSendRequest(true);
+    } else {
+      setEmailErrorMessage("Please provide valid email");
+    }
   };
 
   return (
     <>
       <div className="bg-slate-200 pt-28 pb-8">
-        <form action="" className="mx-auto w-full rounded-lg bg-white p-8 shadow-xl md:w-[576px]">
-          <div className="flex flex-col gap-6 text-center">
-            <h2 className="text-4xl font-semibold">Register to Jerrell Store</h2>
-            <input
-              type="text"
-              name="username"
-              placeholder="username"
-              className="rounded-lg border-2 p-3"
-              value={username}
-              required
-              onChange={(e) => {
-                setUsername(e.target.value);
-              }}
-            />
-            <input
-              type="text"
-              name="email"
-              placeholder="email"
-              className="rounded-lg border-2 p-3"
-              value={email}
-              required
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-            />
-            <input
-              type="password"
-              name="password"
-              className="rounded-lg border-2 p-3"
-              placeholder="password"
-              value={password}
-              required
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-            />
-            <button
-              className="w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300"
-              onClick={(e) => {
-                e.preventDefault();
-                handleSubmit();
-              }}
-            >
-              Register
-            </button>
-            <p>{errorMessage}</p>
+        <form
+          className="mx-auto w-full rounded-lg bg-white p-8 shadow-xl md:w-[576px]"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+        >
+          <div className="flex flex-col gap-6">
+            <h2 className="text-center text-4xl font-semibold">Register to Jerrell Store</h2>
+            <div>
+              <input
+                type="text"
+                required
+                name="username"
+                placeholder="username"
+                className="w-full rounded-lg border-2 p-3"
+                value={username}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                }}
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <input
+                type="text"
+                required
+                name="email"
+                placeholder="email"
+                className={`rounded-lg border-2 ${!emailErrorMessage ? "" : "border-red-500"} w-full p-3`}
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+              />
+              <span className="mt-2 text-red-500">{emailErrorMessage}</span>
+            </div>
+
+            <div>
+              <input
+                type="password"
+                name="password"
+                className="w-full rounded-lg border-2 p-3"
+                placeholder="password"
+                value={password}
+                required
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                }}
+              />
+            </div>
+
+            {errorMessage ? <span className="mt-2 text-red-500">{errorMessage}</span> : ""}
+
+            <button className="w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">Register</button>
           </div>
         </form>
       </div>
