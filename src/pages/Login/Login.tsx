@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import usePost from "../../customHooks/usePost";
+import matchRegex from "../../utils/matchRegex";
 
 type LoginApiResponse = {
   username: string;
@@ -11,6 +12,8 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [emailErrorMessage, setEmailErrorMessage] = useState("");
+  const [passwordErrorMessge, setPasswordErrorMessage] = useState("");
   const [response, loading, error, sendRequest, setSendRequest] = usePost<LoginApiResponse>({
     url: "http://localhost:5000/api/v1/auth/login",
     body: {
@@ -21,7 +24,13 @@ function Login() {
 
   useEffect(() => {
     if (typeof error !== "undefined" && error.code !== "ERR_NETWORK") {
-      setErrorMessage(error.response.data.message);
+      if (error.response.data.message === "incorrect password") {
+        setPasswordErrorMessage("Incorrect password");
+      } else if (error.response.data.message === "email is not registered") {
+        setEmailErrorMessage("Email is not registered");
+      } else {
+        setErrorMessage(error.response.data.message);
+      }
     }
 
     if (typeof error !== "undefined" && error.code === "ERR_NETWORK") {
@@ -34,60 +43,77 @@ function Login() {
   }, [response, loading, error, sendRequest, setSendRequest]);
 
   const handleSubmit = () => {
-    setSendRequest(true);
+    if (!email || !password) {
+      setErrorMessage("Please fill value for each field");
+    }
+    const isMatch = matchRegex(email, /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+    if (isMatch) {
+      setSendRequest(true);
+    } else {
+      setEmailErrorMessage("Please provide valid email");
+    }
   };
 
   return (
     <div className="bg-slate-200 pt-28 pb-8">
-      <form action="" className="mx-auto w-full rounded-lg bg-white p-8 shadow-xl md:w-[576px]">
-        <div className="flex flex-col gap-6 text-center">
-          <h2 className="text-4xl font-semibold">Login to Jerrell Store</h2>
-          <input
-            type="text"
-            name="email"
-            placeholder="email"
-            className="rounded-lg border-2 p-3"
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-          />
-          <input
-            type="password"
-            name="password"
-            className="rounded-lg border-2 p-3"
-            placeholder="password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-          <button
-            className="w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300"
-            onClick={(e) => {
-              e.preventDefault();
-              handleSubmit();
-            }}
-          >
-            Login
-          </button>
-          <Link to="/" className="hover:underline">
+      <form
+        action=""
+        className="mx-auto w-full rounded-lg bg-white p-8 shadow-xl md:w-[576px]"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
+        <div className="flex flex-col gap-6">
+          <h2 className="text-center text-4xl font-semibold">Login to Jerrell Store</h2>
+          <div>
+            <input
+              type="text"
+              name="email"
+              placeholder="email"
+              className={`rounded-lg border-2 ${!emailErrorMessage ? "" : "border-red-500"} w-full p-3`}
+              required
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+            />
+            <span className="mt-2 text-red-500">{emailErrorMessage}</span>
+          </div>
+
+          <div>
+            <input
+              type="password"
+              name="password"
+              className={`rounded-lg border-2 ${!passwordErrorMessge ? "" : "border-red-500"} w-full p-3`}
+              required
+              placeholder="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+            <span className="mt-2 text-red-500">{passwordErrorMessge}</span>
+          </div>
+
+          {errorMessage ? <span className="mt-2 text-red-500">{errorMessage}</span> : ""}
+          <button className="w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">Login</button>
+          <Link to="/" className="text-center hover:underline">
             Forgot Password or Username?
           </Link>
-          <div className="grid grid-cols-[1fr_90px_1fr] items-center">
+          <div className="grid grid-cols-[1fr_auto_1fr] items-center">
             <div className="h-[1px] bg-slate-600"></div>
-            <div>login with</div>
+            <div className="px-3 text-center">Login with</div>
             <div className="h-[1px] bg-slate-600"></div>
           </div>
 
           <button className="w-full border-2 bg-red-500 py-4 uppercase text-white transition-colors duration-300">Google</button>
 
-          <div>
+          <div className="text-center">
             <span className="text-lg">Don't have an account? </span>
             <Link to="/register" className="text-lg font-medium hover:underline">
               Sign Up
             </Link>
           </div>
         </div>
-        <p>{errorMessage}</p>
       </form>
     </div>
   );

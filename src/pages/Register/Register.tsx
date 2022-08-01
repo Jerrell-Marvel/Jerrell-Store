@@ -55,7 +55,12 @@ export default function Register() {
   }, [response, loading, error, sendRequest, setSendRequest]);
 
   const handleSubmit = () => {
+    if (!email || !username || !password) {
+      return setErrorMessage("Please fill value for each field");
+    }
+
     const isMatch = matchRegex(email, /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
+
     if (isMatch) {
       setSendRequest(true);
     } else {
