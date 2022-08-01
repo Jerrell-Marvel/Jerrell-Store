@@ -15,6 +15,7 @@ export function useFetch<T>({ url }: useFetchParameters): [T | undefined, boolea
 
   useEffect(() => {
     const getData = async () => {
+      console.log("called");
       try {
         const response = await axios.get(url);
 

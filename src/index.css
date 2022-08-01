@@ -60,3 +60,7 @@ input[type="number"] {
   transition: 10s ease-out;
   transform: scale(1.2);
 }
+
+input:focus {
+  outline: none;
+}

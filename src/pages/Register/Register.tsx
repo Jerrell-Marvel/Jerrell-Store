@@ -48,11 +48,11 @@ export default function Register() {
     if (typeof response !== "undefined") {
       setIsSuccess(true);
       setErrorMessage("");
-      setTimeout(() => {
-        navigate("/login");
-      }, 1000);
+      // setTimeout(() => {
+      //   navigate("/login");
+      // }, 1000);
     }
-  }, [response, loading, error, sendRequest, setSendRequest]);
+  }, [response, loading, error, sendRequest, setSendRequest, navigate]);
 
   const handleSubmit = () => {
     if (!email || !username || !password) {

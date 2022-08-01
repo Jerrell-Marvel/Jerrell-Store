@@ -13,7 +13,8 @@ function Login() {
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
-  const [passwordErrorMessge, setPasswordErrorMessage] = useState("");
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
   const [response, loading, error, sendRequest, setSendRequest] = usePost<LoginApiResponse>({
     url: "http://localhost:5000/api/v1/auth/login",
     body: {
@@ -38,9 +39,8 @@ function Login() {
     }
 
     if (typeof response !== "undefined") {
-      console.log(response);
     }
-  }, [response, loading, error, sendRequest, setSendRequest]);
+  }, [response, loading, error]);
 
   const handleSubmit = () => {
     if (!email || !password) {
@@ -84,14 +84,14 @@ function Login() {
             <input
               type="password"
               name="password"
-              className={`rounded-lg border-2 ${!passwordErrorMessge ? "" : "border-red-500"} w-full p-3`}
+              className={`rounded-lg border-2 ${!passwordErrorMessage ? "" : "border-red-500"} w-full p-3`}
               required
               placeholder="password"
               onChange={(e) => {
                 setPassword(e.target.value);
               }}
             />
-            <span className="mt-2 text-red-500">{passwordErrorMessge}</span>
+            <span className="mt-2 text-red-500">{passwordErrorMessage}</span>
           </div>
 
           {errorMessage ? <span className="mt-2 text-red-500">{errorMessage}</span> : ""}
@@ -115,6 +115,7 @@ function Login() {
           </div>
         </div>
       </form>
+      <p>{loading ? "LOADINGGGGGGG" : ""}</p>
     </div>
   );
 }

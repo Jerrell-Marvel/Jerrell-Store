@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios, { AxiosRequestHeaders } from "axios";
 
 type usePostProps = {
@@ -9,31 +9,33 @@ type usePostProps = {
 
 export default function usePost<T>({ url, body, headers }: usePostProps): [T | undefined, boolean, any, boolean, React.Dispatch<React.SetStateAction<boolean>>] {
   const [ApiResponse, setApiResponse] = useState<T | undefined>(undefined);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any | undefined>(undefined);
   const [sendRequest, setSendRequest] = useState(false);
 
   useEffect(() => {
-    if (sendRequest) {
-      const getData = async () => {
-        try {
-          const response = await axios.post(url, body, { headers });
+    const getData = async () => {
+      try {
+        const response = await axios.post(url, body, { headers });
+        console.log("called");
 
-          const data: T = response.data;
-          console.log(data);
-          setApiResponse(data);
-          setLoading(false);
-          setSendRequest(false);
-        } catch (err: any) {
-          console.log(err);
-          setError(err);
-          setSendRequest(false);
-          setLoading(false);
-        }
-      };
+        const data: T = response.data;
+        console.log(data);
+        setApiResponse(data);
+        setLoading(false);
+        setSendRequest(false);
+      } catch (err: any) {
+        console.log(err);
+        setError(err);
+        setSendRequest(false);
+        setLoading(false);
+      }
+    };
+    if (sendRequest) {
       getData();
+      setLoading(true);
     }
-  }, [url, headers, body]);
+  }, [sendRequest]);
 
   return [ApiResponse, loading, error, sendRequest, setSendRequest];
 }
