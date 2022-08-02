@@ -9,6 +9,12 @@ type userType = {
   password: string;
 };
 
+type RegisterType = {
+  username: string;
+  email: string;
+  password: string;
+};
+
 export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");

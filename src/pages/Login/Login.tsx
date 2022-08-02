@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import usePost from "../../customHooks/usePost";
 import matchRegex from "../../utils/matchRegex";
+import { useCookies } from "react-cookie";
 
 type LoginApiResponse = {
   username: string;
@@ -15,6 +16,9 @@ function Login() {
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+
+  const [cookies, setCookie] = useCookies(["token"]);
+
   const [response, loading, error, sendRequest, setSendRequest] = usePost<LoginApiResponse>({
     url: "http://localhost:5000/api/v1/auth/login",
     body: {
@@ -39,6 +43,8 @@ function Login() {
     }
 
     if (typeof response !== "undefined") {
+      setCookie("token", response.token, { path: "/" });
+      console.log(response);
     }
   }, [response, loading, error]);
 

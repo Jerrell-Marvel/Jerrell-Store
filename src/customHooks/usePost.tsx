@@ -14,6 +14,7 @@ export default function usePost<T>({ url, body, headers }: usePostProps): [T | u
   const [sendRequest, setSendRequest] = useState(false);
 
   useEffect(() => {
+    console.log("inside use effect");
     const getData = async () => {
       try {
         const response = await axios.post(url, body, { headers });

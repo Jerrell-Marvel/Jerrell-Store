@@ -2,12 +2,14 @@ import { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import NavCart from "./NavCart";
 import Button from "../Button/Button";
+import { useCookies } from "react-cookie";
 
 const navLinks = ["about", "wishlist"];
 const productCategories = ["all", "hoodie", "snacks", "jeans", "shorts", "shirts"];
 function Navbar() {
   const [navActive, setNavActive] = useState(false);
   const [showProductCategories, setShowProductCategories] = useState(false);
+  const [cookies, setCookie] = useCookies(["token"]);
 
   return (
     <>
@@ -58,10 +60,15 @@ function Navbar() {
               </li>
 
               <NavCart />
+
               <li>
-                <NavLink to={`/login`} className="z-10 block py-3 pl-6 md:py-0 md:pl-0">
-                  <Button>Login</Button>
-                </NavLink>
+                {cookies.token ? (
+                  <span className="z-10 block py-3 pl-6 md:py-0 md:pl-0">Username</span>
+                ) : (
+                  <NavLink to={`/login`} className="z-10 block py-3 pl-6 md:py-0 md:pl-0">
+                    <Button>Login</Button>
+                  </NavLink>
+                )}
               </li>
             </ul>
           </nav>
