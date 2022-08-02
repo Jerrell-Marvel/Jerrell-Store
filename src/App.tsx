@@ -9,6 +9,7 @@ import About from "./pages/About/About";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound/NotFound";
 import Register from "./pages/Register/Register";
+import Wishlist from "./pages/Wishlist/Wishlist";
 // import Wishlist from "./pages/Wishlist/Wishlist";
 // import { WishlistProvider } from "./context/WishlistContext";
 
@@ -28,7 +29,7 @@ function App() {
 
         <Route path="/cart" />
 
-        {/* <Route path="/wishlist" element={<Wishlist />} /> */}
+        <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="*" element={<NotFound statusCode={404} message="Page not found or no longer exist" statusText="Page not found" />} />
