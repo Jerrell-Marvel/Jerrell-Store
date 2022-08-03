@@ -28,6 +28,7 @@ export function useFetch<T>({ url, headers }: useFetchParameters): [T | undefine
         console.log(error);
       }
     };
+    getData();
   }, [url]);
   return [ApiResponse, loading, error];
 }

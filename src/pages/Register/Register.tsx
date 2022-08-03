@@ -58,7 +58,7 @@ export default function Register() {
       //   navigate("/login");
       // }, 1000);
     }
-  }, [response, loading, error, sendRequest, setSendRequest, navigate]);
+  }, [response, loading, error]);
 
   const handleSubmit = () => {
     if (!email || !username || !password) {

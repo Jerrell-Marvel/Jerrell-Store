@@ -5,6 +5,8 @@ import { Link, useParams } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch";
 import ProductsCarousel from "../../components/Carousel/ProductsCarousel/ProductsCarousel";
 import NotFound from "../NotFound/NotFound";
+import usePost from "../../customHooks/usePost";
+import { useCookies } from "react-cookie";
 // import { useWishlistContext } from "../../context/WishlistContext";
 
 type ProductType = {
@@ -29,6 +31,7 @@ function ProductDetails() {
   const [itemDetails, setItemDetails] = useState<ProductType | undefined>(undefined);
   const [productAmount, setProductAmount] = useState(1);
   const [isModalActive, setIsModalActive] = useState(false);
+  const [cookies] = useCookies();
 
   const incrementAmount = () => {
     setProductAmount(productAmount + 1);
@@ -41,15 +44,36 @@ function ProductDetails() {
     }
   };
 
-  const [response, loading, error] = useFetch<ProductType>({
+  const [fetchResponse, fetchLoading, fetchError] = useFetch<ProductType>({
     url: `http://localhost:5000/api/v1/products/${itemId}`,
   });
 
+  const [postResponse, loading, error, sendRequest, setSendRequest] = usePost({
+    url: `http://localhost:5000/api/v1/wishlist`,
+    body: {
+      productId: itemId,
+    },
+    headers: {
+      authorization: `Bearer ${cookies.token}`,
+    },
+  });
+
   useEffect(() => {
-    if (typeof response !== "undefined") {
-      setItemDetails(response);
+    if (typeof fetchResponse !== "undefined") {
+      setItemDetails(fetchResponse);
     }
-  }, [response]);
+  }, [fetchResponse]);
+
+  useEffect(() => {
+    if (postResponse) {
+      setIsModalActive((prev) => !prev);
+      console.log(isModalActive);
+    }
+  }, [postResponse, loading, error]);
+
+  const addToWishlistHandler = () => {
+    setSendRequest(true);
+  };
 
   // const addToWishlistHandler = (itemDetails: ProductType | undefined) => {
   //   if (typeof itemDetails !== "undefined") {
@@ -82,13 +106,13 @@ function ProductDetails() {
 
   return (
     <>
-      {error.success ? (
+      {fetchError.success ? (
         <div>
           <section className="bg-slate-50 px-6 pt-20 pb-6">
             <div className="flex flex-wrap">
               <h3 className="my-6 w-full">{itemDetails?.product.category}</h3>
 
-              <div className="w-full md:w-1/2">{loading ? <div className="h-full w-full animate-loading bg-slate-200"></div> : <img src={itemDetails?.product.weight} alt={itemDetails?.product.weight} />}</div>
+              <div className="w-full md:w-1/2">{fetchLoading ? <div className="h-full w-full animate-loading bg-slate-200"></div> : <img src={itemDetails?.product.weight} alt={itemDetails?.product.weight} />}</div>
 
               <div className="w-full md:w-1/2 md:pl-8">
                 <h2 className="mb-4 mt-8 text-2xl font-medium uppercase md:mt-0 lg:text-4xl">{itemDetails?.product.name}</h2>
@@ -107,10 +131,9 @@ function ProductDetails() {
 
                 <button className="mt-4 w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">add to cart</button>
                 <button
-                  // onClick={(e) => {
-                  //   addToWishlistHandler(itemDetails?.data);
-                  //   setIsModalActive((prev) => !prev);
-                  // }}
+                  onClick={(e) => {
+                    addToWishlistHandler();
+                  }}
                   className="mt-4 w-full border-2 border-black bg-white py-4 uppercase text-black transition-colors duration-300 hover:bg-slate-100"
                 >
                   add to wishlist
@@ -149,7 +172,7 @@ function ProductDetails() {
           </div>
         </div>
       ) : (
-        <NotFound statusCode={error.response.request.status} message={error.response.data.message} statusText={error.response.request.statusText} />
+        <NotFound statusCode={fetchError.fetchResponse.request.status} message={error.fetchResponse.data.message} statusText={fetchError.request.statusText} />
       )}
     </>
   );

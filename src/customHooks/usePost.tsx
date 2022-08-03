@@ -36,7 +36,7 @@ export default function usePost<T>({ url, body, headers }: usePostProps): [T | u
       getData();
       setLoading(true);
     }
-  }, [body, headers, sendRequest, url]);
+  }, [sendRequest]);
 
   return [ApiResponse, loading, error, sendRequest, setSendRequest];
 }
