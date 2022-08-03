@@ -33,6 +33,7 @@ export default function Register() {
       email,
       password,
     },
+    method: "post",
   });
 
   useEffect(() => {

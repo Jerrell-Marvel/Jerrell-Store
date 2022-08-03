@@ -5,9 +5,10 @@ type usePostProps = {
   url: string;
   body: object;
   headers?: AxiosRequestHeaders;
+  method: "post" | "put" | "delete";
 };
 
-export default function usePost<T>({ url, body, headers }: usePostProps): [T | undefined, boolean, any, boolean, React.Dispatch<React.SetStateAction<boolean>>] {
+export default function usePost<T>({ url, body, headers, method }: usePostProps): [T | undefined, boolean, any, boolean, React.Dispatch<React.SetStateAction<boolean>>] {
   const [ApiResponse, setApiResponse] = useState<T | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any | undefined>(undefined);
@@ -17,7 +18,7 @@ export default function usePost<T>({ url, body, headers }: usePostProps): [T | u
     const getData = async () => {
       console.log("called");
       try {
-        const response = await axios.post(url, body, { headers });
+        const response = await axios[method](url, body, { headers });
         console.log("called");
 
         const data: T = response.data;

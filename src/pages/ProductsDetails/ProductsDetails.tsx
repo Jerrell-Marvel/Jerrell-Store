@@ -56,6 +56,7 @@ function ProductDetails() {
     headers: {
       authorization: `Bearer ${cookies.token}`,
     },
+    method: "post",
   });
 
   useEffect(() => {
