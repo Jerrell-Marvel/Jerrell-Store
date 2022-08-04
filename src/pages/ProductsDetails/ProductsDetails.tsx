@@ -31,6 +31,7 @@ function ProductDetails() {
   const [itemDetails, setItemDetails] = useState<ProductType | undefined>(undefined);
   const [productAmount, setProductAmount] = useState(1);
   const [isModalActive, setIsModalActive] = useState(false);
+  const [wishlistErrorMessage, setWishlistErrorMessage] = useState("");
   const [cookies] = useCookies();
 
   const incrementAmount = () => {
@@ -48,7 +49,7 @@ function ProductDetails() {
     url: `http://localhost:5000/api/v1/products/${itemId}`,
   });
 
-  const [postResponse, loading, error, sendRequest, setSendRequest] = usePost({
+  const [addWishlistResponse, loading, error, sendRequest, setSendRequest] = usePost({
     url: `http://localhost:5000/api/v1/wishlist`,
     body: {
       productId: itemId,
@@ -61,16 +62,26 @@ function ProductDetails() {
 
   useEffect(() => {
     if (typeof fetchResponse !== "undefined") {
-      setItemDetails(fetchResponse);
+      return setItemDetails(fetchResponse);
     }
   }, [fetchResponse]);
 
   useEffect(() => {
-    if (postResponse) {
+    if (typeof error !== "undefined") {
+      if (error.code === "ERR_NETWORK") {
+        return setWishlistErrorMessage("Something went wrong please try again later");
+      }
+      if (error.response.data.message === "Duplicate value error") {
+        return setWishlistErrorMessage("Item is already in wishlist");
+      }
+    }
+
+    if (typeof addWishlistResponse !== "undefined") {
       setIsModalActive((prev) => !prev);
+      console.log(addWishlistResponse);
       console.log(isModalActive);
     }
-  }, [postResponse, loading, error]);
+  }, [addWishlistResponse, loading, error]);
 
   const addToWishlistHandler = () => {
     setSendRequest(true);
@@ -132,13 +143,24 @@ function ProductDetails() {
 
                 <button className="mt-4 w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">add to cart</button>
                 <button
-                  onClick={(e) => {
+                  onClick={() => {
                     addToWishlistHandler();
                   }}
                   className="mt-4 w-full border-2 border-black bg-white py-4 uppercase text-black transition-colors duration-300 hover:bg-slate-100"
                 >
                   add to wishlist
                 </button>
+                {wishlistErrorMessage ? (
+                  <span className="!mt-2 block text-red-500">
+                    Item is already in wishlist{" "}
+                    <Link to="/wishlist" className="text-black underline">
+                      click here
+                    </Link>{" "}
+                    to check
+                  </span>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </section>
@@ -148,32 +170,37 @@ function ProductDetails() {
           </div>
 
           {/* Modal */}
-          <div className={`${isModalActive ? "visible" : "invisible"}`}>
-            <div className="fixed left-0 right-0 bottom-0 top-0 z-10 bg-black opacity-40"></div>
-            <div className="fixed left-0 right-0 bottom-0 top-0 z-20 pt-20">
-              <div className="absolute top-1/2 left-1/2 w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-6 lg:w-1/2">
-                <h4 className="mb-2 text-3xl font-medium uppercase">successfully added</h4>
-                <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam, rem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, dolor.</span>
+        </div>
+      ) : (
+        <NotFound statusCode={fetchError.fetchResponse.request.status} message={error.fetchResponse.data.message} statusText={fetchError.request.statusText} />
+      )}
 
-                <div className="mt-4 flex gap-4">
-                  <button
-                    onClick={() => {
-                      setIsModalActive((prev) => !prev);
-                    }}
-                    className="w-fit border-2 border-black bg-white py-2 px-4 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"
-                  >
-                    ADD MORE
-                  </button>
-                  <Link to="/wishlist" className="w-fit border-2 border-black bg-primary px-4 py-2 text-sm uppercase text-white transition-colors duration-300">
-                    WISHLIST PAGE
-                  </Link>
-                </div>
+      {isModalActive ? (
+        <div className={`${isModalActive ? "visible" : "invisible"}`}>
+          <div className="fixed left-0 right-0 bottom-0 top-0 z-10 bg-black opacity-40"></div>
+          <div className="fixed left-0 right-0 bottom-0 top-0 z-20 pt-20">
+            <div className="absolute top-1/2 left-1/2 w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-6 lg:w-1/2">
+              <h4 className="mb-2 text-3xl font-medium uppercase">successfully added</h4>
+              <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam, rem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, dolor.</span>
+
+              <div className="mt-4 flex gap-4">
+                <button
+                  onClick={() => {
+                    setIsModalActive((prev) => !prev);
+                  }}
+                  className="w-fit border-2 border-black bg-white py-2 px-4 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"
+                >
+                  ADD MORE
+                </button>
+                <Link to="/wishlist" className="w-fit border-2 border-black bg-primary px-4 py-2 text-sm uppercase text-white transition-colors duration-300">
+                  WISHLIST PAGE
+                </Link>
               </div>
             </div>
           </div>
         </div>
       ) : (
-        <NotFound statusCode={fetchError.fetchResponse.request.status} message={error.fetchResponse.data.message} statusText={fetchError.request.statusText} />
+        ""
       )}
     </>
   );

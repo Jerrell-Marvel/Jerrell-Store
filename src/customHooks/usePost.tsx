@@ -19,7 +19,6 @@ export default function usePost<T>({ url, body, headers, method }: usePostProps)
       console.log("called");
       try {
         const response = await axios[method](url, body, { headers });
-        console.log("called");
 
         const data: T = response.data;
         console.log(data);
