@@ -21,6 +21,7 @@ function Login() {
 
   const [response, loading, error, sendRequest, setSendRequest] = usePost<LoginApiResponse>({
     url: "http://localhost:5000/api/v1/auth/login",
+    method: "post",
     body: {
       email,
       password,
