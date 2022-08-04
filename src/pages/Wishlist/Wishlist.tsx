@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { Link } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch";
+import usePost from "../../customHooks/usePost";
+
 type WishlistType = {
   _id: string;
   product: {
@@ -24,6 +26,7 @@ type WishlistApiResponseType = {
 export default function Wishlist() {
   const [wishlist, setWishlist] = useState<WishlistType[] | []>([]);
   const [cookies] = useCookies(["token"]);
+  const [itemId, setItemId] = useState("");
   const [response, loading, error] = useFetch<WishlistApiResponseType>({
     url: "http://localhost:5000/api/v1/wishlist",
     headers: {
@@ -31,11 +34,50 @@ export default function Wishlist() {
     },
   });
 
+  const [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, SendDeleteWishlistRequest, setSendDeleteWishlistRequest] = usePost({
+    url: `http://localhost:5000/api/v1/wishlist/${itemId}`,
+    body: {
+      productId: itemId,
+    },
+    headers: {
+      authorization: `Bearer ${cookies.token}`,
+    },
+    method: "delete",
+  });
+
+  useEffect(() => {
+    if (typeof deleteWishlistError !== "undefined") {
+      if (deleteWishlistError.code === "ERR_NETWORK") {
+        // return setWishlistErrorMessage("Something went wrong please try again later");
+        console.log("something");
+      }
+      if (deleteWishlistError.response.data.message === "Duplicate value error") {
+        // return setWishlistErrorMessage("Item is already in wishlist");
+      }
+    }
+
+    if (typeof deleteWishlistResponse !== "undefined") {
+      alert("are you sure to remove item from wishlist?");
+      const newWishlist = [...wishlist];
+      const deletedWishlist = newWishlist.filter((wishlist) => {
+        return wishlist._id !== itemId;
+      });
+      setWishlist(deletedWishlist);
+
+      console.log(deleteWishlistResponse);
+    }
+  }, [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError]);
+
   useEffect(() => {
     if (typeof response !== "undefined") {
-      setWishlist(response.wishlists);
+      setWishlist(response.wishlists.reverse());
     }
   }, [response, loading, error]);
+
+  const removeWishlistHandler = (Id: string) => {
+    setItemId(Id);
+    setSendDeleteWishlistRequest(true);
+  };
   return (
     <>
       <div className="pt-20 text-center">
@@ -54,11 +96,18 @@ export default function Wishlist() {
                     <div className="flex h-full flex-col items-end gap-2 pl-4 text-right">
                       <h4 className="font-medium md:text-lg lg:text-xl">{list.product.name}</h4>
 
-                      <Link to={`/products/itemCategory/${list.product._id}`} className="mb-1 w-fit border-2 border-black bg-primary px-2 py-1 text-sm uppercase text-white transition-colors duration-300">
+                      <Link to={`/product/${list.product._id}`} className="mb-1 w-fit border-2 border-black bg-primary px-2 py-1 text-sm uppercase text-white transition-colors duration-300">
                         view item
                       </Link>
 
-                      <button className="w-fit border-2 border-black bg-white px-2 py-1 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100">Remove</button>
+                      <button
+                        className="w-fit border-2 border-black bg-white px-2 py-1 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"
+                        onClick={() => {
+                          removeWishlistHandler(list._id);
+                        }}
+                      >
+                        Remove
+                      </button>
                     </div>
                   </div>
                 </li>

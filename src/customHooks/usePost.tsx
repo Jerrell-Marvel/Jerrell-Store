@@ -14,27 +14,45 @@ export default function usePost<T>({ url, body, headers, method }: usePostProps)
   const [error, setError] = useState<any | undefined>(undefined);
   const [sendRequest, setSendRequest] = useState(false);
 
-  useEffect(() => {
-    const getData = async () => {
-      console.log("called");
-      try {
-        const response = await axios[method](url, body, { headers });
-
-        const data: T = response.data;
-        console.log(data);
-        setApiResponse(data);
-        setLoading(false);
-        setSendRequest(false);
-      } catch (err: any) {
-        console.log(err);
-        setError(err);
-        setSendRequest(false);
-        setLoading(false);
+  const getData = async () => {
+    try {
+      let response;
+      if (method === "delete") {
+        response = await axios.delete(url, {
+          headers,
+          data: body,
+        });
+      } else {
+        response = await axios[method](url, body, {
+          headers,
+        });
       }
-    };
+
+      const data: T = response.data;
+      setApiResponse(data);
+      setLoading(false);
+      setSendRequest(false);
+      setError(undefined);
+    } catch (err: any) {
+      console.log(err);
+      setApiResponse(undefined);
+      setSendRequest(false);
+      setLoading(false);
+      setError(err);
+    }
+  };
+
+  useEffect(() => {
+    console.log("use post called");
+
     if (sendRequest) {
       getData();
       setLoading(true);
+    } else {
+      setApiResponse(undefined);
+      setSendRequest(false);
+      setLoading(false);
+      setError(undefined);
     }
   }, [sendRequest]);
 

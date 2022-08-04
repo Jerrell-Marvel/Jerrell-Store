@@ -49,7 +49,7 @@ function ProductDetails() {
     url: `http://localhost:5000/api/v1/products/${itemId}`,
   });
 
-  const [addWishlistResponse, loading, error, sendRequest, setSendRequest] = usePost({
+  const [addWishlistResponse, addWishlistLoading, addWishlistError, sendAddWishlistRequest, setSendAddWishlistRequest] = usePost({
     url: `http://localhost:5000/api/v1/wishlist`,
     body: {
       productId: itemId,
@@ -67,24 +67,24 @@ function ProductDetails() {
   }, [fetchResponse]);
 
   useEffect(() => {
-    if (typeof error !== "undefined") {
-      if (error.code === "ERR_NETWORK") {
+    if (typeof addWishlistError !== "undefined") {
+      if (addWishlistError.code === "ERR_NETWORK") {
         return setWishlistErrorMessage("Something went wrong please try again later");
       }
-      if (error.response.data.message === "Duplicate value error") {
+      if (addWishlistError.response.data.message === "Duplicate value error") {
         return setWishlistErrorMessage("Item is already in wishlist");
       }
     }
 
     if (typeof addWishlistResponse !== "undefined") {
+      console.log("inside if statement");
       setIsModalActive((prev) => !prev);
-      console.log(addWishlistResponse);
-      console.log(isModalActive);
+      setWishlistErrorMessage("");
     }
-  }, [addWishlistResponse, loading, error]);
+  }, [addWishlistResponse, addWishlistLoading, addWishlistError]);
 
   const addToWishlistHandler = () => {
-    setSendRequest(true);
+    setSendAddWishlistRequest(true);
   };
 
   // const addToWishlistHandler = (itemDetails: ProductType | undefined) => {
@@ -172,7 +172,7 @@ function ProductDetails() {
           {/* Modal */}
         </div>
       ) : (
-        <NotFound statusCode={fetchError.fetchResponse.request.status} message={error.fetchResponse.data.message} statusText={fetchError.request.statusText} />
+        <NotFound statusCode={fetchError.fetchResponse.request.status} message={fetchError.fetchResponse.data.message} statusText={fetchError.request.statusText} />
       )}
 
       {isModalActive ? (
