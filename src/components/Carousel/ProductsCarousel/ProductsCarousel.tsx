@@ -34,6 +34,7 @@ type ProductsCarouselProps = {
 
 function ProductsCarousel({ url, category }: ProductsCarouselProps) {
   const [datas, setDatas] = useState<ProductsType | undefined>(undefined);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [response, loading, error] = useFetch<ProductsType>({
     url: url,
@@ -43,8 +44,10 @@ function ProductsCarousel({ url, category }: ProductsCarouselProps) {
     if (typeof response !== "undefined") {
       // const slicedResponse = response?.data.slice(0, amount);
       setDatas(response);
+    } else if (typeof error !== "undefined") {
+      setErrorMessage("Failed to get resources");
     }
-  }, [response]);
+  }, [response, error]);
 
   return (
     <section className="px-6 py-12 md:py-16">
@@ -53,7 +56,7 @@ function ProductsCarousel({ url, category }: ProductsCarouselProps) {
           <div className="flex h-72 w-fit">
             {[...Array(10)].map((element, index) => (
               <div className="mr-4 flex h-full w-64 animate-loading items-center justify-center rounded-sm bg-slate-200" key={index}>
-                Failed to load resources
+                {errorMessage ? errorMessage : ""}
               </div>
             ))}
           </div>
