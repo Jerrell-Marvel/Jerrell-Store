@@ -11,7 +11,7 @@ type usePostProps = {
 export default function usePost<T>({ url, body, headers, method }: usePostProps): [T | undefined, boolean, any, boolean, React.Dispatch<React.SetStateAction<boolean>>] {
   const [ApiResponse, setApiResponse] = useState<T | undefined>(undefined);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any | undefined>(undefined);
+  const [error, setError] = useState({ success: true });
   const [sendRequest, setSendRequest] = useState(false);
 
   useEffect(() => {
@@ -36,7 +36,6 @@ export default function usePost<T>({ url, body, headers, method }: usePostProps)
           setApiResponse(data);
           setLoading(false);
           setSendRequest(false);
-          setError(undefined);
         } catch (err: any) {
           console.log(err);
           setApiResponse(undefined);
@@ -51,7 +50,7 @@ export default function usePost<T>({ url, body, headers, method }: usePostProps)
       setApiResponse(undefined);
       setSendRequest(false);
       setLoading(false);
-      setError(undefined);
+      setError({ success: true });
     }
   }, [sendRequest]);
 

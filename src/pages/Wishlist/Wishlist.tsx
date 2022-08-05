@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch";
 import usePost from "../../customHooks/usePost";
 
@@ -27,6 +27,8 @@ export default function Wishlist() {
   const [wishlist, setWishlist] = useState<WishlistType[] | []>([]);
   const [cookies] = useCookies(["token"]);
   const [itemId, setItemId] = useState("");
+  const navigate = useNavigate();
+  const [fetchErrorMessage, setFetchErrorMessage] = useState("");
   const [response, loading, error] = useFetch<WishlistApiResponseType>({
     url: "http://localhost:5000/api/v1/wishlist",
     headers: {
@@ -46,7 +48,7 @@ export default function Wishlist() {
   });
 
   useEffect(() => {
-    if (typeof deleteWishlistError !== "undefined") {
+    if (!deleteWishlistError.success) {
       if (deleteWishlistError.code === "ERR_NETWORK") {
         // return setWishlistErrorMessage("Something went wrong please try again later");
         console.log("something");
@@ -72,6 +74,14 @@ export default function Wishlist() {
     if (typeof response !== "undefined") {
       setWishlist(response.wishlists.reverse());
     }
+
+    if (!error.success) {
+      if (error.response.status === 401) {
+        navigate("/login");
+      } else if (error.code === "ERR_NETWORK") {
+        setFetchErrorMessage("Something went wrong please try again later");
+      }
+    }
   }, [response, loading, error]);
 
   const removeWishlistHandler = (Id: string) => {
@@ -83,8 +93,18 @@ export default function Wishlist() {
       <div className="pt-20 text-center">
         <h2 className="my-4 text-4xl font-medium uppercase">Wishlist</h2>
         <div className="bg-slate-100 p-4 text-center ">
-          <h3 className="my-4 text-3xl font-medium">My Wishlist</h3>
-          {wishlist.length > 0 ? "" : <p>Your wishlist is empty</p>}
+          {!fetchErrorMessage ? (
+            !loading ? (
+              <div>
+                <h3 className="my-4 text-3xl font-medium">My Wishlist</h3>
+                {wishlist.length > 0 ? "" : <p>Your wishlist is empty</p>}
+              </div>
+            ) : (
+              "loading"
+            )
+          ) : (
+            <p>{fetchErrorMessage}</p>
+          )}
         </div>
         <div className="py-6 px-6">
           <ul className="flex w-full flex-col items-center">

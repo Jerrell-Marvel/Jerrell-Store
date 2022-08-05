@@ -29,7 +29,7 @@ function Login() {
   });
 
   useEffect(() => {
-    if (typeof error !== "undefined" && error.code !== "ERR_NETWORK") {
+    if (!error.success && error.code !== "ERR_NETWORK") {
       if (error.response.data.message === "incorrect password") {
         setPasswordErrorMessage("Incorrect password");
       } else if (error.response.data.message === "email is not registered") {
@@ -39,7 +39,7 @@ function Login() {
       }
     }
 
-    if (typeof error !== "undefined" && error.code === "ERR_NETWORK") {
+    if (!error.success && error.code === "ERR_NETWORK") {
       setErrorMessage("Something went wrong please try again later");
     }
 

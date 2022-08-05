@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 // import { useFetch2, ApiResponse } from "../../customHooks/useFetch2";
 import { useFetch } from "../../customHooks/useFetch";
@@ -26,6 +26,7 @@ type ProductType = {
 
 function ProductDetails() {
   const { itemId } = useParams();
+  const navigate = useNavigate();
   // const { wishlist, setWishlist } = useWishlistContext();
 
   const [itemDetails, setItemDetails] = useState<ProductType | undefined>(undefined);
@@ -62,17 +63,20 @@ function ProductDetails() {
 
   useEffect(() => {
     if (typeof fetchResponse !== "undefined") {
-      return setItemDetails(fetchResponse);
+      setItemDetails(fetchResponse);
     }
   }, [fetchResponse]);
 
   useEffect(() => {
-    if (typeof addWishlistError !== "undefined") {
+    if (!addWishlistError.success) {
       if (addWishlistError.code === "ERR_NETWORK") {
-        return setWishlistErrorMessage("Something went wrong please try again later");
+        setWishlistErrorMessage("Something went wrong please try again later");
       }
       if (addWishlistError.response.data.message === "Duplicate value error") {
-        return setWishlistErrorMessage("Item is already in wishlist");
+        setWishlistErrorMessage("Item is already in wishlist");
+      }
+      if (addWishlistError.response.status === 401) {
+        navigate("/login");
       }
     }
 

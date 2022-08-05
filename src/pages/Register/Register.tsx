@@ -37,7 +37,7 @@ export default function Register() {
   });
 
   useEffect(() => {
-    if (typeof error !== "undefined" && error.code !== "ERR_NETWORK") {
+    if (!error.success && error.code !== "ERR_NETWORK") {
       if (error.response.data.name === "ValidationError") {
         console.log(error.response);
         setErrorMessage("Please provide information");
@@ -47,7 +47,7 @@ export default function Register() {
       }
     }
 
-    if (typeof error !== "undefined" && error.code === "ERR_NETWORK") {
+    if (!error.success && error.code === "ERR_NETWORK") {
       setEmailErrorMessage("");
       setErrorMessage("Something went wrong please try again later");
     }

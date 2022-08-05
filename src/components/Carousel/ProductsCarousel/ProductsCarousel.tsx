@@ -44,7 +44,7 @@ function ProductsCarousel({ url, category }: ProductsCarouselProps) {
     if (typeof response !== "undefined") {
       // const slicedResponse = response?.data.slice(0, amount);
       setDatas(response);
-    } else if (typeof error !== "undefined") {
+    } else if (!error.success) {
       setErrorMessage("Failed to get resources");
     }
   }, [response, error]);
