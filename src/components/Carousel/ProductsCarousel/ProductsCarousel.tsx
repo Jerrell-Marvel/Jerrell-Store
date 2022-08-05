@@ -52,7 +52,9 @@ function ProductsCarousel({ url, category }: ProductsCarouselProps) {
         <div className="w-full overflow-hidden">
           <div className="flex h-72 w-fit">
             {[...Array(10)].map((element, index) => (
-              <div className="mr-4 h-full w-64 animate-loading rounded-sm bg-slate-200" key={index}></div>
+              <div className="mr-4 flex h-full w-64 animate-loading items-center justify-center rounded-sm bg-slate-200" key={index}>
+                Failed to load resources
+              </div>
             ))}
           </div>
         </div>
