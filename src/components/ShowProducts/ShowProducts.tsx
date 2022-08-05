@@ -23,8 +23,9 @@ type ShowProductsProps = {
 
 function ShowProducts({ url }: ShowProductsProps) {
   const [datas, setDatas] = useState<ProductsType | undefined>(undefined);
+  const [fetchErrorMessage, setFetchErrorMessage] = useState("");
 
-  const [response, loading] = useFetch<ProductsType>({
+  const [response, loading, error] = useFetch<ProductsType>({
     url: url,
   });
 
@@ -36,7 +37,13 @@ function ShowProducts({ url }: ShowProductsProps) {
     if (typeof response !== "undefined") {
       setDatas(response);
     }
-  }, [response]);
+
+    if (!error.success) {
+      if (error.code === "ERR_NETWORK") {
+        setFetchErrorMessage("Something went wrong please try again later");
+      }
+    }
+  }, [response, loading, error]);
 
   return (
     <>
@@ -47,7 +54,7 @@ function ShowProducts({ url }: ShowProductsProps) {
               return (
                 <li className="flex h-96 flex-col gap-4 rounded-xl bg-white p-4 transition-all duration-300" key={index}>
                   <div className="flex-1 animate-loading bg-slate-200"></div>
-                  <div className="flex-[5] animate-loading bg-slate-200"></div>
+                  <div className="flex flex-[5] animate-loading items-center justify-center bg-slate-200 px-6 text-center">{fetchErrorMessage}</div>
                   <div className="flex-[2] animate-loading bg-slate-200"></div>
                 </li>
               );
