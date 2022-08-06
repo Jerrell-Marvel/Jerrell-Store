@@ -102,7 +102,7 @@ function Login() {
           </div>
 
           {errorMessage ? <span className="mt-2 text-red-500">{errorMessage}</span> : ""}
-          <button className="w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">{loading ? "loading" : "register"}</button>
+          <button className="w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">{loading ? "loading" : "login"}</button>
           <Link to="/" className="text-center hover:underline">
             Forgot Password or Username?
           </Link>

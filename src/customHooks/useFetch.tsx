@@ -16,6 +16,7 @@ export function useFetch<T>({ url, headers }: useFetchParameters): [T | undefine
 
   useEffect(() => {
     const getData = async () => {
+      console.log("use fetch called");
       try {
         const response = await axios.get(url, { headers });
 

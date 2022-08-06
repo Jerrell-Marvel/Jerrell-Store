@@ -8,18 +8,20 @@ type UseApiProps = {
   method: "post" | "put" | "delete";
 };
 
-export default function useApi<T>({ url, body, headers, method }: UseApiProps): [T | undefined, boolean, any, () => void] {
+export default function useApi<T>({ url, body, headers, method }: UseApiProps): [T | undefined, boolean, any, (itemId?: string) => void] {
   const [ApiResponse, setApiResponse] = useState<T | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({ success: true });
-  console.log("use api called");
 
-  const getData = async () => {
+  const getData = async (itemId?: string) => {
+    console.log("use api called");
     setLoading(true);
+    setApiResponse(undefined);
+    setError({ success: true });
     try {
       let response;
       if (method === "delete") {
-        response = await axios.delete(url, {
+        response = await axios.delete(`${url}/${itemId}`, {
           headers,
           data: body,
         });

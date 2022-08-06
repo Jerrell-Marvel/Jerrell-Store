@@ -23,6 +23,17 @@ type WishlistApiResponseType = {
   success: boolean;
   wishlists: WishlistType[];
 };
+type DeleteWishlistApiResponseType = {
+  success: boolean;
+  wishlist: {
+    createdAt: string;
+    createdBy: string;
+    product: string;
+    updatedAt: string;
+    __v: 0;
+    _id: string;
+  };
+};
 export default function Wishlist() {
   const [wishlist, setWishlist] = useState<WishlistType[] | []>([]);
   const [cookies] = useCookies(["token"]);
@@ -36,8 +47,8 @@ export default function Wishlist() {
     },
   });
 
-  const [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, SendDeleteWishlistRequest] = useApi({
-    url: `http://localhost:5000/api/v1/wishlist/${itemId}`,
+  const [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, sendDeleteWishlistRequest] = useApi<DeleteWishlistApiResponseType>({
+    url: `http://localhost:5000/api/v1/wishlist`,
     body: {
       productId: itemId,
     },
@@ -59,11 +70,13 @@ export default function Wishlist() {
     }
 
     if (typeof deleteWishlistResponse !== "undefined") {
-      alert("are you sure to remove item from wishlist?");
       const newWishlist = [...wishlist];
+      console.log(newWishlist);
       const deletedWishlist = newWishlist.filter((wishlist) => {
-        return wishlist._id !== itemId;
+        return wishlist._id !== deleteWishlistResponse.wishlist._id;
       });
+      console.log(deletedWishlist);
+
       setWishlist(deletedWishlist);
 
       console.log(deleteWishlistResponse);
@@ -72,7 +85,7 @@ export default function Wishlist() {
 
   useEffect(() => {
     if (typeof response !== "undefined") {
-      setWishlist(response.wishlists.reverse());
+      setWishlist(response.wishlists);
     }
 
     if (!error.success) {
@@ -84,9 +97,9 @@ export default function Wishlist() {
     }
   }, [response, loading, error]);
 
-  const removeWishlistHandler = (Id: string) => {
-    setItemId(Id);
-    SendDeleteWishlistRequest();
+  const removeWishlistHandler = (id: string) => {
+    alert("are you sure to remove item from wishlist?");
+    sendDeleteWishlistRequest(id);
   };
   return (
     <>
