@@ -7,6 +7,7 @@ import ProductsCarousel from "../../components/Carousel/ProductsCarousel/Product
 import NotFound from "../NotFound/NotFound";
 import useApi from "../../customHooks/useApi";
 import { useCookies } from "react-cookie";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 // import { useWishlistContext } from "../../context/WishlistContext";
 
 type ProductType = {
@@ -85,7 +86,7 @@ function ProductDetails() {
       setIsModalActive((prev) => !prev);
       setWishlistErrorMessage("");
     }
-  }, [addWishlistResponse, addWishlistLoading, addWishlistError]);
+  }, [addWishlistResponse, addWishlistError]);
 
   const addToWishlistHandler = () => {
     sendAddWishlistRequest();
@@ -134,7 +135,6 @@ function ProductDetails() {
                 <h2 className="mb-4 mt-8 text-2xl font-medium uppercase md:mt-0 lg:text-4xl">{itemDetails?.product.name}</h2>
                 <h4 className="font-primary font-semibold uppercase md:text-lg lg:text-xl">description</h4>
                 <p>{itemDetails?.product.description}</p>
-
                 <div className="mt-4 flex w-fit border-2">
                   <button className="px-4 py-2 text-2xl" onClick={decrementAmount}>
                     -
@@ -144,15 +144,15 @@ function ProductDetails() {
                     +
                   </button>
                 </div>
-
                 <button className="mt-4 w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">add to cart</button>
+
                 <button
+                  className="mt-4 flex h-14 w-full items-center justify-center border-2 border-black bg-white uppercase text-primary transition-colors duration-300"
                   onClick={() => {
                     addToWishlistHandler();
                   }}
-                  className="mt-4 w-full border-2 border-black bg-white py-4 uppercase text-black transition-colors duration-300 hover:bg-slate-100"
                 >
-                  add to wishlist
+                  {addWishlistLoading ? <LoadingSpinner color="primary" /> : "add to wishlist"}
                 </button>
                 {wishlistErrorMessage ? (
                   <span className="!mt-2 block text-red-500">

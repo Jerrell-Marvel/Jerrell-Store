@@ -32,6 +32,7 @@ export default function useApi<T>({ url, body, headers, method }: UseApiProps): 
       }
 
       const data: T = response.data;
+
       setApiResponse(data);
     } catch (err: any) {
       console.log(err);

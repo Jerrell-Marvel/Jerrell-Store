@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useApi from "../../customHooks/useApi";
 import matchRegex from "../../utils/matchRegex";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 type userType = {
   username: string;
@@ -56,11 +57,9 @@ export default function Register() {
     if (typeof response !== "undefined") {
       setIsSuccess(true);
       setErrorMessage("");
-      // setTimeout(() => {
-      //   navigate("/login");
-      // }, 1000);
+      navigate("/login");
     }
-  }, [response, loading, error]);
+  }, [response, error]);
 
   const handleSubmit = () => {
     if (!email || !username || !password) {
@@ -133,12 +132,12 @@ export default function Register() {
 
             {errorMessage ? <span className="mt-2 text-red-500">{errorMessage}</span> : ""}
 
-            <button className="w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">{loading ? "loading" : "register"}</button>
+            <button className="flex h-14 w-full items-center justify-center border-2 border-black bg-primary uppercase text-white transition-colors duration-300">{loading ? <LoadingSpinner color="white" /> : "register"}</button>
           </div>
         </form>
       </div>
 
-      <div className={`${isSuccess ? "visible" : "invisible"}`}>
+      {/* <div className={`${isSuccess ? "visible" : "invisible"}`}>
         <div className="fixed left-0 right-0 bottom-0 top-0 z-10 bg-black opacity-40"></div>
         <div className="fixed left-0 right-0 bottom-0 top-0 z-20 pt-20">
           <div className="absolute top-1/2 left-1/2 w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-6 lg:w-1/2">
@@ -146,7 +145,7 @@ export default function Register() {
             <p>Your account is successfully registered</p>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

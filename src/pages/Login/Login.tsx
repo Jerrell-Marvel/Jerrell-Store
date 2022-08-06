@@ -1,8 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useApi from "../../customHooks/useApi";
 import matchRegex from "../../utils/matchRegex";
 import { useCookies } from "react-cookie";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 type LoginApiResponse = {
   username: string;
@@ -18,6 +19,7 @@ function Login() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const [cookies, setCookie] = useCookies(["token"]);
+  const navigate = useNavigate();
 
   const [response, loading, error, sendRequest] = useApi<LoginApiResponse>({
     url: "http://localhost:5000/api/v1/auth/login",
@@ -45,9 +47,9 @@ function Login() {
 
     if (typeof response !== "undefined") {
       setCookie("token", response.token, { path: "/" });
-      console.log(response);
+      navigate("/");
     }
-  }, [response, loading, error]);
+  }, [response, error]);
   console.log("rendered");
 
   const handleSubmit = () => {
@@ -102,7 +104,7 @@ function Login() {
           </div>
 
           {errorMessage ? <span className="mt-2 text-red-500">{errorMessage}</span> : ""}
-          <button className="w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">{loading ? "loading" : "login"}</button>
+          <button className="flex h-14 w-full items-center justify-center border-2 border-black bg-primary uppercase text-white transition-colors duration-300">{loading ? <LoadingSpinner color="white" /> : "login"}</button>
           <Link to="/" className="text-center hover:underline">
             Forgot Password or Username?
           </Link>

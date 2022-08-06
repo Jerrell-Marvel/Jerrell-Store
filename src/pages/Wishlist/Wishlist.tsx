@@ -3,6 +3,7 @@ import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch";
 import useApi from "../../customHooks/useApi";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 type WishlistType = {
   _id: string;
@@ -95,7 +96,7 @@ export default function Wishlist() {
         setFetchErrorMessage("Something went wrong please try again later");
       }
     }
-  }, [response, loading, error]);
+  }, [response, error]);
 
   const removeWishlistHandler = (id: string) => {
     alert("are you sure to remove item from wishlist?");
@@ -107,13 +108,13 @@ export default function Wishlist() {
         <h2 className="my-4 text-4xl font-medium uppercase">Wishlist</h2>
         <div className="bg-slate-100 p-4 text-center ">
           {!fetchErrorMessage ? (
-            !loading ? (
+            loading ? (
+              <LoadingSpinner color="primary" />
+            ) : (
               <div>
                 <h3 className="my-4 text-3xl font-medium">My Wishlist</h3>
                 {wishlist.length > 0 ? "" : <p>Your wishlist is empty</p>}
               </div>
-            ) : (
-              "loading"
             )
           ) : (
             <p>{fetchErrorMessage}</p>
@@ -134,12 +135,12 @@ export default function Wishlist() {
                       </Link>
 
                       <button
-                        className="w-fit border-2 border-black bg-white px-2 py-1 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"
+                        className="w-20 border-2 border-black bg-white py-1 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"
                         onClick={() => {
                           removeWishlistHandler(list._id);
                         }}
                       >
-                        Remove
+                        {deleteWishlistLoading ? <LoadingSpinner color="primary" height="h-4" width="w-4" /> : "remove"}
                       </button>
                     </div>
                   </div>
