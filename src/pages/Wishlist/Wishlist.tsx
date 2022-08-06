@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch";
-import usePost from "../../customHooks/usePost";
+import useApi from "../../customHooks/useApi";
 
 type WishlistType = {
   _id: string;
@@ -36,7 +36,7 @@ export default function Wishlist() {
     },
   });
 
-  const [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, SendDeleteWishlistRequest, setSendDeleteWishlistRequest] = usePost({
+  const [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, SendDeleteWishlistRequest] = useApi({
     url: `http://localhost:5000/api/v1/wishlist/${itemId}`,
     body: {
       productId: itemId,
@@ -86,7 +86,7 @@ export default function Wishlist() {
 
   const removeWishlistHandler = (Id: string) => {
     setItemId(Id);
-    setSendDeleteWishlistRequest(true);
+    SendDeleteWishlistRequest();
   };
   return (
     <>

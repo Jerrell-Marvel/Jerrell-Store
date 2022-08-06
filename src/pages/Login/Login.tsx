@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import usePost from "../../customHooks/usePost";
+import useApi from "../../customHooks/useApi";
 import matchRegex from "../../utils/matchRegex";
 import { useCookies } from "react-cookie";
 
@@ -19,7 +19,7 @@ function Login() {
 
   const [cookies, setCookie] = useCookies(["token"]);
 
-  const [response, loading, error, sendRequest, setSendRequest] = usePost<LoginApiResponse>({
+  const [response, loading, error, sendRequest] = useApi<LoginApiResponse>({
     url: "http://localhost:5000/api/v1/auth/login",
     method: "post",
     body: {
@@ -48,6 +48,7 @@ function Login() {
       console.log(response);
     }
   }, [response, loading, error]);
+  console.log("rendered");
 
   const handleSubmit = () => {
     if (!email || !password) {
@@ -55,7 +56,7 @@ function Login() {
     }
     const isMatch = matchRegex(email, /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
     if (isMatch) {
-      setSendRequest(true);
+      sendRequest();
     } else {
       setEmailErrorMessage("Please provide valid email");
     }
@@ -86,7 +87,6 @@ function Login() {
             />
             <span className="mt-2 text-red-500">{emailErrorMessage}</span>
           </div>
-
           <div>
             <input
               type="password"
@@ -102,7 +102,7 @@ function Login() {
           </div>
 
           {errorMessage ? <span className="mt-2 text-red-500">{errorMessage}</span> : ""}
-          <button className="w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">Login</button>
+          <button className="w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">{loading ? "loading" : "register"}</button>
           <Link to="/" className="text-center hover:underline">
             Forgot Password or Username?
           </Link>
@@ -111,9 +111,7 @@ function Login() {
             <div className="px-3 text-center">Login with</div>
             <div className="h-[1px] bg-slate-600"></div>
           </div>
-
           <button className="w-full border-2 bg-red-500 py-4 uppercase text-white transition-colors duration-300">Google</button>
-
           <div className="text-center">
             <span className="text-lg">Don't have an account? </span>
             <Link to="/register" className="text-lg font-medium hover:underline">
@@ -122,7 +120,6 @@ function Login() {
           </div>
         </div>
       </form>
-      <p>{loading ? "LOADINGGGGGGG" : ""}</p>
     </div>
   );
 }

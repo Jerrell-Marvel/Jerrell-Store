@@ -7,14 +7,7 @@ export default function Test() {
     setCount((count) => count + 1); //increment this Hook
   }, []); //no dependency array.
 
-  useEffect(() => {
-    if (str) {
-      console.log("str is true");
-    }
-    return () => {
-      console.log("clean up");
-    };
-  }, [count]);
+  useEffect(() => {}, [count]);
   return (
     <div className="App">
       <p> value of count: {count} </p>

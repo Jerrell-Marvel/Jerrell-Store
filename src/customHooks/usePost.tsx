@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import axios, { AxiosRequestHeaders } from "axios";
 
 type usePostProps = {
@@ -19,6 +19,7 @@ export default function usePost<T>({ url, body, headers, method }: usePostProps)
 
     if (sendRequest) {
       const getData = async () => {
+        setLoading(true);
         try {
           let response;
           if (method === "delete") {

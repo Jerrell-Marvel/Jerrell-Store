@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import usePost from "../../customHooks/usePost";
+import useApi from "../../customHooks/useApi";
 import matchRegex from "../../utils/matchRegex";
 
 type userType = {
@@ -26,7 +26,7 @@ export default function Register() {
 
   const navigate = useNavigate();
 
-  const [response, loading, error, sendRequest, setSendRequest] = usePost<userType>({
+  const [response, loading, error, sendRequest] = useApi<userType>({
     url: "http://localhost:5000/api/v1/auth/register",
     body: {
       username,
@@ -35,6 +35,7 @@ export default function Register() {
     },
     method: "post",
   });
+  console.log("rendered");
 
   useEffect(() => {
     if (!error.success && error.code !== "ERR_NETWORK") {
@@ -69,7 +70,7 @@ export default function Register() {
     const isMatch = matchRegex(email, /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
     if (isMatch) {
-      setSendRequest(true);
+      sendRequest();
     } else {
       setEmailErrorMessage("Please provide valid email");
     }
@@ -132,7 +133,7 @@ export default function Register() {
 
             {errorMessage ? <span className="mt-2 text-red-500">{errorMessage}</span> : ""}
 
-            <button className="w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">Register</button>
+            <button className="w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">{loading ? "loading" : "register"}</button>
           </div>
         </form>
       </div>

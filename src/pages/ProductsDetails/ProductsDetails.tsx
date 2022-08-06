@@ -5,7 +5,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch";
 import ProductsCarousel from "../../components/Carousel/ProductsCarousel/ProductsCarousel";
 import NotFound from "../NotFound/NotFound";
-import usePost from "../../customHooks/usePost";
+import useApi from "../../customHooks/useApi";
 import { useCookies } from "react-cookie";
 // import { useWishlistContext } from "../../context/WishlistContext";
 
@@ -50,7 +50,7 @@ function ProductDetails() {
     url: `http://localhost:5000/api/v1/products/${itemId}`,
   });
 
-  const [addWishlistResponse, addWishlistLoading, addWishlistError, sendAddWishlistRequest, setSendAddWishlistRequest] = usePost({
+  const [addWishlistResponse, addWishlistLoading, addWishlistError, sendAddWishlistRequest] = useApi({
     url: `http://localhost:5000/api/v1/wishlist`,
     body: {
       productId: itemId,
@@ -88,7 +88,7 @@ function ProductDetails() {
   }, [addWishlistResponse, addWishlistLoading, addWishlistError]);
 
   const addToWishlistHandler = () => {
-    setSendAddWishlistRequest(true);
+    sendAddWishlistRequest();
   };
 
   // const addToWishlistHandler = (itemDetails: ProductType | undefined) => {
