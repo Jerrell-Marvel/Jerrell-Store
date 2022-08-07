@@ -123,7 +123,7 @@ function ProductDetails() {
   };
 
   const addToCartHandler = () => {
-    sendAddCartRequest("", { productId: itemId, quantity: 1 });
+    sendAddCartRequest("", { productId: itemId, quantity: productAmount });
   };
 
   // const addToWishlistHandler = (itemDetails: ProductType | undefined) => {

@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch";
 import useApi from "../../customHooks/useApi";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import ProductDetails from "../ProductsDetails/ProductsDetails";
 
 type CartType = {
   _id: string;
@@ -36,6 +37,19 @@ type DeleteCartApiResponseType = {
     _id: string;
   };
 };
+
+type UpdateCartApiResponseType = {
+  success: boolean;
+  item: {
+    createdAt: string;
+    createdBy: string;
+    product: string;
+    updatedAt: string;
+    __v: 0;
+    _id: string;
+    quantity: string;
+  };
+};
 export default function Cart() {
   const [cart, setCart] = useState<CartType[] | []>([]);
   const [cookies] = useCookies(["token"]);
@@ -50,12 +64,44 @@ export default function Cart() {
   });
 
   const [deleteCartResponse, deleteCartLoading, deleteCartError, sendDeleteCartRequest] = useApi<DeleteCartApiResponseType>({
-    url: `http://localhost:5000/api/v1/wishlist`,
+    url: `http://localhost:5000/api/v1/cart`,
     headers: {
       authorization: `Bearer ${cookies.token}`,
     },
     method: "delete",
   });
+
+  const [updateCartResponse, updateCartLoading, updateCartError, sendUpdateCartRequest] = useApi<UpdateCartApiResponseType>({
+    url: `http://localhost:5000/api/v1/cart`,
+    headers: {
+      authorization: `Bearer ${cookies.token}`,
+    },
+    method: "patch",
+  });
+
+  useEffect(() => {
+    if (!updateCartError.success) {
+      if (updateCartError.code === "ERR_NETWORK") {
+        // return setWishlistErrorMessage("Something went wrong please try again later");
+        console.log("something");
+      }
+      if (updateCartError.response.data.message === "Duplicate value error") {
+        // return setWishlistErrorMessage("Item is already in wishlist");
+      }
+    }
+
+    if (typeof updateCartResponse !== "undefined") {
+      const cartIndex = cart.findIndex((e) => {
+        return e._id === updateCartResponse.item._id;
+      });
+      const updatedItem = cart[cartIndex];
+      updatedItem.quantity = updateCartResponse.item.quantity;
+      const newCart = [...cart];
+      newCart[cartIndex] = updatedItem;
+
+      setCart(newCart);
+    }
+  }, [updateCartResponse, updateCartLoading, updateCartError]);
 
   useEffect(() => {
     if (!deleteCartError.success) {
@@ -100,6 +146,13 @@ export default function Cart() {
     alert("are you sure to remove item from cart?");
     sendDeleteCartRequest(id);
   };
+
+  const changeQuantityHandler = (id: string, body: { quantity: string }) => {
+    if (Number(body.quantity) < 1) {
+      return;
+    }
+    sendUpdateCartRequest(id, body);
+  };
   return (
     <>
       <div className="pt-20 text-center">
@@ -131,6 +184,26 @@ export default function Cart() {
                       <Link to={`/product/${item.product._id}`} className="mb-1 w-fit border-2 border-black bg-primary px-2 py-1 text-sm uppercase text-white transition-colors duration-300">
                         view item
                       </Link>
+                      <div
+                        className="px-4 py-2 text-2xl"
+                        onClick={() => {
+                          const updatedQuantity = Number(item.quantity) - 1;
+                          console.log(updatedQuantity);
+                          changeQuantityHandler(item._id, { quantity: updatedQuantity.toString() });
+                        }}
+                      >
+                        -
+                      </div>
+                      <div className="flex items-center px-4 py-2 text-lg">{item.quantity}</div>
+                      <div
+                        className="px-4 py-2"
+                        onClick={() => {
+                          const updatedQuantity = Number(item.quantity) + 1;
+                          changeQuantityHandler(item._id, { quantity: updatedQuantity.toString() });
+                        }}
+                      >
+                        +
+                      </div>
 
                       <button
                         className="w-20 border-2 border-black bg-white py-1 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"

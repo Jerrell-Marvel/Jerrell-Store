@@ -24,6 +24,10 @@ export default function useApi<T>({ url, headers, method }: UseApiProps): [T | u
           headers,
           data: body,
         });
+      } else if (method === "patch") {
+        response = await axios[method](`${url}/${itemId}`, body, {
+          headers,
+        });
       } else {
         response = await axios[method](url, body, {
           headers,
