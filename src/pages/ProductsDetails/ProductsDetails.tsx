@@ -32,7 +32,8 @@ function ProductDetails() {
 
   const [itemDetails, setItemDetails] = useState<ProductType | undefined>(undefined);
   const [productAmount, setProductAmount] = useState(1);
-  const [isModalActive, setIsModalActive] = useState(false);
+  const [isWishlistModalActive, setIsWishlistModalActive] = useState(false);
+  const [isCartModalActive, setIsCartModalActive] = useState(false);
   const [wishlistErrorMessage, setWishlistErrorMessage] = useState("");
   const [cartErrorMessage, setCartErrorMessage] = useState("");
   const [cookies] = useCookies();
@@ -88,7 +89,7 @@ function ProductDetails() {
 
     if (typeof addWishlistResponse !== "undefined") {
       console.log("inside if statement");
-      setIsModalActive((prev) => !prev);
+      setIsWishlistModalActive((prev) => !prev);
       setWishlistErrorMessage("");
     }
   }, [addWishlistResponse, addWishlistError]);
@@ -114,6 +115,7 @@ function ProductDetails() {
 
     if (typeof addCartResponse !== "undefined") {
       console.log("inside if statement");
+      setIsCartModalActive((prev) => !prev);
       setCartErrorMessage("");
     }
   }, [addCartResponse, addCartError]);
@@ -189,7 +191,7 @@ function ProductDetails() {
                 {cartErrorMessage ? (
                   <span className="!mt-2 block text-red-500">
                     Item is already in cart
-                    <Link to="/wishlist" className="text-black underline">
+                    <Link to="/cart" className="text-black underline">
                       click here
                     </Link>
                     to check
@@ -231,8 +233,8 @@ function ProductDetails() {
         <NotFound statusCode={fetchError.fetchResponse.request.status} message={fetchError.fetchResponse.data.message} statusText={fetchError.request.statusText} />
       )}
 
-      {isModalActive ? (
-        <div className={`${isModalActive ? "visible" : "invisible"}`}>
+      {isWishlistModalActive ? (
+        <div>
           <div className="fixed left-0 right-0 bottom-0 top-0 z-10 bg-black opacity-40"></div>
           <div className="fixed left-0 right-0 bottom-0 top-0 z-20 pt-20">
             <div className="absolute top-1/2 left-1/2 w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-6 lg:w-1/2">
@@ -242,7 +244,7 @@ function ProductDetails() {
               <div className="mt-4 flex gap-4">
                 <button
                   onClick={() => {
-                    setIsModalActive((prev) => !prev);
+                    setIsWishlistModalActive((prev) => !prev);
                   }}
                   className="w-fit border-2 border-black bg-white py-2 px-4 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"
                 >
@@ -250,6 +252,34 @@ function ProductDetails() {
                 </button>
                 <Link to="/wishlist" className="w-fit border-2 border-black bg-primary px-4 py-2 text-sm uppercase text-white transition-colors duration-300">
                   WISHLIST PAGE
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+
+      {isCartModalActive ? (
+        <div>
+          <div className="fixed left-0 right-0 bottom-0 top-0 z-10 bg-black opacity-40"></div>
+          <div className="fixed left-0 right-0 bottom-0 top-0 z-20 pt-20">
+            <div className="absolute top-1/2 left-1/2 w-[80%] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-6 lg:w-1/2">
+              <h4 className="mb-2 text-3xl font-medium uppercase">successfully added</h4>
+              <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam, rem. Lorem ipsum dolor sit amet consectetur adipisicing elit. Corrupti, dolor.</span>
+
+              <div className="mt-4 flex gap-4">
+                <button
+                  onClick={() => {
+                    setIsCartModalActive((prev) => !prev);
+                  }}
+                  className="w-fit border-2 border-black bg-white py-2 px-4 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"
+                >
+                  ADD MORE
+                </button>
+                <Link to="/cart" className="w-fit border-2 border-black bg-primary px-4 py-2 text-sm uppercase text-white transition-colors duration-300">
+                  CART PAGE
                 </Link>
               </div>
             </div>
