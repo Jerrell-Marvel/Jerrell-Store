@@ -5,7 +5,7 @@ import { useFetch } from "../../customHooks/useFetch";
 import useApi from "../../customHooks/useApi";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
-type WishlistType = {
+type CartType = {
   _id: string;
   product: {
     _id: string;
@@ -18,15 +18,16 @@ type WishlistType = {
     createdAt: string;
     updatedAt: string;
   };
+  quantity: string;
 };
 
-type WishlistApiResponseType = {
+type CartApiResponseType = {
   success: boolean;
-  wishlists: WishlistType[];
+  items: CartType[];
 };
-type DeleteWishlistApiResponseType = {
+type DeleteCartApiResponseType = {
   success: boolean;
-  wishlist: {
+  item: {
     createdAt: string;
     createdBy: string;
     product: string;
@@ -35,20 +36,20 @@ type DeleteWishlistApiResponseType = {
     _id: string;
   };
 };
-export default function Wishlist() {
-  const [wishlist, setWishlist] = useState<WishlistType[] | []>([]);
+export default function Cart() {
+  const [cart, setCart] = useState<CartType[] | []>([]);
   const [cookies] = useCookies(["token"]);
   const [itemId, setItemId] = useState("");
   const navigate = useNavigate();
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
-  const [response, loading, error] = useFetch<WishlistApiResponseType>({
-    url: "http://localhost:5000/api/v1/wishlist",
+  const [fetchResponse, fetchLoading, fetchError] = useFetch<CartApiResponseType>({
+    url: "http://localhost:5000/api/v1/cart",
     headers: {
       authorization: `Bearer ${cookies.token}`,
     },
   });
 
-  const [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, sendDeleteWishlistRequest] = useApi<DeleteWishlistApiResponseType>({
+  const [deleteCartResponse, deleteCartLoading, deleteCartError, sendDeleteCartRequest] = useApi<DeleteCartApiResponseType>({
     url: `http://localhost:5000/api/v1/wishlist`,
     headers: {
       authorization: `Bearer ${cookies.token}`,
@@ -57,60 +58,60 @@ export default function Wishlist() {
   });
 
   useEffect(() => {
-    if (!deleteWishlistError.success) {
-      if (deleteWishlistError.code === "ERR_NETWORK") {
+    if (!deleteCartError.success) {
+      if (deleteCartError.code === "ERR_NETWORK") {
         // return setWishlistErrorMessage("Something went wrong please try again later");
         console.log("something");
       }
-      if (deleteWishlistError.response.data.message === "Duplicate value error") {
+      if (deleteCartError.response.data.message === "Duplicate value error") {
         // return setWishlistErrorMessage("Item is already in wishlist");
       }
     }
 
-    if (typeof deleteWishlistResponse !== "undefined") {
-      const newWishlist = [...wishlist];
-      console.log(newWishlist);
-      const deletedWishlist = newWishlist.filter((wishlist) => {
-        return wishlist._id !== deleteWishlistResponse.wishlist._id;
+    if (typeof deleteCartResponse !== "undefined") {
+      const newCart = [...cart];
+      console.log(newCart);
+      const deletedCart = newCart.filter((wishlist) => {
+        return wishlist._id !== deleteCartResponse.item._id;
       });
-      console.log(deletedWishlist);
+      console.log(deletedCart);
 
-      setWishlist(deletedWishlist);
+      setCart(deletedCart);
 
-      console.log(deleteWishlistResponse);
+      console.log(deleteCartResponse);
     }
-  }, [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError]);
+  }, [deleteCartResponse, deleteCartLoading, deleteCartError]);
 
   useEffect(() => {
-    if (typeof response !== "undefined") {
-      setWishlist(response.wishlists);
+    if (typeof fetchResponse !== "undefined") {
+      setCart(fetchResponse.items);
     }
 
-    if (!error.success) {
-      if (error.response.status === 401) {
+    if (!fetchError.success) {
+      if (fetchError.response.status === 401) {
         navigate("/login");
-      } else if (error.code === "ERR_NETWORK") {
+      } else if (fetchError.code === "ERR_NETWORK") {
         setFetchErrorMessage("Something went wrong please try again later");
       }
     }
-  }, [response, error]);
+  }, [fetchResponse, fetchError]);
 
   const removeWishlistHandler = (id: string) => {
-    alert("are you sure to remove item from wishlist?");
-    sendDeleteWishlistRequest(id);
+    alert("are you sure to remove item from cart?");
+    sendDeleteCartRequest(id);
   };
   return (
     <>
       <div className="pt-20 text-center">
-        <h2 className="my-4 text-4xl font-medium uppercase">Wishlist</h2>
+        <h2 className="my-4 text-4xl font-medium uppercase">Cart</h2>
         <div className="bg-slate-100 p-4 text-center ">
           {!fetchErrorMessage ? (
-            loading ? (
+            fetchLoading ? (
               <LoadingSpinner color="primary" />
             ) : (
               <div>
-                <h3 className="my-4 text-3xl font-medium">My Wishlist</h3>
-                {wishlist.length > 0 ? "" : <p>Your wishlist is empty</p>}
+                <h3 className="my-4 text-3xl font-medium">My Cart</h3>
+                {cart.length > 0 ? "" : <p>Your cart is empty</p>}
               </div>
             )
           ) : (
@@ -119,25 +120,25 @@ export default function Wishlist() {
         </div>
         <div className="py-6 px-6">
           <ul className="flex w-full flex-col items-center">
-            {wishlist.map((list) => {
+            {cart.map((item) => {
               return (
-                <li className="mb-4 flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-x-2" key={list._id}>
+                <li className="mb-4 flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-x-2" key={item._id}>
                   <div className="grid h-full w-full grid-cols-[1fr_1fr] justify-between p-4 sm:max-w-xl md:max-w-2xl lg:max-w-4xl">
-                    <div className="w-full bg-slate-400">{/* <img src={list._id} alt={""} className="w-full"></img> */}</div>
+                    <div className="w-full bg-slate-400">{/* <img src={item._id} alt={""} className="w-full"></img> */}</div>
                     <div className="flex h-full flex-col items-end gap-2 pl-4 text-right">
-                      <h4 className="font-medium md:text-lg lg:text-xl">{list.product.name}</h4>
+                      <h4 className="font-medium md:text-lg lg:text-xl">{item.product.name}</h4>
 
-                      <Link to={`/product/${list.product._id}`} className="mb-1 w-fit border-2 border-black bg-primary px-2 py-1 text-sm uppercase text-white transition-colors duration-300">
+                      <Link to={`/product/${item.product._id}`} className="mb-1 w-fit border-2 border-black bg-primary px-2 py-1 text-sm uppercase text-white transition-colors duration-300">
                         view item
                       </Link>
 
                       <button
                         className="w-20 border-2 border-black bg-white py-1 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"
                         onClick={() => {
-                          removeWishlistHandler(list._id);
+                          removeWishlistHandler(item._id);
                         }}
                       >
-                        {deleteWishlistLoading ? <LoadingSpinner color="primary" height="h-4" width="w-4" /> : "remove"}
+                        {deleteCartLoading ? <LoadingSpinner color="primary" height="h-4" width="w-4" /> : "remove"}
                       </button>
                     </div>
                   </div>
@@ -145,7 +146,7 @@ export default function Wishlist() {
               );
             })}
           </ul>
-          {wishlist.length < 1 ? (
+          {cart.length < 1 ? (
             <Link to="/wishlist" className="w-fit border-2 border-black bg-primary px-4 py-2 text-sm uppercase text-white transition-colors duration-300">
               WISHLIST PAGE
             </Link>

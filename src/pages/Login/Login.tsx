@@ -24,10 +24,6 @@ function Login() {
   const [response, loading, error, sendRequest] = useApi<LoginApiResponse>({
     url: "http://localhost:5000/api/v1/auth/login",
     method: "post",
-    body: {
-      email,
-      password,
-    },
   });
 
   useEffect(() => {
@@ -58,7 +54,10 @@ function Login() {
     }
     const isMatch = matchRegex(email, /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
     if (isMatch) {
-      sendRequest();
+      sendRequest("", {
+        email,
+        password,
+      });
     } else {
       setEmailErrorMessage("Please provide valid email");
     }

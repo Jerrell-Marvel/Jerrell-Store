@@ -34,6 +34,7 @@ function ProductDetails() {
   const [productAmount, setProductAmount] = useState(1);
   const [isModalActive, setIsModalActive] = useState(false);
   const [wishlistErrorMessage, setWishlistErrorMessage] = useState("");
+  const [cartErrorMessage, setCartErrorMessage] = useState("");
   const [cookies] = useCookies();
 
   const incrementAmount = () => {
@@ -53,9 +54,13 @@ function ProductDetails() {
 
   const [addWishlistResponse, addWishlistLoading, addWishlistError, sendAddWishlistRequest] = useApi({
     url: `http://localhost:5000/api/v1/wishlist`,
-    body: {
-      productId: itemId,
+    headers: {
+      authorization: `Bearer ${cookies.token}`,
     },
+    method: "post",
+  });
+  const [addCartResponse, addCartLoading, addCartError, sendAddCartRequest] = useApi({
+    url: `http://localhost:5000/api/v1/cart`,
     headers: {
       authorization: `Bearer ${cookies.token}`,
     },
@@ -88,8 +93,37 @@ function ProductDetails() {
     }
   }, [addWishlistResponse, addWishlistError]);
 
+  useEffect(() => {
+    if (typeof fetchResponse !== "undefined") {
+      setItemDetails(fetchResponse);
+    }
+  }, [fetchResponse]);
+
+  useEffect(() => {
+    if (!addCartError.success) {
+      if (addCartError.code === "ERR_NETWORK") {
+        setCartErrorMessage("Something went wrong please try again later");
+      }
+      if (addCartError.response.data.message === "Duplicate value error") {
+        setCartErrorMessage("Item is already in Cart");
+      }
+      if (addCartError.response.status === 401) {
+        navigate("/login");
+      }
+    }
+
+    if (typeof addCartResponse !== "undefined") {
+      console.log("inside if statement");
+      setCartErrorMessage("");
+    }
+  }, [addCartResponse, addCartError]);
+
   const addToWishlistHandler = () => {
-    sendAddWishlistRequest();
+    sendAddWishlistRequest("", { productId: itemId });
+  };
+
+  const addToCartHandler = () => {
+    sendAddCartRequest("", { productId: itemId, quantity: 1 });
   };
 
   // const addToWishlistHandler = (itemDetails: ProductType | undefined) => {
@@ -144,7 +178,25 @@ function ProductDetails() {
                     +
                   </button>
                 </div>
-                <button className="mt-4 w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300">add to cart</button>
+                <button
+                  className="mt-4 flex h-14 w-full items-center justify-center border-2 border-black bg-primary uppercase text-white transition-colors duration-300"
+                  onClick={() => {
+                    addToCartHandler();
+                  }}
+                >
+                  {addCartLoading ? <LoadingSpinner color="white" /> : "add to cart"}
+                </button>
+                {cartErrorMessage ? (
+                  <span className="!mt-2 block text-red-500">
+                    Item is already in cart
+                    <Link to="/wishlist" className="text-black underline">
+                      click here
+                    </Link>
+                    to check
+                  </span>
+                ) : (
+                  ""
+                )}
 
                 <button
                   className="mt-4 flex h-14 w-full items-center justify-center border-2 border-black bg-white uppercase text-primary transition-colors duration-300"

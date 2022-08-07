@@ -3,17 +3,16 @@ import axios, { AxiosRequestHeaders } from "axios";
 
 type UseApiProps = {
   url: string;
-  body: object;
   headers?: AxiosRequestHeaders;
-  method: "post" | "put" | "delete";
+  method: "post" | "put" | "delete" | "patch";
 };
 
-export default function useApi<T>({ url, body, headers, method }: UseApiProps): [T | undefined, boolean, any, (itemId?: string) => void] {
+export default function useApi<T>({ url, headers, method }: UseApiProps): [T | undefined, boolean, any, (itemId?: string, body?: object) => void] {
   const [ApiResponse, setApiResponse] = useState<T | undefined>(undefined);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({ success: true });
 
-  const getData = async (itemId?: string) => {
+  const getData = async (itemId?: string, body?: object) => {
     console.log("use api called");
     setLoading(true);
     setApiResponse(undefined);
@@ -21,7 +20,7 @@ export default function useApi<T>({ url, body, headers, method }: UseApiProps): 
     try {
       let response;
       if (method === "delete") {
-        response = await axios.delete(`${url}/${itemId}`, {
+        response = await axios[method](`${url}/${itemId}`, {
           headers,
           data: body,
         });

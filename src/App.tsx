@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import Register from "./pages/Register/Register";
 import Wishlist from "./pages/Wishlist/Wishlist";
 import Test from "./Test";
+import Cart from "./pages/Cart/Cart";
 // import Wishlist from "./pages/Wishlist/Wishlist";
 // import { WishlistProvider } from "./context/WishlistContext";
 
@@ -28,7 +29,7 @@ function App() {
         <Route path="/product-category/:category" element={<ProductsCategories />} />
         <Route path="/product/:itemId" element={<ProductDetails />}></Route>
 
-        <Route path="/cart" />
+        <Route path="/cart" element={<Cart />} />
 
         <Route path="/wishlist" element={<Wishlist />} />
         <Route path="/login" element={<Login />} />

@@ -29,11 +29,6 @@ export default function Register() {
 
   const [response, loading, error, sendRequest] = useApi<userType>({
     url: "http://localhost:5000/api/v1/auth/register",
-    body: {
-      username,
-      email,
-      password,
-    },
     method: "post",
   });
   console.log("rendered");
@@ -69,7 +64,11 @@ export default function Register() {
     const isMatch = matchRegex(email, /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
     if (isMatch) {
-      sendRequest();
+      sendRequest("", {
+        username,
+        email,
+        password,
+      });
     } else {
       setEmailErrorMessage("Please provide valid email");
     }
