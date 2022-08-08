@@ -1,7 +1,5 @@
 import { useSearchParams } from "react-router-dom";
 import ShowProducts from "../../components/ShowProducts/ShowProducts";
-import Button from "../../components/Button/Button";
-import { NavLink } from "react-router-dom";
 import SortProductsDropdown from "../../components/Dropdown/SortProductsDropdown";
 import { useState } from "react";
 
@@ -13,14 +11,14 @@ export default function Search() {
   };
   return (
     <>
-      <div className="bg-slate-100 px-6 py-10">
-        <div className="flex flex-col items-center justify-between">
-          <SortProductsDropdown onChange={onChangeHandler} />
+      <div className="bg-slate-200 pt-20 pb-8">
+        <div className="bg-slate-100 px-6 py-10">
+          <div className="flex flex-col items-center justify-between">
+            <span className="mb-4">Showing results for {searchParams.get("q")}</span>
+            <SortProductsDropdown onChange={onChangeHandler} />
+          </div>
+          <ShowProducts url={`http://localhost:5000/api/v1/products/?sort=${sort}&search=${searchParams.get("q")}`} />
         </div>
-        <ShowProducts url={`http://localhost:5000/api/v1/products/?sort=${sort}&search=${searchParams.get("q")}`} />
-        <NavLink to={`/products/all`} className="mx-auto block w-fit">
-          <Button>See All Products</Button>
-        </NavLink>
       </div>
     </>
   );

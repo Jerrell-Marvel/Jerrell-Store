@@ -36,8 +36,6 @@ function ProductDetails() {
   const [cartErrorMessage, setCartErrorMessage] = useState("");
   const [cookies] = useCookies();
 
-  const [fetchErrorMsg, setFetchErrorMsg] = useState("");
-
   const incrementAmount = () => {
     setProductAmount(productAmount + 1);
   };
@@ -71,13 +69,6 @@ function ProductDetails() {
   useEffect(() => {
     if (typeof fetchResponse !== "undefined") {
       setItemDetails(fetchResponse);
-    }
-    if (!fetchError.success) {
-      if (fetchError.code === "ERR_NETWORK") {
-        setFetchErrorMsg("NETWORK_ERROR");
-      } else {
-        setFetchErrorMsg("NOT_FOUND");
-      }
     }
   }, [fetchResponse, fetchError]);
 

@@ -13,6 +13,7 @@ function NotFound({ message, statusCode, statusText }: NotFoundProps) {
       <div className="mt-6 text-xl md:text-3xl">
         <p>
           {statusCode} | {statusText}
+
         </p>
       </div>
       <Link to="/" className="mt-6 w-fit border-2 border-black bg-primary py-4 px-8 uppercase text-white transition-colors duration-300">

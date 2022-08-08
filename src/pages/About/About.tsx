@@ -12,7 +12,7 @@ function About() {
               Lorem ipsum dolor sit amet consectetur adipisicing elit. At, numquam? Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quod at cupiditate perferendis ex pariatur minus cumque? Incidunt itaque repudiandae fuga ab illo
               suscipit sint cum sequi voluptates quia quo, possimus vel hic sunt accusamus amet quae iste beatae impedit voluptate.
             </p>
-            <Link to="/products">
+            <Link to="/">
               <button className="my-4 w-full border-2 border-black bg-primary py-4 uppercase text-white transition-colors duration-300 hover:bg-white hover:text-black">start shopping</button>
             </Link>
           </div>

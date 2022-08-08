@@ -23,9 +23,7 @@ function ProductsCategories() {
           <SortProductsDropdown onChange={onChangeHandler} />
         </div>
         <ShowProducts url={`http://localhost:5000/api/v1/products/?sort=${sort}${category === "all" ? "" : `&category=${category}`}`} />
-        <NavLink to={`/products/all`} className="mx-auto block w-fit">
-          <Button>See All Products</Button>
-        </NavLink>
+       
       </div>
     </>
   );
