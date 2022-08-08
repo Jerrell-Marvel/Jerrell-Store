@@ -30,6 +30,7 @@ export function useFetch<T>({ url, headers }: useFetchParameters): [T | undefine
       }
     };
     getData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [url]);
   return [ApiResponse, loading, error];
 }

@@ -10,7 +10,7 @@ function Navbar() {
   const navigate = useNavigate();
   const [navActive, setNavActive] = useState(false);
   const [showProductCategories, setShowProductCategories] = useState(false);
-  const [cookies, setCookie] = useCookies(["token"]);
+  const [cookies] = useCookies(["token"]);
   const [search, setSearch] = useState("");
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {

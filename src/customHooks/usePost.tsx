@@ -53,6 +53,7 @@ export default function usePost<T>({ url, body, headers, method }: usePostProps)
       setLoading(false);
       setError({ success: true });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sendRequest]);
 
   return [ApiResponse, loading, error, sendRequest, setSendRequest];

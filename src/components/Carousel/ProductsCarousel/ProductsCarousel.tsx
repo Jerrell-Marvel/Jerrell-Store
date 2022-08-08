@@ -42,7 +42,6 @@ function ProductsCarousel({ url, category }: ProductsCarouselProps) {
 
   useEffect(() => {
     if (typeof response !== "undefined") {
-      // const slicedResponse = response?.data.slice(0, amount);
       setDatas(response);
     } else if (!error.success) {
       setErrorMessage("Failed to get resources");
@@ -75,13 +74,10 @@ function ProductsCarousel({ url, category }: ProductsCarouselProps) {
               return (
                 <SwiperSlide className="block !w-64" key={index}>
                   <Link to={`/product/${product._id}`}>
-                    <div className="z-10 flex w-full flex-col bg-pink-500">
-                      {/* <img src={d.imageUrl} alt={d.title} className="mb-3 !h-72" /> */}
+                    <div className="z-10 flex w-full flex-col">
+                      <img src={`https://source.unsplash.com/random/400x${400 - index}`} alt="temporary alt" className="mb-3 !h-72" />
                       <h3>{product.name}</h3>
-                      <p>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quis voluptate ratione consectetur necessitatibus, odio neque eligendi eius. Recusandae voluptatum, nam blanditiis perferendis sint sunt ad, ut, illo saepe
-                        ullam quasi.
-                      </p>
+                      <p>{product.description}</p>
                     </div>
                   </Link>
                 </SwiperSlide>

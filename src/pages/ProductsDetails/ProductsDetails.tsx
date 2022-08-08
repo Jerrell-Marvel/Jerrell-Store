@@ -1,14 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-
-// import { useFetch2, ApiResponse } from "../../customHooks/useFetch2";
 import { useFetch } from "../../customHooks/useFetch";
 import ProductsCarousel from "../../components/Carousel/ProductsCarousel/ProductsCarousel";
 import NotFound from "../NotFound/NotFound";
 import useApi from "../../customHooks/useApi";
 import { useCookies } from "react-cookie";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-// import { useWishlistContext } from "../../context/WishlistContext";
 
 type ProductType = {
   success: boolean;
@@ -37,6 +35,8 @@ function ProductDetails() {
   const [wishlistErrorMessage, setWishlistErrorMessage] = useState("");
   const [cartErrorMessage, setCartErrorMessage] = useState("");
   const [cookies] = useCookies();
+
+  const [fetchErrorMsg, setFetchErrorMsg] = useState("");
 
   const incrementAmount = () => {
     setProductAmount(productAmount + 1);
@@ -72,7 +72,14 @@ function ProductDetails() {
     if (typeof fetchResponse !== "undefined") {
       setItemDetails(fetchResponse);
     }
-  }, [fetchResponse]);
+    if (!fetchError.success) {
+      if (fetchError.code === "ERR_NETWORK") {
+        setFetchErrorMsg("NETWORK_ERROR");
+      } else {
+        setFetchErrorMsg("NOT_FOUND");
+      }
+    }
+  }, [fetchResponse, fetchError]);
 
   useEffect(() => {
     if (!addWishlistError.success) {
@@ -93,12 +100,6 @@ function ProductDetails() {
       setWishlistErrorMessage("");
     }
   }, [addWishlistResponse, addWishlistError]);
-
-  useEffect(() => {
-    if (typeof fetchResponse !== "undefined") {
-      setItemDetails(fetchResponse);
-    }
-  }, [fetchResponse]);
 
   useEffect(() => {
     if (!addCartError.success) {
@@ -128,35 +129,6 @@ function ProductDetails() {
     sendAddCartRequest("", { productId: itemId, quantity: productAmount });
   };
 
-  // const addToWishlistHandler = (itemDetails: ProductType | undefined) => {
-  //   if (typeof itemDetails !== "undefined") {
-  //     const itemWithAmount = {
-  //       ...itemDetails,
-  //       amount: productAmount,
-  //     };
-
-  //     const itemIndex = wishlist.findIndex((list) => {
-  //       return list.id === itemDetails.id;
-  //     });
-
-  //     if (itemIndex !== -1) {
-  //       const newItem = { ...itemDetails, amount: wishlist[itemIndex].amount + itemWithAmount.amount };
-
-  //       const newWishlist = [...wishlist];
-  //       newWishlist.splice(itemIndex, 1);
-  //       newWishlist.unshift(newItem);
-
-  //       setWishlist(newWishlist);
-  //     } else {
-  //       setWishlist([itemWithAmount, ...wishlist]);
-  //     }
-
-  //     // console.log(itemIndex);
-  //     // console.log(itemWithAmount);
-  //     setProductAmount(1);
-  //   } else return;
-  // };
-
   return (
     <>
       {fetchError.success ? (
@@ -165,7 +137,9 @@ function ProductDetails() {
             <div className="flex flex-wrap">
               <h3 className="my-6 w-full">{itemDetails?.product.category}</h3>
 
-              <div className="w-full md:w-1/2">{fetchLoading ? <div className="h-full w-full animate-loading bg-slate-200"></div> : <img src={itemDetails?.product.weight} alt={itemDetails?.product.weight} />}</div>
+              <div className="w-full md:w-1/2">
+                {fetchLoading ? <div className="h-full w-full animate-loading bg-slate-200"></div> : <img src={`https://source.unsplash.com/random/1000x1000`} alt={itemDetails?.product.weight} className="w-full" />}
+              </div>
 
               <div className="w-full md:w-1/2 md:pl-8">
                 <h2 className="mb-4 mt-8 text-2xl font-medium uppercase md:mt-0 lg:text-4xl">{itemDetails?.product.name}</h2>
@@ -190,10 +164,10 @@ function ProductDetails() {
                 </button>
                 {cartErrorMessage ? (
                   <span className="!mt-2 block text-red-500">
-                    Item is already in cart
+                    Item is already in cart{" "}
                     <Link to="/cart" className="text-black underline">
                       click here
-                    </Link>
+                    </Link>{" "}
                     to check
                   </span>
                 ) : (
@@ -230,7 +204,9 @@ function ProductDetails() {
           {/* Modal */}
         </div>
       ) : (
-        <NotFound statusCode={fetchError.fetchResponse.request.status} message={fetchError.fetchResponse.data.message} statusText={fetchError.request.statusText} />
+        <div>
+          <NotFound statusCode={fetchError.fetchResponse.request.status} message={fetchError.fetchResponse.data.message} statusText={fetchError.request.statusText} />
+        </div>
       )}
 
       {isWishlistModalActive ? (
