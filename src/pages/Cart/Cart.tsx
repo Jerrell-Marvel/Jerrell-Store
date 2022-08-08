@@ -184,29 +184,32 @@ export default function Cart() {
                       <Link to={`/product/${item.product._id}`} className="mb-1 w-fit border-2 border-black bg-primary px-2 py-1 text-sm uppercase text-white transition-colors duration-300">
                         view item
                       </Link>
-                      <div
-                        className="px-4 py-2 text-2xl"
-                        onClick={() => {
-                          const updatedQuantity = Number(item.quantity) - 1;
-                          console.log(updatedQuantity);
-                          changeQuantityHandler(item._id, { quantity: updatedQuantity.toString() });
-                        }}
-                      >
-                        -
-                      </div>
-                      <div className="flex items-center px-4 py-2 text-lg">{item.quantity}</div>
-                      <div
-                        className="px-4 py-2"
-                        onClick={() => {
-                          const updatedQuantity = Number(item.quantity) + 1;
-                          changeQuantityHandler(item._id, { quantity: updatedQuantity.toString() });
-                        }}
-                      >
-                        +
+                      <div className="flex">
+                        <button
+                          className="px-4 py-2 pl-0 text-2xl"
+                          onClick={() => {
+                            const updatedQuantity = Number(item.quantity) - 1;
+                            console.log(updatedQuantity);
+                            changeQuantityHandler(item._id, { quantity: updatedQuantity.toString() });
+                          }}
+                        >
+                          -
+                        </button>
+                        <span className="flex items-center px-4 py-2 text-lg">{item.quantity}</span>
+
+                        <button
+                          className="px-4 py-2 pr-0"
+                          onClick={() => {
+                            const updatedQuantity = Number(item.quantity) + 1;
+                            changeQuantityHandler(item._id, { quantity: updatedQuantity.toString() });
+                          }}
+                        >
+                          +
+                        </button>
                       </div>
 
                       <button
-                        className="w-20 border-2 border-black bg-white py-1 text-sm uppercase text-black transition-colors duration-300 hover:bg-slate-100"
+                        className="h-10 w-20 border-2 border-black bg-white py-2 px-3 text-sm uppercase text-black transition-colors duration-300  hover:bg-slate-100"
                         onClick={() => {
                           removeWishlistHandler(item._id);
                         }}

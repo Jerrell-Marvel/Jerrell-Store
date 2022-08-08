@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import NavCart from "./NavCart";
 import Button from "../Button/Button";
 import { useCookies } from "react-cookie";
@@ -7,9 +7,20 @@ import { useCookies } from "react-cookie";
 const navLinks = ["about", "wishlist"];
 const productCategories = ["all", "hoodie", "snacks", "jeans", "shorts", "shirts"];
 function Navbar() {
+  const navigate = useNavigate();
   const [navActive, setNavActive] = useState(false);
   const [showProductCategories, setShowProductCategories] = useState(false);
   const [cookies, setCookie] = useCookies(["token"]);
+  const [search, setSearch] = useState("");
+
+  const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  };
+
+  const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    navigate(`/search?q=${search}`);
+  };
 
   return (
     <>
@@ -19,7 +30,22 @@ function Navbar() {
             jStore
           </NavLink>
 
-          <input type="text" placeholder="Search" className="z-20 mr-12 h-8 w-1/3 rounded-lg border-2 px-2 md:mr-0 md:w-[18%]" />
+          <form
+            className="w-1/3 md:w-[18%]"
+            onSubmit={(e) => {
+              onSubmitHandler(e);
+            }}
+          >
+            <input
+              type="text"
+              placeholder="Search"
+              className="z-20 mr-12 h-8 w-full rounded-lg border-2 px-2 md:mr-0 "
+              onChange={(e) => {
+                onChangeHandler(e);
+              }}
+              value={search}
+            />
+          </form>
 
           <button id="hamburger" className={`absolute right-6 top-1/2 z-[103] block -translate-y-1/2 md:hidden ${navActive ? "hamburger-active" : ""}`} onClick={() => setNavActive((prev) => !prev)}>
             <span className="hamburger-line origin-top-left transition duration-300"></span>
