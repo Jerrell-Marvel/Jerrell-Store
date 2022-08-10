@@ -26,7 +26,7 @@ function HeroCarousel() {
           clickable: true,
         }}
         autoplay={{
-          delay: 3000,
+          delay: 5000,
           disableOnInteraction: false,
         }}
         className="hero-carousel__slides"

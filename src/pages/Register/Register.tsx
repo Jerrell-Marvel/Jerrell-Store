@@ -28,7 +28,7 @@ export default function Register() {
   const navigate = useNavigate();
 
   const [response, loading, error, sendRequest] = useApi<userType>({
-    url: "http://localhost:5000/api/v1/auth/register",
+    url: "/api/v1/auth/register",
     method: "post",
   });
   console.log("rendered");

@@ -17,6 +17,7 @@ export default function useApi<T>({ url, headers, method }: UseApiProps): [T | u
     setLoading(true);
     setApiResponse(undefined);
     setError({ success: true });
+
     try {
       let response;
       if (method === "delete") {

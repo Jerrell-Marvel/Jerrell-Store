@@ -57,14 +57,14 @@ export default function Cart() {
   const navigate = useNavigate();
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
   const [fetchResponse, fetchLoading, fetchError] = useFetch<CartApiResponseType>({
-    url: "http://localhost:5000/api/v1/cart",
+    url: "/api/v1/cart",
     headers: {
       authorization: `Bearer ${cookies.token}`,
     },
   });
 
   const [deleteCartResponse, deleteCartLoading, deleteCartError, sendDeleteCartRequest] = useApi<DeleteCartApiResponseType>({
-    url: `http://localhost:5000/api/v1/cart`,
+    url: `/api/v1/cart`,
     headers: {
       authorization: `Bearer ${cookies.token}`,
     },
@@ -72,7 +72,7 @@ export default function Cart() {
   });
 
   const [updateCartResponse, updateCartLoading, updateCartError, sendUpdateCartRequest] = useApi<UpdateCartApiResponseType>({
-    url: `http://localhost:5000/api/v1/cart`,
+    url: `/api/v1/cart`,
     headers: {
       authorization: `Bearer ${cookies.token}`,
     },

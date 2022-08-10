@@ -48,18 +48,18 @@ function ProductDetails() {
   };
 
   const [fetchResponse, fetchLoading, fetchError] = useFetch<ProductType>({
-    url: `http://localhost:5000/api/v1/products/${itemId}`,
+    url: `/api/v1/products/${itemId}`,
   });
 
   const [addWishlistResponse, addWishlistLoading, addWishlistError, sendAddWishlistRequest] = useApi({
-    url: `http://localhost:5000/api/v1/wishlist`,
+    url: `/api/v1/wishlist`,
     headers: {
       authorization: `Bearer ${cookies.token}`,
     },
     method: "post",
   });
   const [addCartResponse, addCartLoading, addCartError, sendAddCartRequest] = useApi({
-    url: `http://localhost:5000/api/v1/cart`,
+    url: `/api/v1/cart`,
     headers: {
       authorization: `Bearer ${cookies.token}`,
     },
@@ -189,7 +189,7 @@ function ProductDetails() {
           </section>
 
           <div className="w-full">
-            <ProductsCarousel url="http://localhost:5000/api/v1/products" category={`${itemDetails?.product.category}`} />
+            <ProductsCarousel url="/api/v1/products" category={`${itemDetails?.product.category}`} />
           </div>
 
           {/* Modal */}

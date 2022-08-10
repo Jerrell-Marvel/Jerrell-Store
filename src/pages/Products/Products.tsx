@@ -9,7 +9,7 @@ function Products() {
       <ProductsNav />
       <div className="bg-slate-100 px-6 py-10">
         <h2 className="text-4xl font-medium">Popular Products</h2>
-        <ShowProducts url="http://localhost:5000/api/v1/products" />
+        <ShowProducts url="/api/v1/products" />
         <NavLink to={`/products/all`} className="mx-auto block w-fit">
           <Button>See All Products</Button>
         </NavLink>

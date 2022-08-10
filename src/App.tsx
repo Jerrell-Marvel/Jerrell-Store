@@ -12,8 +12,13 @@ import Register from "./pages/Register/Register";
 import Wishlist from "./pages/Wishlist/Wishlist";
 import Cart from "./pages/Cart/Cart";
 import Search from "./pages/Search/Search";
+import axios from "axios";
+import { useEffect } from "react";
 
 function App() {
+  // useEffect(() => {
+  //   axios.defaults.withCredentials = true;
+  // }, []);
   return (
     <div className="App font-primary">
       {/* <WishlistProvider> */}

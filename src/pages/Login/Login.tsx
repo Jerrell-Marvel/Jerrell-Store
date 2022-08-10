@@ -22,7 +22,7 @@ function Login() {
   const navigate = useNavigate();
 
   const [response, loading, error, sendRequest] = useApi<LoginApiResponse>({
-    url: "http://localhost:5000/api/v1/auth/login",
+    url: "/api/v1/auth/login",
     method: "post",
   });
 
@@ -42,7 +42,7 @@ function Login() {
     }
 
     if (typeof response !== "undefined") {
-      setCookie("token", response.token, { path: "/" });
+      // setCookie("token", response.token, { path: "/" });
       navigate("/");
     }
   }, [response, error]);

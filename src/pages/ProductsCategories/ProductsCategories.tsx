@@ -22,8 +22,7 @@ function ProductsCategories() {
           <h2 className="mb-2 text-4xl font-medium capitalize">{category}</h2>
           <SortProductsDropdown onChange={onChangeHandler} />
         </div>
-        <ShowProducts url={`http://localhost:5000/api/v1/products/?sort=${sort}${category === "all" ? "" : `&category=${category}`}`} />
-       
+        <ShowProducts url={`/api/v1/products/?sort=${sort}${category === "all" ? "" : `&category=${category}`}`} />
       </div>
     </>
   );

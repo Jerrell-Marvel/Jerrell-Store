@@ -17,7 +17,7 @@ export default function Search() {
             <span className="mb-4">Showing results for {searchParams.get("q")}</span>
             <SortProductsDropdown onChange={onChangeHandler} />
           </div>
-          <ShowProducts url={`http://localhost:5000/api/v1/products/?sort=${sort}&search=${searchParams.get("q")}`} />
+          <ShowProducts url={`/api/v1/products/?sort=${sort}&search=${searchParams.get("q")}`} />
         </div>
       </div>
     </>

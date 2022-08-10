@@ -41,14 +41,14 @@ export default function Wishlist() {
   const navigate = useNavigate();
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
   const [response, loading, error] = useFetch<WishlistApiResponseType>({
-    url: "http://localhost:5000/api/v1/wishlist",
+    url: "/api/v1/wishlist",
     headers: {
       authorization: `Bearer ${cookies.token}`,
     },
   });
 
   const [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, sendDeleteWishlistRequest] = useApi<DeleteWishlistApiResponseType>({
-    url: `http://localhost:5000/api/v1/wishlist`,
+    url: `/api/v1/wishlist`,
     headers: {
       authorization: `Bearer ${cookies.token}`,
     },
@@ -78,7 +78,7 @@ export default function Wishlist() {
 
       console.log(deleteWishlistResponse);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError]);
 
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function Wishlist() {
         setFetchErrorMessage("Something went wrong please try again later");
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [response, error]);
 
   const removeWishlistHandler = (id: string) => {
