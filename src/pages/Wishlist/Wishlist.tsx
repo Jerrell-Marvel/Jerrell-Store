@@ -17,6 +17,7 @@ type WishlistType = {
     price: string;
     createdAt: string;
     updatedAt: string;
+    image: string;
   };
 };
 
@@ -124,7 +125,9 @@ export default function Wishlist() {
               return (
                 <li className="mb-4 flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-x-2" key={list._id}>
                   <div className="grid h-full w-full grid-cols-[1fr_1fr] justify-between p-4 sm:max-w-xl md:max-w-2xl lg:max-w-4xl">
-                    <div className="w-full bg-slate-400">{/* <img src={list._id} alt={""} className="w-full"></img> */}</div>
+                    <div className="w-full bg-slate-400">
+                      <img src={`/images/${list.product.image}`} alt={""} className="w-full"></img>
+                    </div>
                     <div className="flex h-full flex-col items-end gap-2 pl-4 text-right">
                       <h4 className="font-medium md:text-lg lg:text-xl">{list.product.name}</h4>
 

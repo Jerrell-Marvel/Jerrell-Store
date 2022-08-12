@@ -15,6 +15,7 @@ type ProductsType = {
     price: string;
     createdAt: string;
     updatedAt: string;
+    image: string;
   }[];
 };
 
@@ -77,7 +78,7 @@ function ShowProducts({ url }: ShowProductsProps) {
                   <li className={`flex h-full flex-col gap-4 rounded-xl bg-white p-4 transition-transform duration-300 hover:scale-105`}>
                     <h3 className="d">{product.name}</h3>
                     <div>
-                      <img src={`https://source.unsplash.com/random/400x${400 - index}`} className="w-full" alt="temporary-alt"></img>
+                      <img src={`/images/${product.image}`} className="w-full" alt="temporary-alt"></img>
                     </div>
 
                     <p className="">{product.description}</p>

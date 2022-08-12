@@ -41,6 +41,7 @@ function App() {
         <Route path="*" element={<NotFound statusCode={404} message="Page not found or no longer exist" statusText="Page not found" />} />
       </Routes>
       <Footer />
+      <img src="/images/pas-foto.jpg-1660162774629-887904127" alt="" />
 
       {/* </WishlistProvider> */}
     </div>

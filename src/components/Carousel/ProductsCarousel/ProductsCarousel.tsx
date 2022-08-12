@@ -24,6 +24,7 @@ type ProductsType = {
     price: string;
     createdAt: string;
     updatedAt: string;
+    image: string;
   }[];
 };
 
@@ -75,7 +76,7 @@ function ProductsCarousel({ url, category }: ProductsCarouselProps) {
                 <SwiperSlide className="block !w-64" key={index}>
                   <Link to={`/product/${product._id}`}>
                     <div className="z-10 flex w-full flex-col">
-                      <img src={`https://source.unsplash.com/random/400x${400 - index}`} alt="temporary alt" className="mb-3 !h-72" />
+                      <img src={`/images/${product.image}`} alt="temporary alt" className="mb-3 !h-72" />
                       <h3>{product.name}</h3>
                       <p>{product.description}</p>
                     </div>

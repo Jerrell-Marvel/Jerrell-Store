@@ -20,6 +20,7 @@ type ProductType = {
     price: string;
     createdAt: string;
     updatedAt: string;
+    image: string;
   };
 };
 
@@ -129,7 +130,7 @@ function ProductDetails() {
               <h3 className="my-6 w-full">{itemDetails?.product.category}</h3>
 
               <div className="w-full md:w-1/2">
-                {fetchLoading ? <div className="h-full w-full animate-loading bg-slate-200"></div> : <img src={`https://source.unsplash.com/random/1000x1000`} alt={itemDetails?.product.weight} className="w-full" />}
+                {fetchLoading ? <div className="h-full w-full animate-loading bg-slate-200"></div> : <img src={`/images/${itemDetails?.product.image}`} alt={itemDetails?.product.weight} className="w-full" />}
               </div>
 
               <div className="w-full md:w-1/2 md:pl-8">
