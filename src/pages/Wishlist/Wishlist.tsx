@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch";
 import useApi from "../../customHooks/useApi";
@@ -38,21 +37,14 @@ type DeleteWishlistApiResponseType = {
 };
 export default function Wishlist() {
   const [wishlist, setWishlist] = useState<WishlistType[] | []>([]);
-  const [cookies] = useCookies(["token"]);
   const navigate = useNavigate();
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
   const [response, loading, error] = useFetch<WishlistApiResponseType>({
     url: "/api/v1/wishlist",
-    headers: {
-      authorization: `Bearer ${cookies.token}`,
-    },
   });
 
   const [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, sendDeleteWishlistRequest] = useApi<DeleteWishlistApiResponseType>({
     url: `/api/v1/wishlist`,
-    headers: {
-      authorization: `Bearer ${cookies.token}`,
-    },
     method: "delete",
   });
 

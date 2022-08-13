@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch";
 import useApi from "../../customHooks/useApi";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import ProductDetails from "../ProductsDetails/ProductsDetails";
+import { useUserContext } from "../../context/UserContext";
 
 type CartType = {
   _id: string;
@@ -53,30 +53,23 @@ type UpdateCartApiResponseType = {
 };
 export default function Cart() {
   const [cart, setCart] = useState<CartType[] | []>([]);
-  const [cookies] = useCookies(["token"]);
   const [itemId, setItemId] = useState("");
   const navigate = useNavigate();
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
+  const { user, setUser } = useUserContext();
   const [fetchResponse, fetchLoading, fetchError] = useFetch<CartApiResponseType>({
     url: "/api/v1/cart",
-    headers: {
-      authorization: `Bearer ${cookies.token}`,
-    },
   });
 
   const [deleteCartResponse, deleteCartLoading, deleteCartError, sendDeleteCartRequest] = useApi<DeleteCartApiResponseType>({
     url: `/api/v1/cart`,
-    headers: {
-      authorization: `Bearer ${cookies.token}`,
-    },
+
     method: "delete",
   });
 
   const [updateCartResponse, updateCartLoading, updateCartError, sendUpdateCartRequest] = useApi<UpdateCartApiResponseType>({
     url: `/api/v1/cart`,
-    headers: {
-      authorization: `Bearer ${cookies.token}`,
-    },
+
     method: "patch",
   });
 
@@ -118,13 +111,15 @@ export default function Cart() {
     if (typeof deleteCartResponse !== "undefined") {
       const newCart = [...cart];
       console.log(newCart);
-      const deletedCart = newCart.filter((wishlist) => {
-        return wishlist._id !== deleteCartResponse.item._id;
+      const deletedCart = newCart.filter((cart) => {
+        return cart._id !== deleteCartResponse.item._id;
       });
       console.log(deletedCart);
 
       setCart(deletedCart);
-
+      if (typeof user !== "undefined") {
+        setUser({ username: user.username, cartCount: user?.cartCount - 1 });
+      }
       console.log(deleteCartResponse);
     }
   }, [deleteCartResponse, deleteCartLoading, deleteCartError]);

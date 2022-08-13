@@ -2,12 +2,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import useApi from "../../customHooks/useApi";
 import matchRegex from "../../utils/matchRegex";
-import { useCookies } from "react-cookie";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import { useUserContext } from "../../context/UserContext";
 
 type LoginApiResponse = {
   username: string;
   token: string;
+  cartCount: number;
 };
 
 function Login() {
@@ -17,8 +18,8 @@ function Login() {
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+  const { user, setUser } = useUserContext();
 
-  const [cookies, setCookie] = useCookies(["token"]);
   const navigate = useNavigate();
 
   const [response, loading, error, sendRequest] = useApi<LoginApiResponse>({
@@ -43,6 +44,7 @@ function Login() {
 
     if (typeof response !== "undefined") {
       // setCookie("token", response.token, { path: "/" });
+      setUser({ username: response.username, cartCount: response.cartCount });
       navigate("/");
     }
   }, [response, error]);

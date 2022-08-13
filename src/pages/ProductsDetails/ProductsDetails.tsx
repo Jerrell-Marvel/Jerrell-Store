@@ -5,8 +5,8 @@ import { useFetch } from "../../customHooks/useFetch";
 import ProductsCarousel from "../../components/Carousel/ProductsCarousel/ProductsCarousel";
 import NotFound from "../NotFound/NotFound";
 import useApi from "../../customHooks/useApi";
-import { useCookies } from "react-cookie";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import { useUserContext } from "../../context/UserContext";
 
 type ProductType = {
   success: boolean;
@@ -35,7 +35,7 @@ function ProductDetails() {
   const [isCartModalActive, setIsCartModalActive] = useState(false);
   const [wishlistErrorMessage, setWishlistErrorMessage] = useState("");
   const [cartErrorMessage, setCartErrorMessage] = useState("");
-  const [cookies] = useCookies();
+  const { user, setUser } = useUserContext();
 
   const incrementAmount = () => {
     setProductAmount(productAmount + 1);
@@ -54,16 +54,11 @@ function ProductDetails() {
 
   const [addWishlistResponse, addWishlistLoading, addWishlistError, sendAddWishlistRequest] = useApi({
     url: `/api/v1/wishlist`,
-    headers: {
-      authorization: `Bearer ${cookies.token}`,
-    },
+
     method: "post",
   });
   const [addCartResponse, addCartLoading, addCartError, sendAddCartRequest] = useApi({
     url: `/api/v1/cart`,
-    headers: {
-      authorization: `Bearer ${cookies.token}`,
-    },
     method: "post",
   });
 
@@ -108,6 +103,10 @@ function ProductDetails() {
 
     if (typeof addCartResponse !== "undefined") {
       console.log("inside if statement");
+
+      if (typeof user !== "undefined") {
+        setUser({ username: user.username, cartCount: user?.cartCount + 1 });
+      }
       setIsCartModalActive((prev) => !prev);
       setCartErrorMessage("");
     }

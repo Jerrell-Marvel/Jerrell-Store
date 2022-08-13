@@ -14,6 +14,7 @@ import Cart from "./pages/Cart/Cart";
 import Search from "./pages/Search/Search";
 import axios from "axios";
 import { useEffect } from "react";
+import { UserProvider } from "./context/UserContext";
 
 function App() {
   // useEffect(() => {
@@ -22,26 +23,27 @@ function App() {
   return (
     <div className="App font-primary">
       {/* <WishlistProvider> */}
-      <Navbar />
+      <UserProvider>
+        <Navbar />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
 
-        {/* <Route path="/products" element={<Products />}></Route> */}
-        <Route path="/product-category/:category" element={<ProductsCategories />} />
-        <Route path="/product/:itemId" element={<ProductDetails />}></Route>
+          {/* <Route path="/products" element={<Products />}></Route> */}
+          <Route path="/product-category/:category" element={<ProductsCategories />} />
+          <Route path="/product/:itemId" element={<ProductDetails />}></Route>
 
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/search" element={<Search />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/search" element={<Search />} />
 
-        <Route path="/wishlist" element={<Wishlist />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="*" element={<NotFound statusCode={404} message="Page not found or no longer exist" statusText="Page not found" />} />
-      </Routes>
-      <Footer />
-      <img src="/images/pas-foto.jpg-1660162774629-887904127" alt="" />
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<NotFound statusCode={404} message="Page not found or no longer exist" statusText="Page not found" />} />
+        </Routes>
+        <Footer />
+      </UserProvider>
 
       {/* </WishlistProvider> */}
     </div>
