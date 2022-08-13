@@ -10,14 +10,12 @@ import { CookiesProvider } from "react-cookie";
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <ScrollToTop />
-      <CookiesProvider>
-        <App />
-      </CookiesProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <ScrollToTop />
+    <CookiesProvider>
+      <App />
+    </CookiesProvider>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function

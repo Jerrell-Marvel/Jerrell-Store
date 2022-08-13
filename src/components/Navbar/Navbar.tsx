@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import NavCart from "./NavCart";
 import Button from "../Button/Button";
 import { useUserContext } from "../../context/UserContext";
+import useApi from "../../customHooks/useApi";
+
+type LogoutApiResponse = {
+  success: boolean;
+};
 
 const navLinks = ["about", "wishlist"];
 const productCategories = ["all", "hoodie", "snacks", "jeans", "shorts", "shirts"];
@@ -22,6 +27,17 @@ function Navbar() {
     setSearch("");
     navigate(`/search?q=${search}`);
   };
+
+  const [logoutResponse, logoutLoading, logoutError, sendLogoutRequest] = useApi<LogoutApiResponse>({
+    url: "/api/v1/auth/logout",
+    method: "post",
+  });
+
+  useEffect(() => {
+    if (typeof logoutResponse !== "undefined") {
+      setUser(undefined);
+    }
+  }, [logoutResponse]);
 
   return (
     <>
@@ -90,7 +106,13 @@ function Navbar() {
 
               <li>
                 {user ? (
-                  <div onClick={() => {}}>Logout</div>
+                  <div
+                    onClick={() => {
+                      sendLogoutRequest();
+                    }}
+                  >
+                    Logout
+                  </div>
                 ) : (
                   <NavLink to={`/login`} className="z-10 block py-3 pl-6 md:py-0 md:pl-0">
                     <Button>Login</Button>
