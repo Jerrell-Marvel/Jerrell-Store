@@ -111,7 +111,7 @@ function Navbar() {
                       sendLogoutRequest();
                     }}
                   >
-                    Logout
+                    <Button>Logout</Button>
                   </div>
                 ) : (
                   <NavLink to={`/login`} className="z-10 block py-3 pl-6 md:py-0 md:pl-0">

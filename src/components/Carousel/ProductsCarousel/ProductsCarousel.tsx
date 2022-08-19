@@ -73,10 +73,10 @@ function ProductsCarousel({ url, category }: ProductsCarouselProps) {
           <Swiper slidesPerView={"auto"} spaceBetween={30} freeMode={true} modules={[FreeMode]} grabCursor={true}>
             {datas?.products.map((product, index) => {
               return (
-                <SwiperSlide className="block !w-64" key={index}>
+                <SwiperSlide className="!w-64" key={index}>
                   <Link to={`/product/${product._id}`}>
                     <div className="z-10 flex w-full flex-col">
-                      <img src={`/images/${product.image}`} alt="temporary alt" className="mb-3 !h-72" />
+                      <img src={`/images/${product.image}`} alt="temporary alt" className="mb-3 w-full" />
                       <h3>{product.name}</h3>
                       <p>{product.description}</p>
                     </div>

@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch";
 import useApi from "../../customHooks/useApi";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import { useUserContext } from "../../context/UserContext";
 
 type WishlistType = {
   _id: string;
@@ -39,6 +40,7 @@ export default function Wishlist() {
   const [wishlist, setWishlist] = useState<WishlistType[] | []>([]);
   const navigate = useNavigate();
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
+
   const [response, loading, error] = useFetch<WishlistApiResponseType>({
     url: "/api/v1/wishlist",
   });

@@ -15,6 +15,9 @@ import Search from "./pages/Search/Search";
 import axios from "axios";
 import { useEffect } from "react";
 import { UserProvider } from "./context/UserContext";
+import Pagination from "./components/Pagination/Pagination2";
+import TestComponent from "./TestComponent";
+import ShowProducts from "./components/ShowProducts/ShowProducts";
 
 function App() {
   // useEffect(() => {
@@ -41,8 +44,11 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound statusCode={404} message="Page not found or no longer exist" statusText="Page not found" />} />
+
+          <Route path="/page" element={<Pagination />} />
         </Routes>
         <Footer />
+        {/* <TestComponent /> */}
       </UserProvider>
 
       {/* </WishlistProvider> */}
