@@ -110,6 +110,7 @@ function Navbar() {
                     onClick={() => {
                       sendLogoutRequest();
                     }}
+                    className="z-10 block py-3 pl-6 md:py-0 md:pl-0"
                   >
                     <Button>Logout</Button>
                   </div>
