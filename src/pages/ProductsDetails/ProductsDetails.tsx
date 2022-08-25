@@ -126,83 +126,83 @@ function ProductDetails() {
     sendAddCartRequest("", { productId: itemId, quantity: productAmount });
   };
 
+  if (isFetchError && (fetchError.response.status === 400 || fetchError.response.status === 404)) {
+    return <NotFound statusCode={fetchError.response.status} message={fetchError.response.data.message} statusText={fetchError.request.statusText} />;
+  }
+
   return (
     <>
-      {!isFetchError ? (
-        <div>
-          <section className="bg-slate-50 px-6 pt-20 pb-6">
-            <div className="flex flex-wrap">
-              <h3 className="my-6 w-full">{itemDetails?.product.category}</h3>
+      <div>
+        <section className="bg-slate-50 px-6 pt-20 pb-6">
+          <div className="flex flex-wrap">
+            <h3 className="my-6 w-full">{itemDetails?.product.category}</h3>
 
-              <div className="w-full md:w-1/2">
-                {fetchLoading ? <div className="h-full w-full animate-loading bg-slate-200"></div> : <img src={`/images/${itemDetails?.product.image}`} alt={itemDetails?.product.weight} className="w-full" />}
-              </div>
-
-              <div className="w-full md:w-1/2 md:pl-8">
-                <h2 className="mb-4 mt-8 text-2xl font-medium uppercase md:mt-0 lg:text-4xl">{itemDetails?.product.name}</h2>
-                <h4 className="font-primary font-semibold uppercase md:text-lg lg:text-xl">description</h4>
-                <p>{itemDetails?.product.description}</p>
-                <div className="mt-4 flex w-fit border-2">
-                  <button className="px-4 py-2 text-2xl" onClick={decrementAmount}>
-                    -
-                  </button>
-                  <div className="flex items-center px-4 py-2 text-lg">{productAmount}</div>
-                  <button className="px-4 py-2" onClick={incrementAmount}>
-                    +
-                  </button>
-                </div>
-                <button
-                  className="mt-4 flex h-14 w-full items-center justify-center border-2 border-black bg-primary uppercase text-white transition-colors duration-300"
-                  onClick={() => {
-                    addToCartHandler();
-                  }}
-                >
-                  {addCartLoading ? <LoadingSpinner color="white" /> : "add to cart"}
-                </button>
-                {cartErrorMessage ? (
-                  <span className="!mt-2 block text-red-500">
-                    Item is already in cart{" "}
-                    <Link to="/cart" className="text-black underline">
-                      click here
-                    </Link>{" "}
-                    to check
-                  </span>
-                ) : (
-                  ""
-                )}
-
-                <button
-                  className="mt-4 flex h-14 w-full items-center justify-center border-2 border-black bg-white uppercase text-primary transition-colors duration-300"
-                  onClick={() => {
-                    addToWishlistHandler();
-                  }}
-                >
-                  {addWishlistLoading ? <LoadingSpinner color="primary" /> : "add to wishlist"}
-                </button>
-                {wishlistErrorMessage ? (
-                  <span className="!mt-2 block text-red-500">
-                    Item is already in wishlist{" "}
-                    <Link to="/wishlist" className="text-black underline">
-                      click here
-                    </Link>{" "}
-                    to check
-                  </span>
-                ) : (
-                  ""
-                )}
-              </div>
+            <div className="w-full md:w-1/2">
+              {fetchLoading ? <div className="h-full w-full animate-loading bg-slate-200"></div> : <img src={`/images/${itemDetails?.product.image}`} alt={itemDetails?.product.weight} className="w-full" />}
             </div>
-          </section>
 
-          <div className="w-full">
-            <ProductsCarousel url="/api/v1/products" category={`${itemDetails?.product.category}`} />
+            <div className="w-full md:w-1/2 md:pl-8">
+              <h2 className="mb-4 mt-8 text-2xl font-medium uppercase md:mt-0 lg:text-4xl">{itemDetails?.product.name}</h2>
+              <h4 className="font-primary font-semibold uppercase md:text-lg lg:text-xl">description</h4>
+              <p>{itemDetails?.product.description}</p>
+              <div className="mt-4 flex w-fit border-2">
+                <button className="px-4 py-2 text-2xl" onClick={decrementAmount}>
+                  -
+                </button>
+                <div className="flex items-center px-4 py-2 text-lg">{productAmount}</div>
+                <button className="px-4 py-2" onClick={incrementAmount}>
+                  +
+                </button>
+              </div>
+              <button
+                className="mt-4 flex h-14 w-full items-center justify-center border-2 border-black bg-primary uppercase text-white transition-colors duration-300"
+                onClick={() => {
+                  addToCartHandler();
+                }}
+              >
+                {addCartLoading ? <LoadingSpinner color="white" /> : "add to cart"}
+              </button>
+              {cartErrorMessage ? (
+                <span className="!mt-2 block text-red-500">
+                  Item is already in cart{" "}
+                  <Link to="/cart" className="text-black underline">
+                    click here
+                  </Link>{" "}
+                  to check
+                </span>
+              ) : (
+                ""
+              )}
+
+              <button
+                className="mt-4 flex h-14 w-full items-center justify-center border-2 border-black bg-white uppercase text-primary transition-colors duration-300"
+                onClick={() => {
+                  addToWishlistHandler();
+                }}
+              >
+                {addWishlistLoading ? <LoadingSpinner color="primary" /> : "add to wishlist"}
+              </button>
+              {wishlistErrorMessage ? (
+                <span className="!mt-2 block text-red-500">
+                  Item is already in wishlist{" "}
+                  <Link to="/wishlist" className="text-black underline">
+                    click here
+                  </Link>{" "}
+                  to check
+                </span>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
+        </section>
 
-          {/* Modal */}
+        <div className="w-full">
+          <ProductsCarousel url="/api/v1/products" category={`${itemDetails?.product.category}`} />
         </div>
-      ) : (
-        <div> {/* <NotFound statusCode={fetchError.response.status} message={fetchError.data.message} statusText={fetchError.response.request.statusText} />{" "} */}</div>
-      )}
+
+        {/* Modal */}
+      </div>
 
       {isWishlistModalActive ? (
         <div>
