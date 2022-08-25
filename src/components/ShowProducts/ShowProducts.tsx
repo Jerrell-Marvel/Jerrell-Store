@@ -85,19 +85,6 @@ function ShowProducts({ url, setPageCount }: ShowProductsProps) {
           </div>
         ) : (
           datas?.products.map((product, index) => {
-            if (datas.products.length === index + 1) {
-              return (
-                <Link to={`/product/${product._id}`} key={product._id}>
-                  <li className={`flex h-full flex-col gap-4 rounded-xl bg-white p-4 transition-transform duration-300 hover:scale-105`}>
-                    <h3 className="text-xl font-medium">{product.name}</h3>
-                    <div>
-                      <img src={`/images/${product.image}`} className="w-full" alt="temporary-alt"></img>
-                    </div>
-                    <div className="">{product.description}</div>
-                  </li>
-                </Link>
-              );
-            }
             return (
               <Link to={`/product/${product._id}`} key={product._id}>
                 <li className={`flex h-full flex-col gap-4 rounded-xl bg-white p-4 transition-transform duration-300 hover:scale-105`}>

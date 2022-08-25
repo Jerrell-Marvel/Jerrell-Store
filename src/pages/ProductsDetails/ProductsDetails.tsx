@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useFetch } from "../../customHooks/useFetch";
+import { useFetch } from "../../customHooks/useFetch2";
 import ProductsCarousel from "../../components/Carousel/ProductsCarousel/ProductsCarousel";
 import NotFound from "../NotFound/NotFound";
 import useApi from "../../customHooks/useApi";
@@ -48,8 +48,14 @@ function ProductDetails() {
     }
   };
 
-  const [fetchResponse, fetchLoading, fetchError] = useFetch<ProductType>({
+  const {
+    data: fetchResponse,
+    isLoading: fetchLoading,
+    error: fetchError,
+    isError: isFetchError,
+  } = useFetch<ProductType>({
     url: `/api/v1/products/${itemId}`,
+    queryKey: ["product-details", itemId],
   });
 
   const [addWishlistResponse, addWishlistLoading, addWishlistError, sendAddWishlistRequest] = useApi({
@@ -122,7 +128,7 @@ function ProductDetails() {
 
   return (
     <>
-      {fetchError.success ? (
+      {!isFetchError ? (
         <div>
           <section className="bg-slate-50 px-6 pt-20 pb-6">
             <div className="flex flex-wrap">
@@ -195,9 +201,7 @@ function ProductDetails() {
           {/* Modal */}
         </div>
       ) : (
-        <div>
-          <NotFound statusCode={fetchError.fetchResponse.request.status} message={fetchError.fetchResponse.data.message} statusText={fetchError.request.statusText} />
-        </div>
+        <div> {/* <NotFound statusCode={fetchError.response.status} message={fetchError.data.message} statusText={fetchError.response.request.statusText} />{" "} */}</div>
       )}
 
       {isWishlistModalActive ? (
