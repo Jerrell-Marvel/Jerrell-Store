@@ -19,6 +19,7 @@ import Pagination from "./components/Pagination/Pagination2";
 import TestComponent from "./TestComponent";
 import ShowProducts from "./components/ShowProducts/ShowProducts";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const queryClient = new QueryClient();
 
@@ -54,6 +55,7 @@ function App() {
           <Footer />
           {/* <TestComponent /> */}
         </UserProvider>
+        <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
       </QueryClientProvider>
 
       {/* </WishlistProvider> */}

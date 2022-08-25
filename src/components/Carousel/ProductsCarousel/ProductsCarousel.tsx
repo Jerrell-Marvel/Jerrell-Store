@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useFetch, useFetchParameters } from "../../../customHooks/useFetch";
+import { useFetch } from "../../../customHooks/useFetch2";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
@@ -10,7 +10,7 @@ import "swiper/css/free-mode";
 import { FreeMode } from "swiper";
 import { Link } from "react-router-dom";
 
-export type ProductsProps = ProductsType & useFetchParameters;
+export type ProductsProps = ProductsType;
 
 type ProductsType = {
   success: boolean;
@@ -37,14 +37,19 @@ function ProductsCarousel({ url, category }: ProductsCarouselProps) {
   const [datas, setDatas] = useState<ProductsType | undefined>(undefined);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const [response, loading, error] = useFetch<ProductsType>({
+  const {
+    data: response,
+    isLoading: loading,
+    isError: error,
+  } = useFetch<ProductsType>({
     url: url,
+    queryKey: ["products-carousel", category],
   });
 
   useEffect(() => {
     if (typeof response !== "undefined") {
       setDatas(response);
-    } else if (!error.success) {
+    } else if (error) {
       setErrorMessage("Failed to get resources");
     }
   }, [response, error]);

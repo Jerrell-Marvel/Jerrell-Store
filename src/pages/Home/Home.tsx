@@ -17,7 +17,7 @@ function Home() {
       <ProductsCarousel url="/api/v1/products" category="jeans" />
 
       <HomeBanner src="https://source.unsplash.com/random/1600x1102">Discount Items</HomeBanner>
-      <ProductsCarousel url="/api/v1/products" category="hoodie" />
+      <ProductsCarousel url="/api/v1/products" category="shorts" />
 
       <HomeBanner src="https://source.unsplash.com/random/1600x1098"></HomeBanner>
     </div>
