@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useFetch } from "../../customHooks/useFetch";
+import { useFetch } from "../../customHooks/useFetch2";
 import useApi from "../../customHooks/useApi";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import ProductDetails from "../ProductsDetails/ProductsDetails";
@@ -57,13 +57,18 @@ export default function Cart() {
   const navigate = useNavigate();
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
   const { user, setUser } = useUserContext();
-  const [fetchResponse, fetchLoading, fetchError] = useFetch<CartApiResponseType>({
+  const {
+    data: fetchData,
+    isLoading: fetchLoading,
+    error: fetchError,
+    isError: isFetchError,
+  } = useFetch<CartApiResponseType>({
     url: "/api/v1/cart",
+    queryKey: ["cart"],
   });
 
   const [deleteCartResponse, deleteCartLoading, deleteCartError, sendDeleteCartRequest] = useApi<DeleteCartApiResponseType>({
     url: `/api/v1/cart`,
-
     method: "delete",
   });
 
@@ -125,18 +130,20 @@ export default function Cart() {
   }, [deleteCartResponse, deleteCartLoading, deleteCartError]);
 
   useEffect(() => {
-    if (typeof fetchResponse !== "undefined") {
-      setCart(fetchResponse.items);
+    if (typeof fetchData !== "undefined") {
+      setCart(fetchData.items);
     }
 
-    if (!fetchError.success) {
+    if (isFetchError) {
       if (fetchError.response.status === 401) {
         navigate("/login");
       } else if (fetchError.code === "ERR_NETWORK") {
         setFetchErrorMessage("Something went wrong please try again later");
+      } else {
+        setFetchErrorMessage("Something went wrong please try again");
       }
     }
-  }, [fetchResponse, fetchError]);
+  }, [fetchData, fetchError, isFetchError]);
 
   const removeWishlistHandler = (id: string) => {
     alert("are you sure to remove item from cart?");
@@ -154,7 +161,7 @@ export default function Cart() {
       <div className="pt-20 text-center">
         <h2 className="my-4 text-4xl font-medium uppercase">Cart</h2>
         <div className="bg-slate-100 p-4 text-center ">
-          {!fetchErrorMessage ? (
+          {!isFetchError ? (
             fetchLoading ? (
               <LoadingSpinner color="primary" />
             ) : (
