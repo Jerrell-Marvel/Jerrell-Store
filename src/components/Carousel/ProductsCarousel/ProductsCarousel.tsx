@@ -37,61 +37,64 @@ function ProductsCarousel({ url, category }: ProductsCarouselProps) {
   const [datas, setDatas] = useState<ProductsType | undefined>(undefined);
   const [errorMessage, setErrorMessage] = useState("");
 
-  const {
-    data: response,
-    isLoading: loading,
-    isError: error,
-  } = useFetch<ProductsType>({
+  const { data, isLoading, isError } = useFetch<ProductsType>({
     url: url,
     queryKey: ["products-carousel", category],
   });
 
   useEffect(() => {
-    if (typeof response !== "undefined") {
-      setDatas(response);
-    } else if (error) {
-      setErrorMessage("Failed to get resources");
+    // if (typeof response !== "undefined") {
+    //   setDatas(response);
+    // } else if (error) {
+    //   setErrorMessage("Failed to get resources");
+    // }
+    if (isError) {
+      setErrorMessage("Something went wrong please try again later");
     }
-  }, [response, error]);
+  }, [isError]);
 
-  return (
-    <section className="px-6 py-12 md:py-16">
-      {loading ? (
+  if (isLoading || isError) {
+    return (
+      <section className="px-6 py-12 md:py-16">
         <div className="w-full overflow-hidden">
           <div className="flex h-72 w-fit">
             {[...Array(10)].map((element, index) => (
-              <div className="mr-4 flex h-full w-64 animate-loading items-center justify-center rounded-sm bg-slate-200" key={index}>
+              <div className="mr-4 flex h-full w-64 animate-loading items-center justify-center rounded-sm bg-slate-200 text-center" key={index}>
                 {errorMessage ? errorMessage : ""}
               </div>
             ))}
           </div>
         </div>
-      ) : (
-        <div>
-          <div className="mb-4 flex items-end justify-between">
-            <h3 className="mr-4 text-2xl font-medium sm:text-3xl md:text-4xl lg:text-5xl">Related products</h3>
-            <Link to={`/product-category/${category}`} className="text-lg sm:text-xl md:mr-4 md:text-2xl lg:mr-8 lg:text-3xl">
-              See More ➡
-            </Link>
-          </div>
+      </section>
+    );
+  }
 
-          <Swiper slidesPerView={"auto"} spaceBetween={30} freeMode={true} modules={[FreeMode]} grabCursor={true}>
-            {datas?.products.map((product, index) => {
-              return (
-                <SwiperSlide className="!w-64" key={index}>
-                  <Link to={`/product/${product._id}`}>
-                    <div className="z-10 flex w-full flex-col">
-                      <img src={`/images/${product.image}`} alt="temporary alt" className="mb-3 w-full" />
-                      <h3>{product.name}</h3>
-                      <p>{product.description}</p>
-                    </div>
-                  </Link>
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
+  return (
+    <section className="px-6 py-12 md:py-16">
+      <div>
+        <div className="mb-4 flex items-end justify-between">
+          <h3 className="mr-4 text-2xl font-medium sm:text-3xl md:text-4xl lg:text-5xl">Related products</h3>
+          <Link to={`/product-category/${category}`} className="text-lg sm:text-xl md:mr-4 md:text-2xl lg:mr-8 lg:text-3xl">
+            See More ➡
+          </Link>
         </div>
-      )}
+
+        <Swiper slidesPerView={"auto"} spaceBetween={30} freeMode={true} modules={[FreeMode]} grabCursor={true}>
+          {data?.products.map((product, index) => {
+            return (
+              <SwiperSlide className="!w-64" key={index}>
+                <Link to={`/product/${product._id}`}>
+                  <div className="z-10 flex w-full flex-col">
+                    <img src={`/images/${product.image}`} alt="temporary alt" className="mb-3 w-full" />
+                    <h3>{product.name}</h3>
+                    <p>{product.description}</p>
+                  </div>
+                </Link>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
+      </div>
     </section>
   );
 }

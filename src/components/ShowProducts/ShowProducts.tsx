@@ -27,37 +27,31 @@ type ShowProductsProps = {
 };
 
 function ShowProducts({ url, setPageCount }: ShowProductsProps) {
-  const [datas, setDatas] = useState<ProductsType | undefined>(undefined);
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const {
-    data: response,
-    isLoading,
-    isError,
-    error,
-  } = useFetch<ProductsType>({
+  const { data, isLoading, isError, error } = useFetch<ProductsType>({
     url: url,
     queryKey: ["show-products", url],
   });
 
   useEffect(() => {
-    if (typeof response !== "undefined") {
-      setDatas(response);
+    if (typeof data !== "undefined") {
       if (typeof setPageCount !== "undefined") {
-        setPageCount(response.totalCount);
+        setPageCount(data.totalCount);
       }
     }
 
     if (isError) {
-      if (error.code === "ERR_NETWORK") {
-        setFetchErrorMessage("Something went wrong please try again later");
-      }
+      // if (error.code === "ERR_NETWORK") {
+      //   setFetchErrorMessage("Something went wrong please try again later");
+      // }
+      setFetchErrorMessage("Something went wrong please try again later");
     }
-  }, [response, isLoading, error]);
+  }, [data, isLoading, error, isError]);
 
-  if (isLoading) {
+  if (isLoading || isError) {
     return (
       <ul className="grid w-full grid-cols-card-grid gap-6 py-10">
         {[...Array(10)].map((element, index) => {
@@ -76,7 +70,7 @@ function ShowProducts({ url, setPageCount }: ShowProductsProps) {
   return (
     <>
       <ul className="grid w-full grid-cols-card-grid gap-6 py-10">
-        {datas && datas.products.length < 1 ? (
+        {data && data.products.length < 1 ? (
           <div className="text-center">
             <span>No products found</span>
             <NavLink to={`/product-category/all`} className="mx-auto mt-8 block w-fit">
@@ -84,7 +78,7 @@ function ShowProducts({ url, setPageCount }: ShowProductsProps) {
             </NavLink>
           </div>
         ) : (
-          datas?.products.map((product, index) => {
+          data?.products.map((product, index) => {
             return (
               <Link to={`/product/${product._id}`} key={product._id}>
                 <li className={`flex h-full flex-col gap-4 rounded-xl bg-white p-4 transition-transform duration-300 hover:scale-105`}>
