@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useFetch } from "../../customHooks/useFetch";
+import { useFetch } from "../../customHooks/useFetch2";
 import useApi from "../../customHooks/useApi";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { useUserContext } from "../../context/UserContext";
@@ -41,8 +41,14 @@ export default function Wishlist() {
   const navigate = useNavigate();
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
 
-  const [response, loading, error] = useFetch<WishlistApiResponseType>({
+  const {
+    data: wishlistData,
+    isLoading,
+    error,
+    isError: isFetchError,
+  } = useFetch<WishlistApiResponseType>({
     url: "/api/v1/wishlist",
+    queryKey: ["wishlist"],
   });
 
   const [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, sendDeleteWishlistRequest] = useApi<DeleteWishlistApiResponseType>({
@@ -77,19 +83,21 @@ export default function Wishlist() {
   }, [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError]);
 
   useEffect(() => {
-    if (typeof response !== "undefined") {
-      setWishlist(response.wishlists);
+    if (typeof wishlistData !== "undefined") {
+      setWishlist(wishlistData.wishlists);
     }
 
-    if (!error.success) {
+    if (isFetchError) {
       if (error.response.status === 401) {
         navigate("/login");
       } else if (error.code === "ERR_NETWORK") {
         setFetchErrorMessage("Something went wrong please try again later");
+      } else {
+        setFetchErrorMessage("Something went wrong please try again later");
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [response, error]);
+  }, [wishlistData, error, isFetchError]);
 
   const removeWishlistHandler = (id: string) => {
     alert("are you sure to remove item from wishlist?");
@@ -100,8 +108,8 @@ export default function Wishlist() {
       <div className="pt-20 text-center">
         <h2 className="my-4 text-4xl font-medium uppercase">Wishlist</h2>
         <div className="bg-slate-100 p-4 text-center ">
-          {!fetchErrorMessage ? (
-            loading ? (
+          {!isFetchError ? (
+            isLoading ? (
               <LoadingSpinner color="primary" />
             ) : (
               <div>
