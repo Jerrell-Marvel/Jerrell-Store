@@ -1,5 +1,3 @@
-
-
 import { useState, useEffect } from "react";
 import axios, { AxiosRequestHeaders } from "axios";
 import { useQuery } from "react-query";
@@ -20,12 +18,16 @@ export function useFetch<T>({ url, headers = {}, pageNumber, queryKey }: useFetc
   const [error, setError] = useState({ success: true });
   // const [hasMore, setHasMore] = useState(true);
 
-  return useQuery<T, any>(queryKey, async () => {
-    const response = await axios.get(url, { headers });
-    const data: T = response.data;
+  return useQuery<T, any>(
+    queryKey,
+    async () => {
+      const response = await axios.get(url, { headers });
+      const data: T = response.data;
 
-    return data;
-  });
+      return data;
+    },
+    { retry: false }
+  );
 
   // useEffect(() => {
   //   const getData = async () => {

@@ -4,6 +4,7 @@ import NavCart from "./NavCart";
 import Button from "../Button/Button";
 import { useUserContext } from "../../context/UserContext";
 import useApi from "../../customHooks/useApi";
+import { useQueryClient } from "react-query";
 
 type LogoutApiResponse = {
   success: boolean;
@@ -16,7 +17,7 @@ function Navbar() {
   const [navActive, setNavActive] = useState(false);
   const [showProductCategories, setShowProductCategories] = useState(false);
   const [search, setSearch] = useState("");
-  const { user, setUser, loading, error } = useUserContext();
+  const { user, setUser, isLoading, error } = useUserContext();
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);

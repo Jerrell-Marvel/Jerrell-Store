@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useState, useEffect } from "react";
-import { useFetch } from "../customHooks/useFetch";
+import { useFetch } from "../customHooks/useFetch2";
 
 const UserContext = createContext<UserContextValue>({} as UserContextValue);
 
@@ -15,22 +15,23 @@ type UserApiResponseType = {
 type UserContextValue = {
   user: UserApiResponseType | undefined;
   setUser: React.Dispatch<React.SetStateAction<UserApiResponseType | undefined>>;
-  loading: boolean;
+  isLoading: boolean;
   error: any;
 };
 
 export function UserProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<UserApiResponseType | undefined>(undefined);
 
-  const [response, loading, error] = useFetch<UserApiResponseType>({
+  const { data, isLoading, error, isError } = useFetch<UserApiResponseType>({
     url: "/api/v1/auth/profile",
+    queryKey: ["profile"],
   });
 
   useEffect(() => {
-    if (typeof response !== "undefined") {
-      setUser(response);
+    if (typeof data !== "undefined") {
+      setUser(data);
     }
-  }, [response]);
+  }, [data]);
 
-  return <UserContext.Provider value={{ user, setUser, loading, error }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ user, setUser, isLoading, error }}>{children}</UserContext.Provider>;
 }

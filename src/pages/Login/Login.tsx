@@ -48,7 +48,6 @@ function Login() {
       navigate("/");
     }
   }, [response, error]);
-  console.log("rendered");
 
   const handleSubmit = () => {
     if (!email || !password) {

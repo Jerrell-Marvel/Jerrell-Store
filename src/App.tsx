@@ -20,10 +20,12 @@ import TestComponent from "./TestComponent";
 import ShowProducts from "./components/ShowProducts/ShowProducts";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
+import useApi2 from "./customHooks/useApi2";
 
 const queryClient = new QueryClient();
 
 function App() {
+  
   // useEffect(() => {
   //   axios.defaults.withCredentials = true;
   // }, []);

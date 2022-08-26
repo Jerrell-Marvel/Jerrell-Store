@@ -103,6 +103,8 @@ export default function Wishlist() {
     alert("are you sure to remove item from wishlist?");
     sendDeleteWishlistRequest(id);
   };
+
+  console.log("this is ALSO RENDERED");
   return (
     <>
       <div className="pt-20 text-center">
