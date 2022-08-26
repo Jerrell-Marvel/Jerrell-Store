@@ -4,6 +4,7 @@ import { useFetch } from "../../customHooks/useFetch2";
 import useApi2 from "../../customHooks/useApi2";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { useUserContext } from "../../context/UserContext";
+import { useQueryClient } from "react-query";
 
 type WishlistType = {
   _id: string;
@@ -37,9 +38,10 @@ type DeleteWishlistApiResponseType = {
   };
 };
 export default function Wishlist() {
-  const [wishlist, setWishlist] = useState<WishlistType[] | []>([]);
+  // const [wishlist, setWishlist] = useState<WishlistType[] | []>([]);
   const navigate = useNavigate();
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
+  const queryClient = useQueryClient();
 
   const {
     data: wishlistData,
@@ -60,6 +62,22 @@ export default function Wishlist() {
   } = useApi2<DeleteWishlistApiResponseType>({
     url: `/api/v1/wishlist`,
     method: "delete",
+    options: {
+      onSuccess: (deleteWishlistResponse) => {
+        queryClient.setQueryData<WishlistApiResponseType | undefined>(["wishlist"], (oldQueryData) => {
+          if (oldQueryData) {
+            const deletedWishlist = oldQueryData?.wishlists.filter((wishlist) => {
+              return wishlist._id !== deleteWishlistResponse.wishlist._id;
+            });
+            return {
+              ...oldQueryData,
+              wishlists: deletedWishlist,
+              count: deletedWishlist.length,
+            };
+          }
+        });
+      },
+    },
   });
 
   useEffect(() => {
@@ -73,26 +91,22 @@ export default function Wishlist() {
       }
     }
 
-    if (typeof deleteWishlistResponse !== "undefined") {
-      const newWishlist = [...wishlist];
-      console.log(newWishlist);
-      const deletedWishlist = newWishlist.filter((wishlist) => {
-        return wishlist._id !== deleteWishlistResponse.wishlist._id;
-      });
-      console.log(deletedWishlist);
+    // if (typeof deleteWishlistResponse !== "undefined") {
+    //   const newWishlist = [...wishlist];
+    //   console.log(newWishlist);
+    //   const deletedWishlist = newWishlist.filter((wishlist) => {
+    //     return wishlist._id !== deleteWishlistResponse.wishlist._id;
+    //   });
+    //   console.log(deletedWishlist);
 
-      setWishlist(deletedWishlist);
+    //   setWishlist(deletedWishlist);
 
-      console.log(deleteWishlistResponse);
-    }
+    //   console.log(deleteWishlistResponse);
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, isDeleteWishlistError]);
 
   useEffect(() => {
-    if (typeof wishlistData !== "undefined") {
-      setWishlist(wishlistData.wishlists);
-    }
-
     if (isFetchError) {
       if (error.response.status === 401) {
         navigate("/login");
@@ -109,6 +123,8 @@ export default function Wishlist() {
     alert("are you sure to remove item from wishlist?");
     sendDeleteWishlistRequest({ itemId: id });
   };
+
+  console.log(wishlistData);
   return (
     <>
       <div className="pt-20 text-center">
@@ -120,7 +136,7 @@ export default function Wishlist() {
             ) : (
               <div>
                 <h3 className="my-4 text-3xl font-medium">My Wishlist</h3>
-                {wishlist.length > 0 ? "" : <p>Your wishlist is empty</p>}
+                {wishlistData && wishlistData?.wishlists.length > 0 ? "" : <p>Your wishlist is empty</p>}
               </div>
             )
           ) : (
@@ -129,7 +145,7 @@ export default function Wishlist() {
         </div>
         <div className="py-6 px-6">
           <ul className="flex w-full flex-col items-center">
-            {wishlist.map((list) => {
+            {wishlistData?.wishlists.map((list) => {
               return (
                 <li className="mb-4 flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-x-2" key={list._id}>
                   <div className="grid h-full w-full grid-cols-[1fr_1fr] justify-between p-4 sm:max-w-xl md:max-w-2xl lg:max-w-4xl">
@@ -157,7 +173,7 @@ export default function Wishlist() {
               );
             })}
           </ul>
-          {wishlist.length < 1 ? (
+          {wishlistData && wishlistData?.wishlists.length < 1 ? (
             <Link to="/wishlist" className="w-fit border-2 border-black bg-primary px-4 py-2 text-sm uppercase text-white transition-colors duration-300">
               WISHLIST PAGE
             </Link>

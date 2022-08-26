@@ -1,11 +1,12 @@
 import { useState } from "react";
 import axios, { AxiosRequestHeaders } from "axios";
-import { useMutation } from "react-query";
+import { useMutation, UseMutationOptions } from "react-query";
 
-type UseApiProps = {
+type UseApiProps<T> = {
   url: string;
   headers?: AxiosRequestHeaders;
   method: "post" | "put" | "delete" | "patch";
+  options?: UseMutationOptions<T, any, MutateFnParams>;
 };
 
 type MutateFnParams = {
@@ -13,7 +14,7 @@ type MutateFnParams = {
   body?: object;
 };
 
-export default function useApi2<T>({ url, headers, method }: UseApiProps) {
+export default function useApi2<T>({ url, headers, method, options }: UseApiProps<T>) {
   return useMutation<T, any, MutateFnParams>(async ({ itemId, body }: MutateFnParams) => {
     console.log("this fn is called inside use mutation");
     let response;
@@ -34,7 +35,7 @@ export default function useApi2<T>({ url, headers, method }: UseApiProps) {
 
     const data: T = response.data;
     return data;
-  });
+  }, options);
 }
 
 // export default function useApi2<T>({ url, headers, method, queryKey }: UseApiProps): {

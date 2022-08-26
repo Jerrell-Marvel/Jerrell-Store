@@ -26,7 +26,7 @@ export function useFetch<T>({ url, headers = {}, pageNumber, queryKey }: useFetc
 
       return data;
     },
-    { retry: false }
+    { retry: false, refetchOnWindowFocus: false }
   );
 
   // useEffect(() => {
