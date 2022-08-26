@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch2";
 import useApi2 from "../../customHooks/useApi2";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import { useUserContext } from "../../context/UserContext";
 import { useQueryClient } from "react-query";
 
 type WishlistType = {
@@ -64,47 +63,22 @@ export default function Wishlist() {
     method: "delete",
     options: {
       onSuccess: (deleteWishlistResponse) => {
-        queryClient.setQueryData<WishlistApiResponseType | undefined>(["wishlist"], (oldQueryData) => {
-          if (oldQueryData) {
-            const deletedWishlist = oldQueryData?.wishlists.filter((wishlist) => {
+        queryClient.setQueryData<WishlistApiResponseType | undefined>(["wishlist"], (oldWishlist) => {
+          if (oldWishlist) {
+            const deletedWishlist = oldWishlist?.wishlists.filter((wishlist) => {
               return wishlist._id !== deleteWishlistResponse.wishlist._id;
             });
             return {
-              ...oldQueryData,
+              ...oldWishlist,
               wishlists: deletedWishlist,
               count: deletedWishlist.length,
             };
           }
+          return oldWishlist;
         });
       },
     },
   });
-
-  useEffect(() => {
-    if (isDeleteWishlistError) {
-      if (deleteWishlistError.code === "ERR_NETWORK") {
-        // return setWishlistErrorMessage("Something went wrong please try again later");
-        console.log("something");
-      }
-      if (deleteWishlistError.response.data.message === "Duplicate value error") {
-        // return setWishlistErrorMessage("Item is already in wishlist");
-      }
-    }
-
-    // if (typeof deleteWishlistResponse !== "undefined") {
-    //   const newWishlist = [...wishlist];
-    //   console.log(newWishlist);
-    //   const deletedWishlist = newWishlist.filter((wishlist) => {
-    //     return wishlist._id !== deleteWishlistResponse.wishlist._id;
-    //   });
-    //   console.log(deletedWishlist);
-
-    //   setWishlist(deletedWishlist);
-
-    //   console.log(deleteWishlistResponse);
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, isDeleteWishlistError]);
 
   useEffect(() => {
     if (isFetchError) {
@@ -145,6 +119,7 @@ export default function Wishlist() {
         </div>
         <div className="py-6 px-6">
           <ul className="flex w-full flex-col items-center">
+            {isDeleteWishlistError ? <span className="mb-4 text-red-400">Failed to remove item, please try again later</span> : ""}
             {wishlistData?.wishlists.map((list) => {
               return (
                 <li className="mb-4 flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-x-2" key={list._id}>
