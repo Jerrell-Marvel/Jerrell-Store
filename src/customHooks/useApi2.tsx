@@ -8,8 +8,13 @@ type UseApiProps = {
   method: "post" | "put" | "delete" | "patch";
 };
 
+type MutateFnParams = {
+  itemId?: string;
+  body?: object;
+};
+
 export default function useApi2<T>({ url, headers, method }: UseApiProps) {
-  return useMutation(async (itemId?: string, body?: object) => {
+  return useMutation<T, any, MutateFnParams>(async ({ itemId, body }: MutateFnParams) => {
     console.log("this fn is called inside use mutation");
     let response;
     if (method === "delete") {

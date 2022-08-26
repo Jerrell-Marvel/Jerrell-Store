@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch2";
-import useApi from "../../customHooks/useApi";
+import useApi2 from "../../customHooks/useApi2";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { useUserContext } from "../../context/UserContext";
 
@@ -51,13 +51,19 @@ export default function Wishlist() {
     queryKey: ["wishlist"],
   });
 
-  const [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, sendDeleteWishlistRequest] = useApi<DeleteWishlistApiResponseType>({
+  const {
+    data: deleteWishlistResponse,
+    isLoading: deleteWishlistLoading,
+    error: deleteWishlistError,
+    isError: isDeleteWishlistError,
+    mutate: sendDeleteWishlistRequest,
+  } = useApi2<DeleteWishlistApiResponseType>({
     url: `/api/v1/wishlist`,
     method: "delete",
   });
 
   useEffect(() => {
-    if (!deleteWishlistError.success) {
+    if (isDeleteWishlistError) {
       if (deleteWishlistError.code === "ERR_NETWORK") {
         // return setWishlistErrorMessage("Something went wrong please try again later");
         console.log("something");
@@ -80,7 +86,7 @@ export default function Wishlist() {
       console.log(deleteWishlistResponse);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError]);
+  }, [deleteWishlistResponse, deleteWishlistLoading, deleteWishlistError, isDeleteWishlistError]);
 
   useEffect(() => {
     if (typeof wishlistData !== "undefined") {
@@ -101,10 +107,8 @@ export default function Wishlist() {
 
   const removeWishlistHandler = (id: string) => {
     alert("are you sure to remove item from wishlist?");
-    sendDeleteWishlistRequest(id);
+    sendDeleteWishlistRequest({ itemId: id });
   };
-
-  console.log("this is ALSO RENDERED");
   return (
     <>
       <div className="pt-20 text-center">
