@@ -4,9 +4,10 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch2";
 import ProductsCarousel from "../../components/Carousel/ProductsCarousel/ProductsCarousel";
 import NotFound from "../NotFound/NotFound";
-import useApi from "../../customHooks/useApi";
+import useApi2 from "../../customHooks/useApi2";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { useUserContext } from "../../context/UserContext";
+import { useQueryClient } from "react-query";
 
 type ProductType = {
   success: boolean;
@@ -36,6 +37,7 @@ function ProductDetails() {
   const [wishlistErrorMessage, setWishlistErrorMessage] = useState("");
   const [cartErrorMessage, setCartErrorMessage] = useState("");
   const { user, setUser } = useUserContext();
+  const queryClient = useQueryClient();
 
   const incrementAmount = () => {
     setProductAmount(productAmount + 1);
@@ -58,12 +60,24 @@ function ProductDetails() {
     queryKey: ["product-details", itemId],
   });
 
-  const [addWishlistResponse, addWishlistLoading, addWishlistError, sendAddWishlistRequest] = useApi({
+  const {
+    data: addWishlistResponse,
+    isLoading: addWishlistLoading,
+    error: addWishlistError,
+    isError: isAddWishlistError,
+    mutate: sendAddWishlistRequest,
+  } = useApi2({
     url: `/api/v1/wishlist`,
-
     method: "post",
   });
-  const [addCartResponse, addCartLoading, addCartError, sendAddCartRequest] = useApi({
+
+  const {
+    data: addCartResponse,
+    isLoading: addCartLoading,
+    error: addCartError,
+    isError: isAddCartError,
+    mutate: sendAddCartRequest,
+  } = useApi2({
     url: `/api/v1/cart`,
     method: "post",
   });
@@ -75,15 +89,12 @@ function ProductDetails() {
   }, [fetchResponse, fetchError]);
 
   useEffect(() => {
-    if (!addWishlistError.success) {
+    if (isAddWishlistError) {
       if (addWishlistError.code === "ERR_NETWORK") {
         setWishlistErrorMessage("Something went wrong please try again later");
       }
       if (addWishlistError.response.data.message === "Duplicate value error") {
         setWishlistErrorMessage("Item is already in wishlist");
-      }
-      if (addWishlistError.response.status === 401) {
-        navigate("/login");
       }
     }
 
@@ -95,15 +106,12 @@ function ProductDetails() {
   }, [addWishlistResponse, addWishlistError]);
 
   useEffect(() => {
-    if (!addCartError.success) {
+    if (isAddCartError) {
       if (addCartError.code === "ERR_NETWORK") {
         setCartErrorMessage("Something went wrong please try again later");
       }
       if (addCartError.response.data.message === "Duplicate value error") {
         setCartErrorMessage("Item is already in Cart");
-      }
-      if (addCartError.response.status === 401) {
-        navigate("/login");
       }
     }
 
@@ -119,11 +127,25 @@ function ProductDetails() {
   }, [addCartResponse, addCartError]);
 
   const addToWishlistHandler = () => {
-    sendAddWishlistRequest("", { productId: itemId });
+    const isLoggedIn = queryClient.getQueryData(["profile"]);
+    if (isLoggedIn) {
+      sendAddWishlistRequest({
+        body: {
+          productId: itemId,
+        },
+      });
+    } else {
+      navigate("/login");
+    }
   };
 
   const addToCartHandler = () => {
-    sendAddCartRequest("", { productId: itemId, quantity: productAmount });
+    sendAddCartRequest({
+      body: {
+        productId: itemId,
+        quantity: productAmount,
+      },
+    });
   };
 
   if (isFetchError && (fetchError.response.status === 400 || fetchError.response.status === 404)) {
