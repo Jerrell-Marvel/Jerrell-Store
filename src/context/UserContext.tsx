@@ -7,7 +7,7 @@ export const useUserContext = () => {
   return useContext(UserContext);
 };
 
-type UserApiResponseType = {
+export type UserApiResponseType = {
   username: string;
   cartCount: number;
 };

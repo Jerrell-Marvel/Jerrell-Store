@@ -8,6 +8,7 @@ import useApi2 from "../../customHooks/useApi2";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { useUserContext } from "../../context/UserContext";
 import { useQueryClient } from "react-query";
+import { UserApiResponseType as UserType } from "../../context/UserContext";
 
 type ProductType = {
   success: boolean;
@@ -80,6 +81,19 @@ function ProductDetails() {
   } = useApi2({
     url: `/api/v1/cart`,
     method: "post",
+    options: {
+      onSuccess: () => {
+        queryClient.setQueryData<UserType | undefined>(["profile"], (oldProfile) => {
+          if (oldProfile) {
+            return {
+              ...oldProfile,
+              cartCount: oldProfile.cartCount + 1,
+            };
+          }
+          return oldProfile;
+        });
+      },
+    },
   });
 
   useEffect(() => {
