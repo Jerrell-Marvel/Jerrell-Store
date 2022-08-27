@@ -2,9 +2,12 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch2";
 import useApi from "../../customHooks/useApi";
+import useApi2 from "../../customHooks/useApi2";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import ProductDetails from "../ProductsDetails/ProductsDetails";
 import { useUserContext } from "../../context/UserContext";
+import { useQueryClient } from "react-query";
+import { UserApiResponseType as UserType } from "../../context/UserContext";
 
 type CartType = {
   _id: string;
@@ -57,8 +60,10 @@ export default function Cart() {
   const navigate = useNavigate();
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
   const { user, setUser } = useUserContext();
+  const queryClient = useQueryClient();
+
   const {
-    data: fetchData,
+    data: cartData,
     isLoading: fetchLoading,
     error: fetchError,
     isError: isFetchError,
@@ -67,14 +72,46 @@ export default function Cart() {
     queryKey: ["cart"],
   });
 
-  const [deleteCartResponse, deleteCartLoading, deleteCartError, sendDeleteCartRequest] = useApi<DeleteCartApiResponseType>({
+  const {
+    data: deleteCartResponse,
+    isLoading: deleteCartLoading,
+    error: deleteCartError,
+    isError: isDeleteCartError,
+    mutate: sendDeleteCartRequest,
+  } = useApi2<DeleteCartApiResponseType>({
     url: `/api/v1/cart`,
     method: "delete",
+    options: {
+      onSuccess: (deleteCartResponse) => {
+        queryClient.setQueryData<CartApiResponseType | undefined>(["cart"], (oldCart) => {
+          if (oldCart) {
+            const deletedCart = oldCart?.items.filter((item) => {
+              return item._id !== deleteCartResponse.item._id;
+            });
+            return {
+              ...oldCart,
+              items: deletedCart,
+              count: deletedCart.length,
+            };
+          }
+          return oldCart;
+        });
+
+        queryClient.setQueryData<UserType | undefined>(["profile"], (oldProfile) => {
+          if (oldProfile) {
+            return {
+              ...oldProfile,
+              cartCount: oldProfile.cartCount - 1,
+            };
+          }
+          return oldProfile;
+        });
+      },
+    },
   });
 
   const [updateCartResponse, updateCartLoading, updateCartError, sendUpdateCartRequest] = useApi<UpdateCartApiResponseType>({
     url: `/api/v1/cart`,
-
     method: "patch",
   });
 
@@ -103,7 +140,7 @@ export default function Cart() {
   }, [updateCartResponse, updateCartLoading, updateCartError]);
 
   useEffect(() => {
-    if (!deleteCartError.success) {
+    if (isDeleteCartError) {
       if (deleteCartError.code === "ERR_NETWORK") {
         // return setWishlistErrorMessage("Something went wrong please try again later");
         console.log("something");
@@ -113,25 +150,25 @@ export default function Cart() {
       }
     }
 
-    if (typeof deleteCartResponse !== "undefined") {
-      const newCart = [...cart];
-      console.log(newCart);
-      const deletedCart = newCart.filter((cart) => {
-        return cart._id !== deleteCartResponse.item._id;
-      });
-      console.log(deletedCart);
+    // if (typeof deleteCartResponse !== "undefined") {
+    //   const newCart = [...cart];
+    //   console.log(newCart);
+    //   const deletedCart = newCart.filter((cart) => {
+    //     return cart._id !== deleteCartResponse.item._id;
+    //   });
+    //   console.log(deletedCart);
 
-      setCart(deletedCart);
-      if (typeof user !== "undefined") {
-        setUser({ username: user.username, cartCount: user?.cartCount - 1 });
-      }
-      console.log(deleteCartResponse);
-    }
+    //   setCart(deletedCart);
+    //   if (typeof user !== "undefined") {
+    //     setUser({ username: user.username, cartCount: user?.cartCount - 1 });
+    //   }
+    //   console.log(deleteCartResponse);
+    // }
   }, [deleteCartResponse, deleteCartLoading, deleteCartError]);
 
   useEffect(() => {
-    if (typeof fetchData !== "undefined") {
-      setCart(fetchData.items);
+    if (typeof cartData !== "undefined") {
+      setCart(cartData.items);
     }
 
     if (isFetchError) {
@@ -143,11 +180,11 @@ export default function Cart() {
         setFetchErrorMessage("Something went wrong please try again");
       }
     }
-  }, [fetchData, fetchError, isFetchError]);
+  }, [cartData, fetchError, isFetchError]);
 
   const removeWishlistHandler = (id: string) => {
     alert("are you sure to remove item from cart?");
-    sendDeleteCartRequest(id);
+    sendDeleteCartRequest({ itemId: id });
   };
 
   const changeQuantityHandler = (id: string, body: { quantity: string }) => {
@@ -176,7 +213,7 @@ export default function Cart() {
         </div>
         <div className="py-6 px-6">
           <ul className="flex w-full flex-col items-center">
-            {cart.map((item) => {
+            {cartData?.items.map((item) => {
               return (
                 <li className="mb-4 flex w-full max-w-lg flex-col items-center rounded-xl border-2 border-x-2" key={item._id}>
                   <div className="grid h-full w-full grid-cols-[1fr_1fr] justify-between p-4 sm:max-w-xl md:max-w-2xl lg:max-w-4xl">
@@ -227,7 +264,7 @@ export default function Cart() {
               );
             })}
           </ul>
-          {cart.length < 1 ? (
+          {cartData && cartData?.items.length < 1 ? (
             <Link to="/wishlist" className="w-fit border-2 border-black bg-primary px-4 py-2 text-sm uppercase text-white transition-colors duration-300">
               WISHLIST PAGE
             </Link>
