@@ -47,10 +47,24 @@ export default function Wishlist() {
     isLoading,
     error,
     isError: isFetchError,
+    refetch: fetchWishlist,
   } = useFetch<WishlistApiResponseType>({
     url: "/api/v1/wishlist",
     queryKey: ["wishlist"],
+    options: {
+      enabled: false,
+    },
   });
+
+  useEffect(() => {
+    const isLoggedIn = queryClient.getQueryData(["profile"]);
+    console.log(isLoggedIn);
+    if (typeof isLoggedIn !== "undefined") {
+      fetchWishlist();
+    } else {
+      navigate("/login");
+    }
+  }, []);
 
   const {
     data: deleteWishlistResponse,
@@ -82,9 +96,7 @@ export default function Wishlist() {
 
   useEffect(() => {
     if (isFetchError) {
-      if (error.response.status === 401) {
-        navigate("/login");
-      } else if (error.code === "ERR_NETWORK") {
+      if (error.code === "ERR_NETWORK") {
         setFetchErrorMessage("Something went wrong please try again later");
       } else {
         setFetchErrorMessage("Something went wrong please try again later");
@@ -98,7 +110,6 @@ export default function Wishlist() {
     sendDeleteWishlistRequest({ itemId: id });
   };
 
-  console.log(wishlistData);
   return (
     <>
       <div className="pt-20 text-center">

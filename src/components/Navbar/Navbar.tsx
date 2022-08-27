@@ -18,6 +18,7 @@ function Navbar() {
   const [showProductCategories, setShowProductCategories] = useState(false);
   const [search, setSearch] = useState("");
   const { user, setUser, isLoading, error } = useUserContext();
+  const queryClient = useQueryClient();
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
@@ -36,7 +37,7 @@ function Navbar() {
 
   useEffect(() => {
     if (typeof logoutResponse !== "undefined") {
-      setUser(undefined);
+      queryClient.setQueryData(["profile"], undefined);
     }
   }, [logoutResponse]);
 
@@ -103,10 +104,20 @@ function Navbar() {
                 </div>
               </li>
 
-              <NavCart amount={user?.cartCount} />
+              <NavCart
+                amount={
+                  queryClient.getQueryData<{
+                    username: string;
+                    cartCount: number;
+                  }>(["profile"])?.cartCount
+                }
+              />
 
               <li>
-                {user ? (
+                {queryClient.getQueryData<{
+                  username: string;
+                  cartCount: number;
+                }>(["profile"]) ? (
                   <div
                     onClick={() => {
                       sendLogoutRequest();

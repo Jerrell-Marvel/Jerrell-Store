@@ -1,18 +1,19 @@
 import { useState, useEffect } from "react";
 import axios, { AxiosRequestHeaders } from "axios";
-import { useQuery } from "react-query";
+import { useQuery, UseQueryOptions } from "react-query";
 
-export type useFetchParameters = {
+export type useFetchParameters<T> = {
   url: string;
   headers?: AxiosRequestHeaders;
   pageNumber?: number;
   queryKey: any[];
+  options?: UseQueryOptions<T, any>;
 };
 export type ApiResponse<T> = {
   data: T;
 };
 
-export function useFetch<T>({ url, headers = {}, pageNumber, queryKey }: useFetchParameters) {
+export function useFetch<T>({ url, headers = {}, pageNumber, queryKey, options }: useFetchParameters<T>) {
   const [ApiResponse, setApiResponse] = useState<T | undefined>(undefined);
   const [initialLoading, setInitialLoading] = useState(false);
   const [error, setError] = useState({ success: true });
@@ -26,7 +27,7 @@ export function useFetch<T>({ url, headers = {}, pageNumber, queryKey }: useFetc
 
       return data;
     },
-    { retry: false, refetchOnWindowFocus: false }
+    { ...options, retry: false, refetchOnWindowFocus: false }
   );
 
   // useEffect(() => {

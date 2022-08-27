@@ -4,6 +4,7 @@ import useApi from "../../customHooks/useApi";
 import matchRegex from "../../utils/matchRegex";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { useUserContext } from "../../context/UserContext";
+import { useQueryClient } from "react-query";
 
 type LoginApiResponse = {
   username: string;
@@ -19,6 +20,7 @@ function Login() {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
   const { user, setUser } = useUserContext();
+  const queryClient = useQueryClient();
 
   const navigate = useNavigate();
 
@@ -45,6 +47,7 @@ function Login() {
     if (typeof response !== "undefined") {
       // setCookie("token", response.token, { path: "/" });
       setUser({ username: response.username, cartCount: response.cartCount });
+      queryClient.setQueryData(["profile"], { username: response.username, cartCount: response.cartCount });
       navigate("/");
     }
   }, [response, error]);
