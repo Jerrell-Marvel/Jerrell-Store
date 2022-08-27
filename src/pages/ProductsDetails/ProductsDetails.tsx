@@ -135,6 +135,7 @@ function ProductDetails() {
       if (typeof user !== "undefined") {
         setUser({ username: user.username, cartCount: user?.cartCount + 1 });
       }
+      setProductAmount(1);
       setIsCartModalActive((prev) => !prev);
       setCartErrorMessage("");
     }

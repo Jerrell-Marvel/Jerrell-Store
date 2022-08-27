@@ -110,13 +110,56 @@ export default function Cart() {
     },
   });
 
-  const [updateCartResponse, updateCartLoading, updateCartError, sendUpdateCartRequest] = useApi<UpdateCartApiResponseType>({
+  const {
+    data: updateCartResponse,
+    isLoading: updateCartLoading,
+    error: updateCartError,
+    mutate: sendUpdateCartRequest,
+    isError: isUpdateCartError,
+  } = useApi2<UpdateCartApiResponseType>({
     url: `/api/v1/cart`,
     method: "patch",
+    options: {
+      onMutate: async (newCart) => {
+        await queryClient.cancelQueries(["cart"]);
+        const previousCartData = queryClient.getQueryData<CartApiResponseType>(["cart"]);
+
+        if (previousCartData) {
+          queryClient.setQueryData<CartApiResponseType | undefined>(["cart"], (oldQueryData) => {
+            if (oldQueryData) {
+              const updatedCart = oldQueryData.items.map((cart) => {
+                if (cart._id === newCart.itemId) {
+                  return {
+                    ...cart,
+                    quantity: newCart.body.quantity,
+                  };
+                } else {
+                  return cart;
+                }
+              });
+
+              return {
+                success: true,
+                items: updatedCart,
+              };
+            }
+          });
+        }
+
+        return { previousCartData };
+      },
+
+      onError: (_err, _newTodo, context: any) => {
+        queryClient.setQueryData(["cart"], context.previousCartData);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries(["cart"]);
+      },
+    },
   });
 
   useEffect(() => {
-    if (!updateCartError.success) {
+    if (isUpdateCartError) {
       if (updateCartError.code === "ERR_NETWORK") {
         // return setWishlistErrorMessage("Something went wrong please try again later");
         console.log("something");
@@ -126,17 +169,17 @@ export default function Cart() {
       }
     }
 
-    if (typeof updateCartResponse !== "undefined") {
-      const cartIndex = cart.findIndex((e) => {
-        return e._id === updateCartResponse.item._id;
-      });
-      const updatedItem = cart[cartIndex];
-      updatedItem.quantity = updateCartResponse.item.quantity;
-      const newCart = [...cart];
-      newCart[cartIndex] = updatedItem;
+    // if (typeof updateCartResponse !== "undefined") {
+    //   const cartIndex = cart.findIndex((e) => {
+    //     return e._id === updateCartResponse.item._id;
+    //   });
+    //   const updatedItem = cart[cartIndex];
+    //   updatedItem.quantity = updateCartResponse.item.quantity;
+    //   const newCart = [...cart];
+    //   newCart[cartIndex] = updatedItem;
 
-      setCart(newCart);
-    }
+    //   setCart(newCart);
+    // }
   }, [updateCartResponse, updateCartLoading, updateCartError]);
 
   useEffect(() => {
@@ -191,7 +234,7 @@ export default function Cart() {
     if (Number(body.quantity) < 1) {
       return;
     }
-    sendUpdateCartRequest(id, body);
+    sendUpdateCartRequest({ itemId: id, body: body });
   };
   return (
     <>
@@ -204,7 +247,7 @@ export default function Cart() {
             ) : (
               <div>
                 <h3 className="my-4 text-3xl font-medium">My Cart</h3>
-                {cart.length > 0 ? "" : <p>Your cart is empty</p>}
+                {cartData && cartData?.items.length > 0 ? "" : <p>Your cart is empty</p>}
               </div>
             )
           ) : (

@@ -11,7 +11,7 @@ type UseApiProps<T> = {
 
 type MutateFnParams = {
   itemId?: string;
-  body?: object;
+  body?: any;
 };
 
 export default function useApi2<T>({ url, headers, method, options }: UseApiProps<T>) {
