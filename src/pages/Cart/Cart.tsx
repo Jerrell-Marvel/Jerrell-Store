@@ -67,9 +67,22 @@ export default function Cart() {
     isLoading: fetchLoading,
     error: fetchError,
     isError: isFetchError,
+    refetch: fetchCart,
   } = useFetch<CartApiResponseType>({
     url: "/api/v1/cart",
     queryKey: ["cart"],
+    options: {
+      enabled: false,
+      onError: (fetchError) => {
+        if (fetchError.response.status === 401) {
+          navigate("/login");
+        } else if (fetchError.code === "ERR_NETWORK") {
+          setFetchErrorMessage("Something went wrong please try again later");
+        } else {
+          setFetchErrorMessage("Something went wrong please try again");
+        }
+      },
+    },
   });
 
   const {
@@ -159,71 +172,81 @@ export default function Cart() {
   });
 
   useEffect(() => {
-    if (isUpdateCartError) {
-      if (updateCartError.code === "ERR_NETWORK") {
-        // return setWishlistErrorMessage("Something went wrong please try again later");
-        console.log("something");
-      }
-      if (updateCartError.response.data.message === "Duplicate value error") {
-        // return setWishlistErrorMessage("Item is already in wishlist");
-      }
+    const isLoggedIn = queryClient.getQueryData(["profile"]);
+    console.log(isLoggedIn);
+    if (typeof isLoggedIn !== "undefined") {
+      fetchCart();
+    } else {
+      navigate("/login");
     }
+  }, []);
 
-    // if (typeof updateCartResponse !== "undefined") {
-    //   const cartIndex = cart.findIndex((e) => {
-    //     return e._id === updateCartResponse.item._id;
-    //   });
-    //   const updatedItem = cart[cartIndex];
-    //   updatedItem.quantity = updateCartResponse.item.quantity;
-    //   const newCart = [...cart];
-    //   newCart[cartIndex] = updatedItem;
+  // useEffect(() => {
+  //   if (isUpdateCartError) {
+  //     if (updateCartError.code === "ERR_NETWORK") {
+  //       // return setWishlistErrorMessage("Something went wrong please try again later");
+  //       console.log("something");
+  //     }
+  //     if (updateCartError.response.data.message === "Duplicate value error") {
+  //       // return setWishlistErrorMessage("Item is already in wishlist");
+  //     }
+  //   }
 
-    //   setCart(newCart);
-    // }
-  }, [updateCartResponse, updateCartLoading, updateCartError]);
+  //   // if (typeof updateCartResponse !== "undefined") {
+  //   //   const cartIndex = cart.findIndex((e) => {
+  //   //     return e._id === updateCartResponse.item._id;
+  //   //   });
+  //   //   const updatedItem = cart[cartIndex];
+  //   //   updatedItem.quantity = updateCartResponse.item.quantity;
+  //   //   const newCart = [...cart];
+  //   //   newCart[cartIndex] = updatedItem;
 
-  useEffect(() => {
-    if (isDeleteCartError) {
-      if (deleteCartError.code === "ERR_NETWORK") {
-        // return setWishlistErrorMessage("Something went wrong please try again later");
-        console.log("something");
-      }
-      if (deleteCartError.response.data.message === "Duplicate value error") {
-        // return setWishlistErrorMessage("Item is already in wishlist");
-      }
-    }
+  //   //   setCart(newCart);
+  //   // }
+  // }, [updateCartResponse, updateCartLoading, updateCartError]);
 
-    // if (typeof deleteCartResponse !== "undefined") {
-    //   const newCart = [...cart];
-    //   console.log(newCart);
-    //   const deletedCart = newCart.filter((cart) => {
-    //     return cart._id !== deleteCartResponse.item._id;
-    //   });
-    //   console.log(deletedCart);
+  // useEffect(() => {
+  //   if (isDeleteCartError) {
+  //     if (deleteCartError.code === "ERR_NETWORK") {
+  //       // return setWishlistErrorMessage("Something went wrong please try again later");
+  //       console.log("something");
+  //     }
+  //     if (deleteCartError.response.data.message === "Duplicate value error") {
+  //       // return setWishlistErrorMessage("Item is already in wishlist");
+  //     }
+  //   }
 
-    //   setCart(deletedCart);
-    //   if (typeof user !== "undefined") {
-    //     setUser({ username: user.username, cartCount: user?.cartCount - 1 });
-    //   }
-    //   console.log(deleteCartResponse);
-    // }
-  }, [deleteCartResponse, deleteCartLoading, deleteCartError]);
+  //   // if (typeof deleteCartResponse !== "undefined") {
+  //   //   const newCart = [...cart];
+  //   //   console.log(newCart);
+  //   //   const deletedCart = newCart.filter((cart) => {
+  //   //     return cart._id !== deleteCartResponse.item._id;
+  //   //   });
+  //   //   console.log(deletedCart);
 
-  useEffect(() => {
-    if (typeof cartData !== "undefined") {
-      setCart(cartData.items);
-    }
+  //   //   setCart(deletedCart);
+  //   //   if (typeof user !== "undefined") {
+  //   //     setUser({ username: user.username, cartCount: user?.cartCount - 1 });
+  //   //   }
+  //   //   console.log(deleteCartResponse);
+  //   // }
+  // }, [deleteCartResponse, deleteCartLoading, deleteCartError]);
 
-    if (isFetchError) {
-      if (fetchError.response.status === 401) {
-        navigate("/login");
-      } else if (fetchError.code === "ERR_NETWORK") {
-        setFetchErrorMessage("Something went wrong please try again later");
-      } else {
-        setFetchErrorMessage("Something went wrong please try again");
-      }
-    }
-  }, [cartData, fetchError, isFetchError]);
+  // useEffect(() => {
+  //   if (typeof cartData !== "undefined") {
+  //     setCart(cartData.items);
+  //   }
+
+  //   if (isFetchError) {
+  //     if (fetchError.response.status === 401) {
+  //       navigate("/login");
+  //     } else if (fetchError.code === "ERR_NETWORK") {
+  //       setFetchErrorMessage("Something went wrong please try again later");
+  //     } else {
+  //       setFetchErrorMessage("Something went wrong please try again");
+  //     }
+  //   }
+  // }, [cartData, fetchError, isFetchError]);
 
   const removeWishlistHandler = (id: string) => {
     alert("are you sure to remove item from cart?");

@@ -34,22 +34,32 @@ function ShowProducts({ url, setPageCount }: ShowProductsProps) {
   const { data, isLoading, isError, error } = useFetch<ProductsType>({
     url: url,
     queryKey: ["show-products", url],
+    options: {
+      onSuccess: (data) => {
+        if (typeof setPageCount !== "undefined") {
+          setPageCount(data.totalCount);
+        }
+      },
+      onError: () => {
+        setFetchErrorMessage("Something went wrong please try again later");
+      },
+    },
   });
 
-  useEffect(() => {
-    if (typeof data !== "undefined") {
-      if (typeof setPageCount !== "undefined") {
-        setPageCount(data.totalCount);
-      }
-    }
+  // useEffect(() => {
+  //   if (typeof data !== "undefined") {
+  //     if (typeof setPageCount !== "undefined") {
+  //       setPageCount(data.totalCount);
+  //     }
+  //   }
 
-    if (isError) {
-      // if (error.code === "ERR_NETWORK") {
-      //   setFetchErrorMessage("Something went wrong please try again later");
-      // }
-      setFetchErrorMessage("Something went wrong please try again later");
-    }
-  }, [data, isLoading, error, isError]);
+  //   if (isError) {
+  //     // if (error.code === "ERR_NETWORK") {
+  //     //   setFetchErrorMessage("Something went wrong please try again later");
+  //     // }
+  //     setFetchErrorMessage("Something went wrong please try again later");
+  //   }
+  // }, [data, isLoading, error, isError]);
 
   if (isLoading || isError) {
     return (
@@ -87,6 +97,7 @@ function ShowProducts({ url, setPageCount }: ShowProductsProps) {
                     <img src={`/images/${product.image}`} className="w-full" alt="temporary-alt"></img>
                   </div>
                   <div className="">{product.description}</div>
+                  <div>{product.price}</div>
                 </li>
               </Link>
             );

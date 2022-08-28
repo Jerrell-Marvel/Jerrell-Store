@@ -53,6 +53,13 @@ export default function Wishlist() {
     queryKey: ["wishlist"],
     options: {
       enabled: false,
+      onError: (error) => {
+        if (error.code === "ERR_NETWORK") {
+          setFetchErrorMessage("Something went wrong please try again later");
+        } else {
+          setFetchErrorMessage("Something went wrong please try again later");
+        }
+      },
     },
   });
 
@@ -94,16 +101,16 @@ export default function Wishlist() {
     },
   });
 
-  useEffect(() => {
-    if (isFetchError) {
-      if (error.code === "ERR_NETWORK") {
-        setFetchErrorMessage("Something went wrong please try again later");
-      } else {
-        setFetchErrorMessage("Something went wrong please try again later");
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wishlistData, error, isFetchError]);
+  // useEffect(() => {
+  //   if (isFetchError) {
+  //     if (error.code === "ERR_NETWORK") {
+  //       setFetchErrorMessage("Something went wrong please try again later");
+  //     } else {
+  //       setFetchErrorMessage("Something went wrong please try again later");
+  //     }
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [wishlistData, error, isFetchError]);
 
   const removeWishlistHandler = (id: string) => {
     alert("are you sure to remove item from wishlist?");
@@ -160,8 +167,8 @@ export default function Wishlist() {
             })}
           </ul>
           {wishlistData && wishlistData?.wishlists.length < 1 ? (
-            <Link to="/wishlist" className="w-fit border-2 border-black bg-primary px-4 py-2 text-sm uppercase text-white transition-colors duration-300">
-              WISHLIST PAGE
+            <Link to="/product-category/all" className="w-fit border-2 border-black bg-primary px-4 py-2 text-sm uppercase text-white transition-colors duration-300">
+              FIND PRODUCTS
             </Link>
           ) : (
             ""

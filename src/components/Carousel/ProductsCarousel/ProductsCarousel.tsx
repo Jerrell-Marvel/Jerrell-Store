@@ -40,18 +40,23 @@ function ProductsCarousel({ url, category }: ProductsCarouselProps) {
   const { data, isLoading, isError } = useFetch<ProductsType>({
     url: url,
     queryKey: ["products-carousel", category],
+    options: {
+      onError: () => {
+        setErrorMessage("Something went wrong please try again later");
+      },
+    },
   });
 
-  useEffect(() => {
-    // if (typeof response !== "undefined") {
-    //   setDatas(response);
-    // } else if (error) {
-    //   setErrorMessage("Failed to get resources");
-    // }
-    if (isError) {
-      setErrorMessage("Something went wrong please try again later");
-    }
-  }, [isError]);
+  // useEffect(() => {
+  //   // if (typeof response !== "undefined") {
+  //   //   setDatas(response);
+  //   // } else if (error) {
+  //   //   setErrorMessage("Failed to get resources");
+  //   // }
+  //   if (isError) {
+  //     setErrorMessage("Something went wrong please try again later");
+  //   }
+  // }, [isError]);
 
   if (isLoading || isError) {
     return (

@@ -31,7 +31,7 @@ function ProductDetails() {
   const navigate = useNavigate();
   // const { wishlist, setWishlist } = useWishlistContext();
 
-  const [itemDetails, setItemDetails] = useState<ProductType | undefined>(undefined);
+  // const [itemDetails, setItemDetails] = useState<ProductType | undefined>(undefined);
   const [productAmount, setProductAmount] = useState(1);
   const [isWishlistModalActive, setIsWishlistModalActive] = useState(false);
   const [isCartModalActive, setIsCartModalActive] = useState(false);
@@ -52,7 +52,7 @@ function ProductDetails() {
   };
 
   const {
-    data: fetchResponse,
+    data: itemDetails,
     isLoading: fetchLoading,
     error: fetchError,
     isError: isFetchError,
@@ -70,6 +70,19 @@ function ProductDetails() {
   } = useApi2({
     url: `/api/v1/wishlist`,
     method: "post",
+    options: {
+      onSuccess: () => {
+        setIsWishlistModalActive((prev) => !prev);
+        setWishlistErrorMessage("");
+      },
+      onError: (addWishlistError) => {
+        if (addWishlistError.code === "ERR_NETWORK") {
+          setWishlistErrorMessage("Something went wrong please try again later");
+        } else if (addWishlistError.response.data.message === "Duplicate value error") {
+          setWishlistErrorMessage("Item is already in wishlist");
+        }
+      },
+    },
   });
 
   const {
@@ -92,54 +105,67 @@ function ProductDetails() {
           }
           return oldProfile;
         });
+
+        setProductAmount(1);
+        setIsCartModalActive((prev) => !prev);
+        setCartErrorMessage("");
+      },
+
+      onError: (addCartError) => {
+        if (addCartError.code === "ERR_NETWORK") {
+          setCartErrorMessage("Something went wrong please try again later");
+        }
+        if (addCartError.response.data.message === "Duplicate value error") {
+          setCartErrorMessage("Item is already in Cart");
+        }
       },
     },
   });
 
-  useEffect(() => {
-    if (typeof fetchResponse !== "undefined") {
-      setItemDetails(fetchResponse);
-    }
-  }, [fetchResponse, fetchError]);
+  // useEffect(() => {
+  //   if (typeof fetchResponse !== "undefined") {
+  //     setItemDetails(fetchResponse);
+  //   }
+  // }, [fetchResponse, fetchError]);
 
-  useEffect(() => {
-    if (isAddWishlistError) {
-      if (addWishlistError.code === "ERR_NETWORK") {
-        setWishlistErrorMessage("Something went wrong please try again later");
-      }
-      if (addWishlistError.response.data.message === "Duplicate value error") {
-        setWishlistErrorMessage("Item is already in wishlist");
-      }
-    }
+  // useEffect(() => {
+  //   if (isAddWishlistError) {
+  //     if (addWishlistError.code === "ERR_NETWORK") {
+  //       setWishlistErrorMessage("Something went wrong please try again later");
+  //     }
+  //     if (addWishlistError.response.data.message === "Duplicate value error") {
+  //       setWishlistErrorMessage("Item is already in wishlist");
+  //     }
+  //   }
 
-    if (typeof addWishlistResponse !== "undefined") {
-      console.log("inside if statement");
-      setIsWishlistModalActive((prev) => !prev);
-      setWishlistErrorMessage("");
-    }
-  }, [addWishlistResponse, addWishlistError]);
+  //   if (typeof addWishlistResponse !== "undefined") {
+  //     console.log("inside if statement");
+  //     setIsWishlistModalActive((prev) => !prev);
+  //     setWishlistErrorMessage("");
+  //   }
+  // }, [addWishlistResponse, addWishlistError]);
 
-  useEffect(() => {
-    if (isAddCartError) {
-      if (addCartError.code === "ERR_NETWORK") {
-        setCartErrorMessage("Something went wrong please try again later");
-      }
-      if (addCartError.response.data.message === "Duplicate value error") {
-        setCartErrorMessage("Item is already in Cart");
-      }
-    }
+  // useEffect(() => {
+  //   if (isAddCartError) {
+  //     if (addCartError.code === "ERR_NETWORK") {
+  //       setCartErrorMessage("Something went wrong please try again later");
+  //     }
+  //     if (addCartError.response.data.message === "Duplicate value error") {
+  //       setCartErrorMessage("Item is already in Cart");
+  //     }
+  //   }
 
-    if (typeof addCartResponse !== "undefined") {
-      console.log("inside if statement");
+  //   if (typeof addCartResponse !== "undefined") {
+  //     console.log("inside if statement");
 
-      if (typeof user !== "undefined") {
-        setUser({ username: user.username, cartCount: user?.cartCount + 1 });
-      }
-      setProductAmount(1);
-      setIsCartModalActive((prev) => !prev);
-      setCartErrorMessage("");
-    }
-  }, [addCartResponse, addCartError]);
+  //     if (typeof user !== "undefined") {
+  //       setUser({ username: user.username, cartCount: user?.cartCount + 1 });
+  //     }
+  //     setProductAmount(1);
+  //     setIsCartModalActive((prev) => !prev);
+  //     setCartErrorMessage("");
+  //   }
+  // }, [addCartResponse, addCartError]);
 
   const addToWishlistHandler = () => {
     const isLoggedIn = queryClient.getQueryData(["profile"]);
@@ -155,12 +181,17 @@ function ProductDetails() {
   };
 
   const addToCartHandler = () => {
-    sendAddCartRequest({
-      body: {
-        productId: itemId,
-        quantity: productAmount,
-      },
-    });
+    const isLoggedIn = queryClient.getQueryData(["profile"]);
+    if (isLoggedIn) {
+      sendAddCartRequest({
+        body: {
+          productId: itemId,
+          quantity: productAmount,
+        },
+      });
+    } else {
+      navigate("/login");
+    }
   };
 
   if (isFetchError && (fetchError.response.status === 400 || fetchError.response.status === 404)) {
