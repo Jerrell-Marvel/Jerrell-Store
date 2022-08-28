@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import useApi from "../../customHooks/useApi";
+import useApi from "../../customHooks/useApi2";
 import matchRegex from "../../utils/matchRegex";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
@@ -20,41 +20,66 @@ export default function Register() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
 
   const navigate = useNavigate();
 
-  const [response, loading, error, sendRequest] = useApi<userType>({
+  const {
+    data: response,
+    isLoading: loading,
+    error,
+    mutate: sendRequest,
+  } = useApi<userType>({
     url: "/api/v1/auth/register",
     method: "post",
+    options: {
+      onSuccess: () => {
+        setErrorMessage("");
+        navigate("/login");
+      },
+      onError: (error) => {
+        if (error.code !== "ERR_NETWORK") {
+          if (error.response.data.name === "ValidationError") {
+            console.log(error.response);
+            setErrorMessage("Please provide information");
+          }
+          if (error.response.data.name === "MongoServerError") {
+            setEmailErrorMessage("Email is already registered");
+          }
+        }
+
+        if (error.code === "ERR_NETWORK") {
+          setEmailErrorMessage("");
+          setErrorMessage("Something went wrong please try again later");
+        }
+      },
+    },
   });
-  console.log("rendered");
 
-  useEffect(() => {
-    if (!error.success && error.code !== "ERR_NETWORK") {
-      if (error.response.data.name === "ValidationError") {
-        console.log(error.response);
-        setErrorMessage("Please provide information");
-      }
-      if (error.response.data.name === "MongoServerError") {
-        setEmailErrorMessage("Email is already registered");
-      }
-    }
+  // useEffect(() => {
+  //   if (!error.success && error.code !== "ERR_NETWORK") {
+  //     if (error.response.data.name === "ValidationError") {
+  //       console.log(error.response);
+  //       setErrorMessage("Please provide information");
+  //     }
+  //     if (error.response.data.name === "MongoServerError") {
+  //       setEmailErrorMessage("Email is already registered");
+  //     }
+  //   }
 
-    if (!error.success && error.code === "ERR_NETWORK") {
-      setEmailErrorMessage("");
-      setErrorMessage("Something went wrong please try again later");
-    }
+  //   if (!error.success && error.code === "ERR_NETWORK") {
+  //     setEmailErrorMessage("");
+  //     setErrorMessage("Something went wrong please try again later");
+  //   }
 
-    if (typeof response !== "undefined") {
-      setIsSuccess(true);
-      setErrorMessage("");
-      navigate("/login");
-    }
-  }, [response, error]);
+  //   if (typeof response !== "undefined") {
+  //     setIsSuccess(true);
+  //     setErrorMessage("");
+  //     navigate("/login");
+  //   }
+  // }, [response, error]);
 
   const handleSubmit = () => {
     if (!email || !username || !password) {
@@ -64,10 +89,12 @@ export default function Register() {
     const isMatch = matchRegex(email, /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
 
     if (isMatch) {
-      sendRequest("", {
-        username,
-        email,
-        password,
+      sendRequest({
+        body: {
+          username,
+          email,
+          password,
+        },
       });
     } else {
       setEmailErrorMessage("Please provide valid email");
