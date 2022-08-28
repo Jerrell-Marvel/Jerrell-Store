@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import useApi from "../../customHooks/useApi";
+import useApi from "../../customHooks/useApi2";
 import matchRegex from "../../utils/matchRegex";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { useUserContext } from "../../context/UserContext";
@@ -24,33 +24,53 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const [response, loading, error, sendRequest] = useApi<LoginApiResponse>({
+  const {
+    data: response,
+    isLoading: loading,
+    error,
+    mutate: sendRequest,
+  } = useApi<LoginApiResponse>({
     url: "/api/v1/auth/login",
     method: "post",
+    options: {
+      onSuccess: (response) => {
+        queryClient.setQueryData(["profile"], { username: response.username, cartCount: response.cartCount });
+        navigate("/");
+      },
+      onError: (error) => {
+        if (error.response.data.message === "incorrect password") {
+          setPasswordErrorMessage("Incorrect password");
+        } else if (error.response.data.message === "email is not registered") {
+          setEmailErrorMessage("Email is not registered");
+        } else {
+          setErrorMessage(error.response.data.message);
+        }
+      },
+    },
   });
 
-  useEffect(() => {
-    if (!error.success && error.code !== "ERR_NETWORK") {
-      if (error.response.data.message === "incorrect password") {
-        setPasswordErrorMessage("Incorrect password");
-      } else if (error.response.data.message === "email is not registered") {
-        setEmailErrorMessage("Email is not registered");
-      } else {
-        setErrorMessage(error.response.data.message);
-      }
-    }
+  // useEffect(() => {
+  //   if (!error.success && error.code !== "ERR_NETWORK") {
+  //     if (error.response.data.message === "incorrect password") {
+  //       setPasswordErrorMessage("Incorrect password");
+  //     } else if (error.response.data.message === "email is not registered") {
+  //       setEmailErrorMessage("Email is not registered");
+  //     } else {
+  //       setErrorMessage(error.response.data.message);
+  //     }
+  //   }
 
-    if (!error.success && error.code === "ERR_NETWORK") {
-      setErrorMessage("Something went wrong please try again later");
-    }
+  //   if (!error.success && error.code === "ERR_NETWORK") {
+  //     setErrorMessage("Something went wrong please try again later");
+  //   }
 
-    if (typeof response !== "undefined") {
-      // setCookie("token", response.token, { path: "/" });
-      setUser({ username: response.username, cartCount: response.cartCount });
-      queryClient.setQueryData(["profile"], { username: response.username, cartCount: response.cartCount });
-      navigate("/");
-    }
-  }, [response, error]);
+  //   if (typeof response !== "undefined") {
+  //     // setCookie("token", response.token, { path: "/" });
+  //     setUser({ username: response.username, cartCount: response.cartCount });
+  //     queryClient.setQueryData(["profile"], { username: response.username, cartCount: response.cartCount });
+  //     navigate("/");
+  //   }
+  // }, [response, error]);
 
   const handleSubmit = () => {
     if (!email || !password) {
@@ -58,9 +78,11 @@ function Login() {
     }
     const isMatch = matchRegex(email, /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i);
     if (isMatch) {
-      sendRequest("", {
-        email,
-        password,
+      sendRequest({
+        body: {
+          email,
+          password,
+        },
       });
     } else {
       setEmailErrorMessage("Please provide valid email");
