@@ -3,7 +3,7 @@ import { NavLink, Link, useNavigate } from "react-router-dom";
 import NavCart from "./NavCart";
 import Button from "../Button/Button";
 import { useUserContext } from "../../context/UserContext";
-import useApi from "../../customHooks/useApi";
+import useApi from "../../customHooks/useApi2";
 import { useQueryClient } from "react-query";
 
 type LogoutApiResponse = {
@@ -17,7 +17,6 @@ function Navbar() {
   const [navActive, setNavActive] = useState(false);
   const [showProductCategories, setShowProductCategories] = useState(false);
   const [search, setSearch] = useState("");
-  const { user, setUser, isLoading, error } = useUserContext();
   const queryClient = useQueryClient();
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,16 +29,29 @@ function Navbar() {
     navigate(`/search?q=${search}`);
   };
 
-  const [logoutResponse, logoutLoading, logoutError, sendLogoutRequest] = useApi<LogoutApiResponse>({
+  const {
+    data: logoutResponse,
+    isLoading: logoutLoading,
+    error: logoutError,
+    isError: isLogourError,
+    mutate: sendLogoutRequest,
+  } = useApi<LogoutApiResponse>({
     url: "/api/v1/auth/logout",
     method: "post",
+    options: {
+      onSuccess: () => {
+        queryClient.setQueryData(["profile"], undefined);
+      },
+      onError: () => {
+        alert("Something went wrong please try again later");
+      },
+    },
   });
 
-  useEffect(() => {
-    if (typeof logoutResponse !== "undefined") {
-      queryClient.setQueryData(["profile"], undefined);
-    }
-  }, [logoutResponse]);
+  // useEffect(() => {
+  //   if (typeof logoutResponse !== "undefined") {
+  //   }
+  // }, [logoutResponse]);
 
   return (
     <>
@@ -120,7 +132,7 @@ function Navbar() {
                 }>(["profile"]) ? (
                   <div
                     onClick={() => {
-                      sendLogoutRequest();
+                      sendLogoutRequest({});
                     }}
                     className="z-10 block py-3 pl-6 md:py-0 md:pl-0"
                   >
