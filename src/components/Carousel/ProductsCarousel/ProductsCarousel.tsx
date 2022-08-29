@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useFetch } from "../../../customHooks/useFetch2";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -34,7 +34,6 @@ type ProductsCarouselProps = {
 };
 
 function ProductsCarousel({ url, category }: ProductsCarouselProps) {
-  const [datas, setDatas] = useState<ProductsType | undefined>(undefined);
   const [errorMessage, setErrorMessage] = useState("");
 
   const { data, isLoading, isError } = useFetch<ProductsType>({

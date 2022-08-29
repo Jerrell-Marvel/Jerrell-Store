@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import ProductsNav from "../../components/ProductsNav/ProductsNav";
 import ShowProducts from "../../components/ShowProducts/ShowProducts";
 import SortProductsDropdown from "../../components/Dropdown/SortProductsDropdown";
-import { useState, useRef } from "react";
+import { useState } from "react";
 import Pagination from "../../components/Pagination/Pagination";
 
 function ProductsCategories() {

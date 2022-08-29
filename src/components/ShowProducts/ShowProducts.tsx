@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useFetch } from "../../customHooks/useFetch2";
 import { Link, NavLink } from "react-router-dom";
 import Button from "../../components/Button/Button";
@@ -28,8 +28,6 @@ type ShowProductsProps = {
 
 function ShowProducts({ url, setPageCount }: ShowProductsProps) {
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
-  const [pageNumber, setPageNumber] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
 
   const { data, isLoading, isError, error } = useFetch<ProductsType>({
     url: url,

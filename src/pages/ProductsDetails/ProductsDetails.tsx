@@ -37,7 +37,6 @@ function ProductDetails() {
   const [isCartModalActive, setIsCartModalActive] = useState(false);
   const [wishlistErrorMessage, setWishlistErrorMessage] = useState("");
   const [cartErrorMessage, setCartErrorMessage] = useState("");
-  const { user, setUser } = useUserContext();
   const queryClient = useQueryClient();
 
   const incrementAmount = () => {

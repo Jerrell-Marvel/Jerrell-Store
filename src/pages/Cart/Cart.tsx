@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useFetch } from "../../customHooks/useFetch2";
-import useApi from "../../customHooks/useApi";
 import useApi2 from "../../customHooks/useApi2";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import ProductDetails from "../ProductsDetails/ProductsDetails";
-import { useUserContext } from "../../context/UserContext";
 import { useQueryClient } from "react-query";
 import { UserApiResponseType as UserType } from "../../context/UserContext";
 
@@ -55,11 +52,8 @@ type UpdateCartApiResponseType = {
   };
 };
 export default function Cart() {
-  const [cart, setCart] = useState<CartType[] | []>([]);
-  const [itemId, setItemId] = useState("");
   const navigate = useNavigate();
   const [fetchErrorMessage, setFetchErrorMessage] = useState("");
-  const { user, setUser } = useUserContext();
   const queryClient = useQueryClient();
 
   const {

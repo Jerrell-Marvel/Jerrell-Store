@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+
 import axios, { AxiosRequestHeaders } from "axios";
 import { useQuery, UseQueryOptions } from "react-query";
 
@@ -14,9 +14,6 @@ export type ApiResponse<T> = {
 };
 
 export function useFetch<T>({ url, headers = {}, pageNumber, queryKey, options }: useFetchParameters<T>) {
-  const [ApiResponse, setApiResponse] = useState<T | undefined>(undefined);
-  const [initialLoading, setInitialLoading] = useState(false);
-  const [error, setError] = useState({ success: true });
   // const [hasMore, setHasMore] = useState(true);
 
   return useQuery<T, any>(

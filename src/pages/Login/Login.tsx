@@ -18,8 +18,6 @@ function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const [emailErrorMessage, setEmailErrorMessage] = useState("");
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
-  const [isSuccess, setIsSuccess] = useState(false);
-  const { user, setUser } = useUserContext();
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();

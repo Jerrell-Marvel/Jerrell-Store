@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import NavCart from "./NavCart";
 import Button from "../Button/Button";
-import { useUserContext } from "../../context/UserContext";
 import useApi from "../../customHooks/useApi2";
 import { useQueryClient } from "react-query";
 

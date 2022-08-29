@@ -9,7 +9,7 @@ export default function SortProductsDropdown({ onChange }: SortProductsDropdownP
     <select
       className="rounded-sm p-2"
       ref={selectRef}
-      onChange={(e) => {
+      onChange={() => {
         const value = selectRef.current.options[selectRef.current.selectedIndex].value;
         onChange(value);
       }}

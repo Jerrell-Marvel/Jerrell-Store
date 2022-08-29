@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useApi from "../../customHooks/useApi2";
 import matchRegex from "../../utils/matchRegex";
@@ -31,7 +31,7 @@ export default function Register() {
     isLoading: loading,
     error,
     mutate: sendRequest,
-  } = useApi<userType>({
+  } = useApi<RegisterType>({
     url: "/api/v1/auth/register",
     method: "post",
     options: {

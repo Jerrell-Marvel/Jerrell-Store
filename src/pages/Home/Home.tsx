@@ -2,8 +2,6 @@ import HomeBanner from "../../components/HomeBanner/HomeBanner";
 import HeroCarousel from "../../components/Carousel/HeroCarousel/HeroCarousel";
 import Service from "../../components/Service/Service";
 import ProductsCarousel from "../../components/Carousel/ProductsCarousel/ProductsCarousel";
-import useApi2 from "../../customHooks/useApi2";
-import { useEffect } from "react";
 
 function Home() {
   // const { mutate } = useApi2({ url: `/api/v1/wishlist`, method: "delete" });
