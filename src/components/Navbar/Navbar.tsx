@@ -4,9 +4,15 @@ import NavCart from "./NavCart";
 import Button from "../Button/Button";
 import useApi from "../../customHooks/useApi2";
 import { useQueryClient } from "react-query";
+import { useFetch } from "../../customHooks/useFetch2";
 
 type LogoutApiResponse = {
   success: boolean;
+};
+
+export type UserApiResponseType = {
+  username: string;
+  cartCount: number;
 };
 
 const navLinks = ["about", "wishlist"];
@@ -28,6 +34,11 @@ function Navbar() {
     navigate(`/search?q=${search}`);
   };
 
+  const { data, isLoading, error, isError } = useFetch<UserApiResponseType>({
+    url: "/api/v1/auth/profile",
+    queryKey: ["profile"],
+  });
+
   const {
     data: logoutResponse,
     isLoading: logoutLoading,
@@ -46,6 +57,8 @@ function Navbar() {
       },
     },
   });
+
+  console.log("navbar rerendered");
 
   // useEffect(() => {
   //   if (typeof logoutResponse !== "undefined") {
@@ -117,10 +130,11 @@ function Navbar() {
 
               <NavCart
                 amount={
-                  queryClient.getQueryData<{
-                    username: string;
-                    cartCount: number;
-                  }>(["profile"])?.cartCount
+                  // queryClient.getQueryData<{
+                  // username: string;
+                  // cartCount: number;
+                  // }>(["profile"])?.cartCount
+                  queryClient.getQueryData<{ username: string; cartCount: number }>(["profile"])?.cartCount
                 }
               />
 

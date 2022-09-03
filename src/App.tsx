@@ -21,11 +21,13 @@ import ShowProducts from "./components/ShowProducts/ShowProducts";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import useApi2 from "./customHooks/useApi2";
+import { useFetch } from "./customHooks/useFetch2";
+
+
 
 const queryClient = new QueryClient();
 
 function App() {
-  
   // useEffect(() => {
   //   axios.defaults.withCredentials = true;
   // }, []);
@@ -33,30 +35,30 @@ function App() {
     <div className="App font-primary">
       <QueryClientProvider client={queryClient}>
         {/* <WishlistProvider> */}
-        <UserProvider>
-          <Navbar />
 
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
+        <Navbar />
 
-            {/* <Route path="/products" element={<Products />}></Route> */}
-            <Route path="/product-category/:category" element={<ProductsCategories />} />
-            <Route path="/product/:itemId" element={<ProductDetails />}></Route>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
 
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/search" element={<Search />} />
+          {/* <Route path="/products" element={<Products />}></Route> */}
+          <Route path="/product-category/:category" element={<ProductsCategories />} />
+          <Route path="/product/:itemId" element={<ProductDetails />}></Route>
 
-            <Route path="/wishlist" element={<Wishlist />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="*" element={<NotFound statusCode={404} message="Page not found or no longer exist" statusText="Page not found" />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/search" element={<Search />} />
 
-            <Route path="/page" element={<Pagination />} />
-          </Routes>
-          <Footer />
-          {/* <TestComponent /> */}
-        </UserProvider>
+          <Route path="/wishlist" element={<Wishlist />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="*" element={<NotFound statusCode={404} message="Page not found or no longer exist" statusText="Page not found" />} />
+
+          <Route path="/page" element={<Pagination />} />
+        </Routes>
+        <Footer />
+        {/* <TestComponent /> */}
+
         <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
       </QueryClientProvider>
 

@@ -89,6 +89,7 @@ export default function Wishlist() {
             const deletedWishlist = oldWishlist?.wishlists.filter((wishlist) => {
               return wishlist._id !== deleteWishlistResponse.wishlist._id;
             });
+
             return {
               ...oldWishlist,
               wishlists: deletedWishlist,
