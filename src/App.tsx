@@ -22,8 +22,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import useApi2 from "./customHooks/useApi2";
 import { useFetch } from "./customHooks/useFetch2";
-
-
+import Profile from "./pages/Profile/Profile";
 
 const queryClient = new QueryClient();
 
@@ -53,6 +52,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound statusCode={404} message="Page not found or no longer exist" statusText="Page not found" />} />
+
+          <Route path="/profile" element={<Profile />} />
 
           <Route path="/page" element={<Pagination />} />
         </Routes>
