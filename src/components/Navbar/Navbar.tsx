@@ -73,6 +73,8 @@ function Navbar() {
             jStore
           </NavLink>
 
+          <Link to="/profile">PROFILE</Link>
+
           <form
             className="w-1/3 md:w-[18%]"
             onSubmit={(e) => {
@@ -134,15 +136,12 @@ function Navbar() {
                   // username: string;
                   // cartCount: number;
                   // }>(["profile"])?.cartCount
-                  queryClient.getQueryData<{ username: string; cartCount: number }>(["profile"])?.cartCount
+                  data?.cartCount
                 }
               />
 
               <li>
-                {queryClient.getQueryData<{
-                  username: string;
-                  cartCount: number;
-                }>(["profile"]) ? (
+                {data ? (
                   <div
                     onClick={() => {
                       sendLogoutRequest({});

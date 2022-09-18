@@ -6,7 +6,7 @@ import ProductsCarousel from "../../components/Carousel/ProductsCarousel/Product
 import NotFound from "../NotFound/NotFound";
 import useApi2 from "../../customHooks/useApi2";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
-import { useUserContext } from "../../context/UserContext";
+// import { useUserContext } from "../../context/UserContext";
 import { useQueryClient } from "react-query";
 import { UserApiResponseType as UserType } from "../../context/UserContext";
 

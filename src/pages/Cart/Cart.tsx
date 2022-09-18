@@ -173,7 +173,7 @@ export default function Cart() {
     } else {
       navigate("/login");
     }
-  }, []);
+  }, [fetchCart, navigate, queryClient]);
 
   // useEffect(() => {
   //   if (isUpdateCartError) {

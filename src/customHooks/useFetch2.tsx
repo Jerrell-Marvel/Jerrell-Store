@@ -1,4 +1,3 @@
-
 import axios, { AxiosRequestHeaders } from "axios";
 import { useQuery, UseQueryOptions } from "react-query";
 
@@ -21,6 +20,7 @@ export function useFetch<T>({ url, headers = {}, pageNumber, queryKey, options }
     async () => {
       const response = await axios.get(url, { headers });
       const data: T = response.data;
+      console.log("query fetched");
 
       return data;
     },

@@ -14,7 +14,6 @@ import Cart from "./pages/Cart/Cart";
 import Search from "./pages/Search/Search";
 import axios from "axios";
 import { useEffect } from "react";
-import { UserProvider } from "./context/UserContext";
 import Pagination from "./components/Pagination/Pagination2";
 import TestComponent from "./TestComponent";
 import ShowProducts from "./components/ShowProducts/ShowProducts";
@@ -23,6 +22,7 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import useApi2 from "./customHooks/useApi2";
 import { useFetch } from "./customHooks/useFetch2";
 import Profile from "./pages/Profile/Profile";
+import Wrapper from "./components/Wrapper";
 
 const queryClient = new QueryClient();
 
@@ -34,7 +34,7 @@ function App() {
     <div className="App font-primary">
       <QueryClientProvider client={queryClient}>
         {/* <WishlistProvider> */}
-
+        {/* <Wrapper> */}
         <Navbar />
 
         <Routes>
@@ -58,6 +58,8 @@ function App() {
           <Route path="/page" element={<Pagination />} />
         </Routes>
         <Footer />
+        {/* </Wrapper> */}
+
         {/* <TestComponent /> */}
 
         <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
