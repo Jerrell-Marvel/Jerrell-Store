@@ -51,6 +51,7 @@ function Navbar() {
     options: {
       onSuccess: () => {
         queryClient.setQueryData(["profile"], undefined);
+        window.location.reload();
       },
       onError: () => {
         alert("Something went wrong please try again later");
@@ -72,8 +73,6 @@ function Navbar() {
           <NavLink to="/" className="py-6 pr-4 font-bold uppercase">
             jStore
           </NavLink>
-
-          <Link to="/profile">PROFILE</Link>
 
           <form
             className="w-1/3 md:w-[18%]"

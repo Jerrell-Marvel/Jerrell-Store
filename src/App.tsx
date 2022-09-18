@@ -60,7 +60,7 @@ function App() {
         <Footer />
         {/* </Wrapper> */}
 
-        {/* <TestComponent /> */}
+        <TestComponent />
 
         <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />
       </QueryClientProvider>

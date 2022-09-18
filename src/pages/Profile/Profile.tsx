@@ -43,7 +43,7 @@ export default function Profile() {
       if (!userData) {
         await queryClient.refetchQueries<UserType>(["profile"]);
         userData = queryClient.getQueryData<UserType>(["profile"]);
-        navigate("/login");
+        // navigate("/login");
       } else {
         setUser(userData);
       }

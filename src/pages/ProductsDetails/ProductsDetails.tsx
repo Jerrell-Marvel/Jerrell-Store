@@ -38,6 +38,7 @@ function ProductDetails() {
   const [wishlistErrorMessage, setWishlistErrorMessage] = useState("");
   const [cartErrorMessage, setCartErrorMessage] = useState("");
   const queryClient = useQueryClient();
+ 
 
   const incrementAmount = () => {
     setProductAmount(productAmount + 1);
