@@ -52,26 +52,27 @@ export default function Wishlist() {
     url: "/api/v1/wishlist",
     queryKey: ["wishlist"],
     options: {
-      enabled: false,
       onError: (error) => {
-        if (error.code === "ERR_NETWORK") {
+        if (error.response.status === 401) {
+          navigate("/login");
+        } else if (error.code === "ERR_NETWORK") {
           setFetchErrorMessage("Something went wrong please try again later");
         } else {
-          setFetchErrorMessage("Something went wrong please try again later");
+          setFetchErrorMessage("Something went wrong please try again");
         }
       },
     },
   });
 
-  useEffect(() => {
-    const isLoggedIn = queryClient.getQueryData(["profile"]);
-    console.log(isLoggedIn);
-    if (typeof isLoggedIn !== "undefined") {
-      fetchWishlist();
-    } else {
-      navigate("/login");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const isLoggedIn = queryClient.getQueryData(["profile"]);
+  //   console.log(isLoggedIn);
+  //   if (typeof isLoggedIn !== "undefined") {
+  //     fetchWishlist();
+  //   } else {
+  //     navigate("/login");
+  //   }
+  // }, []);
 
   const {
     data: deleteWishlistResponse,
