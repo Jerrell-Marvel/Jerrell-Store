@@ -15,6 +15,11 @@ export default function Profile() {
   const { data, isLoading, error, isError } = useFetch<UserType>({
     url: "/api/v1/auth/profile",
     queryKey: ["profile"],
+    options: {
+      onError: () => {
+        navigate("/login");
+      },
+    },
   });
 
   // useEffect(() => {

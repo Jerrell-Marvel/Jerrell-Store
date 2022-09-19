@@ -66,7 +66,6 @@ export default function Cart() {
     url: "/api/v1/cart",
     queryKey: ["cart"],
     options: {
-      enabled: false,
       onError: (fetchError) => {
         if (fetchError.response.status === 401) {
           navigate("/login");
@@ -165,15 +164,15 @@ export default function Cart() {
     },
   });
 
-  useEffect(() => {
-    const isLoggedIn = queryClient.getQueryData(["profile"]);
-    console.log(isLoggedIn);
-    if (typeof isLoggedIn !== "undefined") {
-      fetchCart();
-    } else {
-      navigate("/login");
-    }
-  }, [fetchCart, navigate, queryClient]);
+  // useEffect(() => {
+  //   const isLoggedIn = queryClient.getQueryData(["profile"]);
+  //   console.log(isLoggedIn);
+  //   if (typeof isLoggedIn !== "undefined") {
+  //     fetchCart();
+  //   } else {
+  //     navigate("/login");
+  //   }
+  // }, [fetchCart, navigate, queryClient]);
 
   // useEffect(() => {
   //   if (isUpdateCartError) {
