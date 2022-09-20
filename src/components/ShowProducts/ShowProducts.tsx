@@ -61,13 +61,15 @@ function ShowProducts({ url, setPageCount }: ShowProductsProps) {
 
   if (isLoading || isError) {
     return (
-      <ul className="grid w-full grid-cols-card-grid gap-6 py-10">
+      <ul className="flex w-full flex-wrap py-10">
         {[...Array(10)].map((element, index) => {
           return (
-            <li className="flex h-96 flex-col gap-4 rounded-xl bg-white p-4 transition-all duration-300" key={index}>
-              <div className="flex-1 animate-loading bg-slate-200"></div>
-              <div className="flex flex-[5] animate-loading items-center justify-center bg-slate-200 px-6 text-center">{fetchErrorMessage}</div>
-              <div className="flex-[2] animate-loading bg-slate-200"></div>
+            <li className="h-96 w-full p-3 sm:w-1/2 md:w-1/3 lg:w-1/4" key={index}>
+              <div className="flex h-full w-full flex-col gap-4 rounded-xl bg-white p-4 transition-all duration-300">
+                <div className="flex-1 animate-loading bg-slate-200"></div>
+                <div className="flex flex-[5] animate-loading items-center justify-center bg-slate-200 px-6 text-center">{fetchErrorMessage}</div>
+                <div className="flex-[2] animate-loading bg-slate-200"></div>
+              </div>
             </li>
           );
         })}
@@ -77,7 +79,7 @@ function ShowProducts({ url, setPageCount }: ShowProductsProps) {
 
   return (
     <>
-      <ul className="grid w-full grid-cols-card-grid gap-6 py-10">
+      <ul className="flex w-full flex-wrap py-10">
         {data && data.products.length < 1 ? (
           <div className="text-center">
             <span>No products found</span>
@@ -89,13 +91,15 @@ function ShowProducts({ url, setPageCount }: ShowProductsProps) {
           data?.products.map((product, index) => {
             return (
               <Link to={`/product/${product._id}`} key={product._id}>
-                <li className={`flex h-full flex-col gap-4 rounded-xl bg-white p-4 transition-transform duration-300 hover:scale-105`}>
-                  <h3 className="text-xl font-medium">{product.name}</h3>
-                  <div>
-                    <img src={`/images/${product.image}`} className="w-full" alt="temporary-alt"></img>
+                <li className="h-96 w-full p-3 sm:w-1/2 md:w-1/3 lg:w-1/4">
+                  <div className="flex h-full flex-col gap-4 rounded-xl bg-white p-4 transition-transform duration-300 hover:scale-105">
+                    <h3 className="text-xl font-medium">{product.name}</h3>
+                    <div>
+                      <img src={`/images/${product.image}`} className="w-full" alt="temporary-alt"></img>
+                    </div>
+                    <div className="">{product.description}</div>
+                    <div>{product.price}</div>
                   </div>
-                  <div className="">{product.description}</div>
-                  <div>{product.price}</div>
                 </li>
               </Link>
             );
