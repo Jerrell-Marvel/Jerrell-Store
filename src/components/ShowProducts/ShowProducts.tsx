@@ -90,8 +90,8 @@ function ShowProducts({ url, setPageCount }: ShowProductsProps) {
         ) : (
           data?.products.map((product, index) => {
             return (
-              <Link to={`/product/${product._id}`} key={product._id}>
-                <li className="h-96 w-full p-3 sm:w-1/2 md:w-1/3 lg:w-1/4">
+              <Link to={`/product/${product._id}`} key={product._id} className="h-96 w-full p-3 sm:w-1/2 md:w-1/3 lg:w-1/4">
+                <li>
                   <div className="flex h-full flex-col gap-4 rounded-xl bg-white p-4 transition-transform duration-300 hover:scale-105">
                     <h3 className="text-xl font-medium">{product.name}</h3>
                     <div>

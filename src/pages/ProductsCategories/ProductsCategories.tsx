@@ -1,19 +1,32 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import ProductsNav from "../../components/ProductsNav/ProductsNav";
 import ShowProducts from "../../components/ShowProducts/ShowProducts";
 import SortProductsDropdown from "../../components/Dropdown/SortProductsDropdown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Pagination from "../../components/Pagination/Pagination";
 
 function ProductsCategories() {
+  const [searchParams] = useSearchParams();
   const { category = "all" } = useParams();
   const [sort, setSort] = useState("newest");
   const [page, setPage] = useState(1);
   const [pageCount, setPageCount] = useState(1);
+  const navigate = useNavigate();
+  const location = useLocation();
+  useEffect(() => {
+    const page2 = searchParams.get("page") || "1";
+    const sort2 = searchParams.get("sort") || "newest";
+    console.log(page2, sort2);
+    navigate(location.pathname + `?sort=${sort2}&page=${page2}`);
+  }, []);
+
   const onChangeSortHandler = (value: string) => {
+    console.log(value);
+    navigate(location.pathname + `?sort=${value}`);
     setSort(value);
   };
   const onClickPageHandler = (value: number) => {
+    navigate(location.pathname);
     setPage(value);
     window.scrollTo(0, 0);
   };

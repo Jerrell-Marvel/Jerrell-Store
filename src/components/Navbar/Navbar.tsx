@@ -59,8 +59,6 @@ function Navbar() {
     },
   });
 
-  console.log("navbar rerendered");
-
   // useEffect(() => {
   //   if (typeof logoutResponse !== "undefined") {
   //   }
