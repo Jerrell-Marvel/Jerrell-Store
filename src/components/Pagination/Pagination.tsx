@@ -1,11 +1,12 @@
 type PaginationPropsType = {
   pageCount: number;
-  onClick: (value: number) => void;
+  onClick: (pageValue: number, sortValue: string) => void;
   activePage: number;
+  sort: string;
 };
-export default function Pagination({ pageCount, onClick, activePage }: PaginationPropsType) {
+export default function Pagination({ pageCount, onClick, activePage, sort }: PaginationPropsType) {
   const onClickHandler = (page: number) => {
-    return onClick(page);
+    return onClick(page, sort);
   };
 
   if (pageCount < 1) {

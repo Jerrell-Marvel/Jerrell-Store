@@ -14,20 +14,23 @@ function ProductsCategories() {
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
-    const page2 = searchParams.get("page") || "1";
-    const sort2 = searchParams.get("sort") || "newest";
-    console.log(page2, sort2);
-    navigate(location.pathname + `?sort=${sort2}&page=${page2}`);
+    const sortValue = searchParams.get("sort") || "newest";
+    const pageValue = Number(searchParams.get("page")) || 1;
+    setPage(pageValue);
+    setSort(sortValue);
+    console.log(page, sort);
+    navigate(location.pathname + `?sort=${sortValue}&page=${pageValue}`);
   }, []);
 
   const onChangeSortHandler = (value: string) => {
     console.log(value);
-    navigate(location.pathname + `?sort=${value}`);
+    navigate(location.pathname + `?sort=${value}&page=1`);
     setSort(value);
+    setPage(1);
   };
-  const onClickPageHandler = (value: number) => {
-    navigate(location.pathname);
-    setPage(value);
+  const onClickPageHandler = (pageValue: number, sortValue: string) => {
+    navigate(location.pathname + `?sort=${sortValue}&page=${pageValue}`);
+    setPage(pageValue);
     window.scrollTo(0, 0);
   };
   const getTotalPage = (count: number) => {
@@ -45,7 +48,7 @@ function ProductsCategories() {
           <SortProductsDropdown onChange={onChangeSortHandler} />
         </div>
         <ShowProducts url={`/api/v1/products/?sort=${sort}${category === "all" ? "" : `&category=${category}`}&page=${page}`} setPageCount={getTotalPage} />
-        <Pagination pageCount={pageCount} onClick={onClickPageHandler} activePage={page} />
+        <Pagination pageCount={pageCount} onClick={onClickPageHandler} activePage={page} sort={sort} />
       </div>
     </>
   );
