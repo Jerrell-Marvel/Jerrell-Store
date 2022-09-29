@@ -31,7 +31,7 @@ function Navbar() {
   const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSearch("");
-    navigate(`/search?q=${search}`);
+    navigate(`/search?q=${search}&sort=newest`);
   };
 
   const { data, isLoading, error, isError } = useFetch<UserApiResponseType>({

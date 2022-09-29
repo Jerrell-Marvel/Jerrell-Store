@@ -16,12 +16,14 @@ export default function Search() {
     console.log(sort, searchValue);
     navigate(location.pathname + `?q=${searchValue}&sort=${sortValue}`);
   }, []);
+  console.log(searchParams.get("q"));
+  console.log(searchParams.get("sort"));
 
   const onChangeSortHandler = (value: string) => {
     console.log(value);
     const searchValue = searchParams.get("q");
     navigate(location.pathname + `?q=${searchValue}&sort=${value}`);
-    setSort(value);
+    // setSort(value);
   };
   return (
     <>
@@ -31,7 +33,7 @@ export default function Search() {
             <span className="mb-4">Showing results for {searchParams.get("q")}</span>
             <SortProductsDropdown onChange={onChangeSortHandler} />
           </div>
-          <ShowProducts url={`/api/v1/products/?sort=${sort}&search=${searchParams.get("q")}`} />
+          <ShowProducts url={`/api/v1/products/?sort=${searchParams.get("sort")}&search=${searchParams.get("q")}`} />
         </div>
       </div>
     </>
