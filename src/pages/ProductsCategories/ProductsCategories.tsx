@@ -25,12 +25,12 @@ function ProductsCategories() {
   const onChangeSortHandler = (value: string) => {
     console.log(value);
     navigate(location.pathname + `?sort=${value}&page=1`);
-    setSort(value);
-    setPage(1);
+    // setSort(value);
+    // setPage(1);
   };
   const onClickPageHandler = (pageValue: number, sortValue: string) => {
     navigate(location.pathname + `?sort=${sortValue}&page=${pageValue}`);
-    setPage(pageValue);
+    // setPage(pageValue);
     window.scrollTo(0, 0);
   };
   const getTotalPage = (count: number) => {
@@ -47,7 +47,7 @@ function ProductsCategories() {
           <h2 className="mb-2 text-4xl font-medium capitalize">{category}</h2>
           <SortProductsDropdown onChange={onChangeSortHandler} />
         </div>
-        <ShowProducts url={`/api/v1/products/?sort=${sort}${category === "all" ? "" : `&category=${category}`}&page=${page}`} setPageCount={getTotalPage} />
+        <ShowProducts url={`/api/v1/products/?sort=${searchParams.get("sort")}${category === "all" ? "" : `&category=${category}`}&page=${searchParams.get("page")}`} setPageCount={getTotalPage} />
         <Pagination pageCount={pageCount} onClick={onClickPageHandler} activePage={page} sort={sort} />
       </div>
     </>
