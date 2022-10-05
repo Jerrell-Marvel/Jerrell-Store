@@ -19,8 +19,8 @@ export default function SortProductsDropdown({ onChange }: SortProductsDropdownP
 
     // @ts-ignore
     selectRef.current.selectedIndex = SelectValue[sortParam];
-  }, []);
-  
+  });
+
   return (
     <select
       className="rounded-sm p-2"

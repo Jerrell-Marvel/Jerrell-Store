@@ -10,14 +10,17 @@ export default function Search() {
   const [sort, setSort] = useState("newest");
 
   useEffect(() => {
-    const sortValue = searchParams.get("sort") || "newest";
+    const sortValue = searchParams.get("sort");
     const searchValue = searchParams.get("q");
-    setSort(sortValue);
-    console.log(sort, searchValue);
-    navigate(location.pathname + `?q=${searchValue}&sort=${sortValue}`);
+    // setSort(sortValue);
+    // console.log(sort, searchValue);
+    if (!sortValue) {
+      navigate(location.pathname + `?q=${searchValue}&sort=${sortValue || "newest"}`);
+    }
+    // navigate(location.pathname + `?q=${searchValue}&sort=${sortValue}`);
   }, []);
-  console.log(searchParams.get("q"));
-  console.log(searchParams.get("sort"));
+
+  console.log("rerendered");
 
   const onChangeSortHandler = (value: string) => {
     console.log(value);
