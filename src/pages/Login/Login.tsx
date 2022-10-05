@@ -41,7 +41,7 @@ function Login() {
         } else if (error.response.data.message === "email is not registered") {
           setEmailErrorMessage("Email is not registered");
         } else {
-          setErrorMessage(error.response.data.message);
+          setErrorMessage("Something went wrong please try again later");
         }
       },
     },
