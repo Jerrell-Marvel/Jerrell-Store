@@ -14,13 +14,17 @@ function ProductsCategories() {
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
-    const sortValue = searchParams.get("sort") || "newest";
-    const pageValue = Number(searchParams.get("page")) || 1;
-    setPage(pageValue);
-    setSort(sortValue);
-    console.log(page, sort);
-    navigate(location.pathname + `?sort=${sortValue}&page=${pageValue}`);
+    let sortValue = searchParams.get("sort");
+    let pageValue = Number(searchParams.get("page"));
+    // setPage(pageValue);
+    // setSort(sortValue);
+    // console.log(page, sort);
+    if (!sortValue || !pageValue) {
+      navigate(location.pathname + `?sort=${sortValue || "newest"}&page=${pageValue || 1}`);
+    }
   }, []);
+
+  console.log(sort);
 
   const onChangeSortHandler = (value: string) => {
     console.log(value);
@@ -29,7 +33,7 @@ function ProductsCategories() {
     // setPage(1);
   };
   const onClickPageHandler = (pageValue: number, sortValue: string) => {
-    navigate(location.pathname + `?sort=${sortValue}&page=${pageValue}`);
+    navigate(location.pathname + `?sort=${searchParams.get("sort") || "newest"}&page=${pageValue}`);
     // setPage(pageValue);
     window.scrollTo(0, 0);
   };
@@ -38,6 +42,7 @@ function ProductsCategories() {
     setPageCount(totalPage);
   };
 
+  console.log("rerendered");
   return (
     <>
       <ProductsNav />
@@ -48,7 +53,7 @@ function ProductsCategories() {
           <SortProductsDropdown onChange={onChangeSortHandler} />
         </div>
         <ShowProducts url={`/api/v1/products/?sort=${searchParams.get("sort")}${category === "all" ? "" : `&category=${category}`}&page=${searchParams.get("page")}`} setPageCount={getTotalPage} />
-        <Pagination pageCount={pageCount} onClick={onClickPageHandler} activePage={page} sort={sort} />
+        <Pagination pageCount={pageCount} onClick={onClickPageHandler} activePage={Number(searchParams.get("page")) || 1} sort={sort} />
       </div>
     </>
   );
