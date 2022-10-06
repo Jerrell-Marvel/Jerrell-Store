@@ -48,9 +48,10 @@ export default function Register() {
           if (error.response.data.name === "MongoServerError") {
             setEmailErrorMessage("Email is already registered");
           }
-        }
-
-        if (error.code === "ERR_NETWORK") {
+        } else if (error.code === "ERR_NETWORK") {
+          setEmailErrorMessage("");
+          setErrorMessage("Something went wrong please try again later");
+        } else {
           setEmailErrorMessage("");
           setErrorMessage("Something went wrong please try again later");
         }
